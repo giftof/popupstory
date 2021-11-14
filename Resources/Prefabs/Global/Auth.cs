@@ -14,6 +14,8 @@ public class Auth : MonoBehaviour
     FirebaseAuth auth = null;
     FirebaseUser user = null;
 
+    void Awake() => DontDestroyOnLoad(this);
+
     void Start()
     {
         InitializeFirebase();

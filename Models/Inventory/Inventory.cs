@@ -20,7 +20,8 @@ namespace Popup.Inventory
 
 	public interface IInventory
 	{
-		Item PickItem   (int uid);
+		//ModelBase PickItem(int uid);
+		Item PickItem	(int uid);
 		bool UseItem    (int uid);
 		bool UseItem    (Item item);
 		bool PopItem    (int uid);
@@ -187,20 +188,20 @@ namespace Popup.Inventory
 		}
 
 
-		public Item PickItem(int UID)
-		{
-			(int, int) result = Search(UID, false);
+        public Item PickItem(int UID)
+        {
+            (int, int) result = Search(UID, false);
 
-			if (result.Item1 < maxSize)
-			{
-				return Guard.MustConvertTo<Item>(inventory[UID]);
-			}
+            if (result.Item1 < maxSize)
+            {
+                return Guard.MustConvertTo<Item>(inventory[UID]);
+            }
 
-			throw new NotImplementedException();
-		}
+            throw new NotImplementedException();
+        }
 
 
-		private bool CheckEmptySlot(ref Item item)
+        private bool CheckEmptySlot(ref Item item)
 		{
 			if (!item.IsExist)
 			{

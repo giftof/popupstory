@@ -1,5 +1,5 @@
 
-namespace Popup.Status
+namespace Popup.Defines
 {
     public enum Elements
     {
@@ -98,5 +98,12 @@ namespace Popup.Status
         brave,
         berserk,
         focus,
+    }
+
+    public enum SceneType
+    {
+        entrance,
+        lobby,
+        game,
     }
 }

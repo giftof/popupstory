@@ -13,7 +13,6 @@ namespace Popup.Utils
     using Configs = Configs.Configs;
     public static class Libs
     {
-        private static int UID = 0;
         //private utils() { }
 
         //private static readonly Lazy<utils> instance = new Lazy<utils>(() => new utils());
@@ -45,7 +44,7 @@ namespace Popup.Utils
         public static string	ToJson<T>       (T       source                )    => JsonUtility.ToJson(source);
 		public static int		Round			(float	 value                 )    => (int)Math.Round(value);
         public static bool      IsEnablePair    (bool    _lock, bool    _key   )    => !_lock || (_lock && _key);
-        public static int       RequestNewUID   => UID++;
+        
 
    		public static int[] TextToIntArray(string text, int falseValue = -1)
 		{

@@ -1,11 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Popup.Inventory;
 using Popup.Items;
 using Popup.Configs;
-using Popup.Status;
+using Popup.Defines;
 using Popup.Utils;
+
+using Popup.ServerJob;
 
 
 
@@ -15,21 +18,20 @@ public class Game : MonoBehaviour
 {
     // Start is called before the first frame update
 
+    public Button toEntrance;
+    public Button toLobby;
+    private Manager manager;
 
-
-    void Start()
+    // Start is called before the first frame update
+    void Awake()
     {
+        manager = (Manager)FindObjectOfType(typeof(Manager));
         Debug.Log("enter Game");
-
+        toEntrance.onClick.AddListener(() => manager.sceneController.Load(SceneType.entrance));
+        toLobby.onClick.AddListener(() => manager.sceneController.Load(SceneType.lobby));
         //StartCoroutine(WaitDB());
         //DEBUG_ShowInventory();
         //DEBUG_Convert();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     //IEnumerator WaitDB()
@@ -99,70 +101,70 @@ public class Game : MonoBehaviour
     {
         Inventory inventory = new Inventory(null, Configs.squadInventorySize);
 
-        Item item1 = new Item(Libs.RequestNewUID);
+        Item item1 = new Item(ServerJob.RequestNewUID);
         item1.SetName("stack1");
         item1.SetCat(ItemCat.stackable);
         item1.SetAmount(12);
         item1.SetWeight(0.10f);
         item1.SetVolume(0.20f);
 
-        Item item2 = new Item(Libs.RequestNewUID);
+        Item item2 = new Item(ServerJob.RequestNewUID);
         item2.SetName("stack2");
         item2.SetCat(ItemCat.stackable);
         item2.SetAmount(5);
         item2.SetWeight(0.50f);
         item2.SetVolume(0.10f);
 
-        Item item3 = new Item(Libs.RequestNewUID);
+        Item item3 = new Item(ServerJob.RequestNewUID);
         item3.SetName("stack1");
         item3.SetCat(ItemCat.stackable);
         item3.SetAmount(25);
         item3.SetWeight(0.10f);
         item3.SetVolume(0.20f);
 
-        Item item4 = new Item(Libs.RequestNewUID);
+        Item item4 = new Item(ServerJob.RequestNewUID);
         item4.SetName("weapon1");
         item4.SetCat(ItemCat.equip);
         item4.SetAmount(1);
         item4.SetWeight(2f);
         item4.SetVolume(3f);
 
-        Item item5 = new Item(Libs.RequestNewUID);
+        Item item5 = new Item(ServerJob.RequestNewUID);
         item5.SetName("helmet1");
         item5.SetCat(ItemCat.equip);
         item5.SetAmount(1);
         item5.SetWeight(0.2f);
         item5.SetVolume(1f);
 
-        Item item6 = new Item(Libs.RequestNewUID);
+        Item item6 = new Item(ServerJob.RequestNewUID);
         item6.SetName("leggings1");
         item6.SetCat(ItemCat.equip);
         item6.SetAmount(1);
         item6.SetWeight(0.5f);
         item6.SetVolume(5f);
 
-        Item item7 = new Item(Libs.RequestNewUID);
+        Item item7 = new Item(ServerJob.RequestNewUID);
         item7.SetName("chest1");
         item7.SetCat(ItemCat.equip);
         item7.SetAmount(1);
         item7.SetWeight(1f);
         item7.SetVolume(5f);
 
-        Item item8 = new Item(Libs.RequestNewUID);
+        Item item8 = new Item(ServerJob.RequestNewUID);
         item8.SetName("boots1");
         item8.SetCat(ItemCat.equip);
         item8.SetAmount(1);
         item8.SetWeight(0.2f);
         item8.SetVolume(1f);
 
-        Item item9 = new Item(Libs.RequestNewUID);
+        Item item9 = new Item(ServerJob.RequestNewUID);
         item9.SetName("gloves1");
         item9.SetCat(ItemCat.equip);
         item9.SetAmount(1);
         item9.SetWeight(0.2f);
         item9.SetVolume(1f);
 
-        Item item10 = new Item(Libs.RequestNewUID);
+        Item item10 = new Item(ServerJob.RequestNewUID);
         item10.SetName("stack1");
         item10.SetCat(ItemCat.stackable);
         item10.SetAmount(10);

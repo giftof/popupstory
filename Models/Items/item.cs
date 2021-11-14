@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using Popup.Utils;
-using Popup.Status;
+using Popup.Defines;
 using System;
 using System.Data;
 
@@ -12,35 +12,36 @@ using System.Data;
 namespace Popup.Items
 {
 	using Cfg = Configs.Configs;
+	using ServerJob = ServerJob.ServerJob;
 	[Serializable]
 	public class Item
 	{
 		[SerializeField]
 		string		name;
-		[SerializeField]
-		int		uid;
-		[SerializeField]
+        [SerializeField]
+        int uid;
+        [SerializeField]
 		float		weight;
 		[SerializeField]
 		float		volume;
 		[SerializeField]
-		int		amount;
-		int		maxAmount = int.MaxValue;
+		int			amount;
+		int			maxAmount = int.MaxValue;
 		[SerializeField]
 		Grade		grade;
 		[SerializeField]
 		int[]		magicIdArray;
 		[SerializeField]
-		ItemCat	category;
+		ItemCat		category;
 		[SerializeField]
-		int		durability;
+		int			durability;
 
 
 
 		public 	string 	GetName 		=> name;
 		public 	Grade 	GetGrade 		=> grade;
 		public 	int 	GetUID 			=> uid;
-		public 	int 	GetSpellAmount 	=> magicIdArray == null ? 0 : magicIdArray.Length;
+        public 	int 	GetSpellAmount 	=> magicIdArray == null ? 0 : magicIdArray.Length;
 		public 	float 	GetWeight 		=> weight * amount;
 		public 	float 	GetVolume 		=> volume * amount;
 		public 	int 	GetAmount 		=> amount;
@@ -57,7 +58,7 @@ namespace Popup.Items
 		public void SetAmount(int amount) => this.amount = amount; // test
 		public void SetUID(int UID) => uid = UID;   // test
 
-		public void SetWeight(float weight)                 // test
+        public void SetWeight(float weight)                 // test
 		{
 			this.weight = weight;
 
@@ -83,17 +84,17 @@ namespace Popup.Items
 
 		public Item(int uid) => this.uid = uid;
 
-		//Item() // fix
-		//{
+        //Item() // fix
+        //{
 
-		//}
+        //}
 
-		//public bool Compare(string name)    => this.name == name;
+        //public bool Compare(string name)    => this.name == name;
 
-		// public 	bool CompareUID		(int uid) 			=> this.uid == uid;
-		public 	void DecreaseAmount	(int count = 1)		=> amount -= count;
+        // public 	bool CompareUID		(int uid) 			=> this.uid == uid;
+        public 	void DecreaseAmount	(int count = 1)		=> amount -= count;
 		private bool HaveAttribute	(ItemCat attribute) => 0 < (category & attribute);
-		public	bool IsExist							=> 0 < amount;
+		public	bool IsExist							=> 0 < durability && 0 < amount;
 
 
 		public bool HasSpace()
@@ -136,29 +137,30 @@ namespace Popup.Items
 		{
 			Item other = (Item)MemberwiseClone();
 			other.SetAmount(0);
-			other.SetUID(Libs.RequestNewUID);
-			return other;
+			other.SetUID(ServerJob.RequestNewUID);
+            return other;
 		}
 
 
-		public static Delegate.ConvertFromString<Item> convert = new Delegate.ConvertFromString<Item>(DataConvert);
+		//public static Delegate.ConvertFromString<Item> convert = new Delegate.ConvertFromString<Item>(DataConvert);
 
 
-		private static Item DataConvert(IDataReader data)
-		{
-			Item item = new Item(data.GetInt32(0));
+		//private static Item DataConvert(IDataReader data)
+		//{
+		//	//Item item = new Item(data.GetInt32(0));
+		//	Item item = new Item();
 
-			item.name = data.GetString(1);
-			item.weight = data.GetFloat(2);
-			item.volume = data.GetFloat(3);
-			item.amount = data.GetInt32(4);
-			item.grade = (Grade)data.GetInt32(5);
-			item.magicIdArray = Libs.TextToIntArray(data.GetString(6));
-			item.category = (ItemCat)data.GetInt32(7);
-			item.durability = data.GetInt32(8);
+		//	item.name = data.GetString(1);
+		//	item.weight = data.GetFloat(2);
+		//	item.volume = data.GetFloat(3);
+		//	item.amount = data.GetInt32(4);
+		//	item.grade = (Grade)data.GetInt32(5);
+		//	item.magicIdArray = Libs.TextToIntArray(data.GetString(6));
+		//	item.category = (ItemCat)data.GetInt32(7);
+		//	item.durability = data.GetInt32(8);
 
-			return item;
-		}
+		//	return item;
+		//}
 	}
 
 

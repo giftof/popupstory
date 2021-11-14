@@ -1,8 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 using Popup.Configs;
-using Popup.Status;
+using Popup.Defines;
 using Popup.Utils;
+
+using Popup.ServerJob;
 
 
 public class Spell
@@ -19,12 +21,12 @@ public class Spell
 		if (string.IsNullOrEmpty(attribute))
 		{
 			name 		= "null";
-			uid 		= Libs.RequestNewUID;
+			uid 		= ServerJob.RequestNewUID;
 			effective 	= SpellEffective.none;
 			element 	= Elements.none;
 		}
 		name 		= "null";
-		uid 		= Libs.RequestNewUID;
+		uid 		= ServerJob.RequestNewUID;
 		effective 	= SpellEffective.none;
 		element 	= Elements.none;
 	}
