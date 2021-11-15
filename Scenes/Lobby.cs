@@ -15,15 +15,32 @@ public class Lobby : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        manager = (Manager)FindObjectOfType(typeof(Manager));
+        Initialize();
+
         Debug.Log("enter Lobby");
-        toEntrance.onClick.AddListener(() => manager.sceneController.Load(SceneType.entrance));
-        toGame.onClick.AddListener(() => manager.sceneController.Load(SceneType.game));
+        toEntrance.onClick.AddListener(() =>
+        {
+            manager.eventSystem.enabled = false;
+            manager.sceneController.Load(SceneType.entrance);
+        });
+        toGame.onClick.AddListener(() =>
+        {
+            manager.eventSystem.enabled = false;
+            manager.sceneController.Load(SceneType.game);
+        });
     }
 
-    // Update is called once per frame
-    void Update()
+
+
+    private void Initialize()
     {
-        
+        manager = (Manager)FindObjectOfType(typeof(Manager));
+
+        if (manager == null)
+        {
+            manager = Instantiate(Resources.Load<Manager>("Prefabs/Global/Manager"));
+        }
+
+        manager.eventSystem.enabled = true;
     }
 }

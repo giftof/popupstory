@@ -84,14 +84,8 @@ namespace Popup.Items
 
 		public Item(int uid) => this.uid = uid;
 
-        //Item() // fix
-        //{
 
-        //}
 
-        //public bool Compare(string name)    => this.name == name;
-
-        // public 	bool CompareUID		(int uid) 			=> this.uid == uid;
         public 	void DecreaseAmount	(int count = 1)		=> amount -= count;
 		private bool HaveAttribute	(ItemCat attribute) => 0 < (category & attribute);
 		public	bool IsExist							=> 0 < durability && 0 < amount;

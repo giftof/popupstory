@@ -12,7 +12,7 @@ using System;
 namespace Popup.Charactor
 {
     using Cfg = Configs.Configs;
-    using Ivn = Inventory.Inventory;
+    //using Ivn = Inventory.Inventory;
     public struct Charactor
     {
         string          name;
@@ -26,7 +26,7 @@ namespace Popup.Charactor
         Buff[]          buffs;
         Spell[]         spells;
         Item[]          equips;
-        Ivn             inventory;
+        //Ivn             inventory;
 
 
 

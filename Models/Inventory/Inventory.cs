@@ -6,6 +6,7 @@ using Popup.Configs;
 using Popup.Items;
 using Popup.Utils;
 using Popup.Delegate;
+using Popup.Framework;
 
 
 
@@ -18,17 +19,17 @@ namespace Popup.Inventory
 	// 	(int, int) TestSearch<T>(T value);
 	// }
 
-	public interface IInventory
-	{
-		//ModelBase PickItem(int uid);
-		Item PickItem	(int uid);
-		bool UseItem    (int uid);
-		bool UseItem    (Item item);
-		bool PopItem    (int uid);
-		bool AddItem    (ref Item item);
-		void SetMaxSize (int size);
+	//public interface IInventory
+	//{
+	//	//ModelBase PickItem(int uid);
+	//	Item PickItem	(int uid);
+	//	bool UseItem    (int uid);
+	//	bool UseItem    (Item item);
+	//	bool PopItem    (int uid);
+	//	bool AddItem    (ref Item item);
+	//	void SetMaxSize (int size);
 
-	}
+	//}
 
 	public class Inventory : IInventory
 	{
@@ -78,7 +79,7 @@ namespace Popup.Inventory
 		}
 
 
-		private void EraseDummySlot()
+		public void EraseDummySlot()
 		{
 			for (int index = 0; index < maxSize; ++index)
 			{

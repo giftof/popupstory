@@ -25,13 +25,36 @@ public class Game : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        manager = (Manager)FindObjectOfType(typeof(Manager));
+        Initialize();
+
         Debug.Log("enter Game");
-        toEntrance.onClick.AddListener(() => manager.sceneController.Load(SceneType.entrance));
-        toLobby.onClick.AddListener(() => manager.sceneController.Load(SceneType.lobby));
+        toEntrance.onClick.AddListener(() =>
+        {
+            manager.eventSystem.enabled = false;
+            manager.sceneController.Load(SceneType.entrance);
+        });
+        toLobby.onClick.AddListener(() =>
+        {
+            manager.eventSystem.enabled = false;
+            manager.sceneController.Load(SceneType.lobby);
+        });
         //StartCoroutine(WaitDB());
         //DEBUG_ShowInventory();
         //DEBUG_Convert();
+    }
+
+
+
+    private void Initialize()
+    {
+        manager = (Manager)FindObjectOfType(typeof(Manager));
+
+        if (manager == null)
+        {
+            manager = Instantiate(Resources.Load<Manager>("Prefabs/Global/Manager"));
+        }
+
+        manager.eventSystem.enabled = true;
     }
 
     //IEnumerator WaitDB()

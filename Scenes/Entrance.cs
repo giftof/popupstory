@@ -19,8 +19,16 @@ public class Entrance : MonoBehaviour
         Initialize();
 
         Debug.Log("enter Entrance");
-        toLobby.onClick.AddListener(() => manager.sceneController.Load(SceneType.lobby));
-        toGame.onClick.AddListener(() => manager.sceneController.Load(SceneType.game));
+        toLobby.onClick.AddListener(() =>
+        {
+            manager.eventSystem.enabled = false;
+            manager.sceneController.Load(SceneType.lobby);
+        });
+        toGame.onClick.AddListener(() =>
+        {
+            manager.eventSystem.enabled = false;
+            manager.sceneController.Load(SceneType.game);
+        });
     }
 
 
@@ -33,5 +41,7 @@ public class Entrance : MonoBehaviour
         {
             manager = Instantiate(Resources.Load<Manager>("Prefabs/Global/Manager"));
         }
+
+        manager.eventSystem.enabled = true;
     }
 }
