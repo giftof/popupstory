@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
-using Popup.Utils;
+using UnityEngine;
+using Popup.Library;
 using Popup.Items;
+using Popup.Framework;
 using System;
 
 
@@ -13,21 +15,50 @@ namespace Popup.Charactors
 {
     using Cfg = Configs.Configs;
     //using Ivn = Inventory.Inventory;
-    public class Charactor
+    [Serializable]
+    public class Charactor : IPopupObject
     {
+        [SerializeField]
         string          name;
+        [SerializeField]
         readonly int    uid;
+        [SerializeField]
         int             level;
+        [SerializeField]
         int             exp;
+        [SerializeField]
         int             maxHp;
+        [SerializeField]
+        int             curHp;
+        [SerializeField]
         int             maxMp;
+        [SerializeField]
+        int             curMp;
+        [SerializeField]
         int             speed;
-        int             damage;
-        Buff[]          buffs;
-        Spell[]         spells;
-        Item[]          equips;
+        [SerializeField]
+        int             power;
+        [SerializeField]
+        Buff[]          buffArray;
+        [SerializeField]
+        Spell[]         spellArray;
+        [SerializeField]
+        Item[]          equipArray;
         //Ivn             inventory;
 
+
+        public string   GetName         => name;
+        public int      GetUID()        => uid;
+        public int      GetLevel        => level;
+        public int      GetMaxHp        => maxHp;
+        public int      GetMaxMp        => maxMp;
+        public int      GetCurrentHp    => curHp;
+        public int      GetCurrentMp    => curMp;
+        public int      GetSpeed        => speed;
+        public int      GetPower        => power;
+        public Buff[]   GetBuffArray    => buffArray;
+        public Spell[]  GetSpellArray   => spellArray;
+        public Item[]   GetEquipArray   => equipArray;
 
 
         void TakeAffect(ref Spell takeSpell)
@@ -37,11 +68,11 @@ namespace Popup.Charactors
 
         void GiveAffect(int spellIndex, params Charactor[] targetArray)
         {
-            Guard.InRange(spellIndex, ref this.spells);
+            Guard.MustInRange(spellIndex, ref this.spellArray, "[GiveAffect in charactor]");
 
             foreach (Charactor target in targetArray)
             {
-                target.TakeAffect(ref this.spells[spellIndex]);
+                target.TakeAffect(ref this.spellArray[spellIndex]);
             }
         }
 

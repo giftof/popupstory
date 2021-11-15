@@ -15,12 +15,19 @@ namespace Popup.Framework
 
 
 
+    public interface IPopupObject
+    {
+        int GetUID();
+    }
+
+
+
 	public interface IInventory
 	{
         //ModelBase PickItem(int uid);
         Item    PickItem    (int uid);
         bool    UseItem     (int uid);
-        bool    UseItem     (Item item);
+        bool    UseItem     (ref Item item);
         bool    PopItem     (int uid);
         bool    AddItem     (ref Item item);
         void    SetMaxSize  (int size);
@@ -30,13 +37,11 @@ namespace Popup.Framework
 
     public interface ICharactor
     {
-        Charactor   PickCharactor   (int uid);
+        ref Charactor   PickCharactor   (int uid);
         bool        PopCharactor    (int uid);
-        bool        PopCharactor    (Charactor charactor);
+        bool        PopCharactor    (ref Charactor charactor);
         bool        AddCharactor    (int uid);
-        bool        AddCharactor    (Charactor charactor);
-        bool        RemoveCharactor (int uid);
-        bool        RemoveCharactor (Charactor charactor);
+        bool        AddCharactor    (ref Charactor charactor);
     }
 
 }

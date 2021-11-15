@@ -16,8 +16,8 @@ public class Manager : MonoBehaviour
     private void Awake()
     {
         DontDestroyOnLoad(this);
-        DontDestroyOnLoad(eventSystem);
-        DontDestroyOnLoad(auth);
-        DontDestroyOnLoad(sceneController);
+        //DontDestroyOnLoad(eventSystem);
+        //DontDestroyOnLoad(auth);
+        //DontDestroyOnLoad(sceneController);
     }
 }

@@ -6,7 +6,7 @@ using Popup.Inventory;
 using Popup.Items;
 using Popup.Configs;
 using Popup.Defines;
-using Popup.Utils;
+using Popup.Library;
 
 using Popup.ServerJob;
 
@@ -73,7 +73,7 @@ public class Game : MonoBehaviour
         string json;
 
         Debug.Log(test.GetName);
-        Debug.Log(test.GetUID);
+        Debug.Log(test.GetUID());
         Debug.Log(test.GetAmount);
         Debug.Log(test.GetWeight);
         Debug.Log(test.GetVolume);

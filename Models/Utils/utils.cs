@@ -3,12 +3,13 @@ using System.Collections;
 using System;
 using System.Text;
 using Popup.Configs;
+using Popup.Framework;
 
 
 
 
 
-namespace Popup.Utils
+namespace Popup.Library
 {
     using Configs = Configs.Configs;
     public static class Libs
@@ -67,6 +68,18 @@ namespace Popup.Utils
 			return result;
 		}
 
+        public static int FindEmptyIndex<T>(ref T[] array, int startIndex = 0)
+        {
+            int index = startIndex;
+
+            for (; index < array.Length; ++index)
+            {
+                if (array[index] == null) break;
+            }
+
+            return index;
+        }
+
     }
 
     public static class Guard
@@ -93,12 +106,25 @@ namespace Popup.Utils
         }
 
 
-        public static void InRange<T>(int index, ref T[] array)
+        public static void MustInRange<T>(int index, ref T[] array, string caller)
         {
             if (!Libs.IsInclude(index, ref array))
             {
-                throw new Error(MakeString(index.ToString(), " is out of range(0 ~ ", array.Length.ToString(), ")") );
+                throw new Error(MakeString(index.ToString(), " is out of range(0 ~ ", array.Length.ToString(), ") - " + caller) );
             }
+        }
+
+
+        public static ref T MustInclude<T>(int uid, ref T[] array, string caller) where T: IPopupObject
+        {
+            for(int i = 0; i < array.Length; ++i)
+            {
+                if (array[i].GetUID().Equals(uid))
+                {
+                    return ref array[i];
+                }
+            }
+            throw new Error("Error: not include - " + caller);
         }
 
 
@@ -120,11 +146,18 @@ namespace Popup.Utils
         }
 
 
-        public static T MustConvertTo<T> (object item) where T: class
+        public static T MustConvertTo<T> (object item, string caller) where T: class
         {
             if (item == null) { return null; }
             if (item is T t)  { return t; }
-            throw new Error("Convert Fail");
+            throw new Error("Convert Fail - " + caller);
+        }
+
+
+        public static void MustNotNull(object obj, string caller)
+        {
+            if (obj == null)
+                throw new Error("This is null - " + caller);
         }
     }
 

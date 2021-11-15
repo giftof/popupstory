@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
-using Popup.Utils;
+using Popup.Library;
 using Popup.Defines;
+using Popup.Framework;
 using System;
 using System.Data;
 
@@ -14,7 +15,7 @@ namespace Popup.Items
 	using Cfg = Configs.Configs;
 	using ServerJob = ServerJob.ServerJob;
 	[Serializable]
-	public class Item
+	public class Item : IPopupObject
 	{
 		[SerializeField]
 		string		name;
@@ -40,7 +41,7 @@ namespace Popup.Items
 
 		public 	string 	GetName 		=> name;
 		public 	Grade 	GetGrade 		=> grade;
-		public 	int 	GetUID 			=> uid;
+        public int GetUID() => uid;
         public 	int 	GetSpellAmount 	=> magicIdArray == null ? 0 : magicIdArray.Length;
 		public 	float 	GetWeight 		=> weight * amount;
 		public 	float 	GetVolume 		=> volume * amount;
@@ -107,7 +108,7 @@ namespace Popup.Items
 		{
 			if (0 < (category & ItemCat.hasSpell))
 			{
-				Guard.InRange(index, ref magicIdArray);
+				Guard.MustInRange(index, ref magicIdArray, "[GetSpell in item]");
 				return (true, magicIdArray[index]);
 			}
 			return (false, 0);

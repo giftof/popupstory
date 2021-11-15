@@ -4,7 +4,7 @@ using UnityEngine;
 using System;
 using Popup.Configs;
 using Popup.Items;
-using Popup.Utils;
+using Popup.Library;
 using Popup.Delegate;
 using Popup.Framework;
 
@@ -38,14 +38,13 @@ namespace Popup.Inventory
 		// Item        lastItem = null;  // cacheing to save few searching
 
 
-
 		public Inventory(ref Item[] itemArray, int maxSize) => Init(ref itemArray, maxSize);
 		public Inventory(Item[]     itemArray, int maxSize) => Init(ref itemArray, maxSize);
 		public Inventory(ref Inventory inventory)           => Init(ref inventory.inventory, inventory.maxSize);
 
 
-		public bool UseItem     (Item item) => UseItem(item.GetUID);
-		public void SetMaxSize  (int size)  => maxSize = size;
+		public bool UseItem     (ref Item item) => UseItem(item.GetUID());
+		public void SetMaxSize  (int size)		=> maxSize = size;
 
 
         private void Init(ref Item[] itemArray, int maxSize)
@@ -69,8 +68,10 @@ namespace Popup.Inventory
 
 			foreach (Item element in item)
 			{
-				index = GetEmptySlot(index);
-				if (maxSize <= index) break;
+				index = Libs.FindEmptyIndex(ref inventory, index);
+				//index = GetEmptySlot(index);
+				if (!Libs.IsInclude(index, maxSize)) break;
+				//if (maxSize <= index) break;
 				if (element != null && element.IsExist)
 				{
 					inventory[index++] = element;
@@ -91,23 +92,23 @@ namespace Popup.Inventory
 		}
 
 
-		private int GetEmptySlot(int fromIndex = 0)
-		{
-			int index = maxSize;
+		//private int GetEmptySlot(int fromIndex = 0)
+		//{
+		//	int index = maxSize;
 
-			if (fromIndex.Equals(index)) return index;
+		//	if (fromIndex.Equals(index)) return index;
 
-			for (; fromIndex < maxSize; ++fromIndex)
-			{
-				if (inventory[fromIndex] == null)
-				{
-					index = fromIndex;
-					break;
-				}
-			}
+		//	for (; fromIndex < maxSize; ++fromIndex)
+		//	{
+		//		if (inventory[fromIndex] == null)
+		//		{
+		//			index = fromIndex;
+		//			break;
+		//		}
+		//	}
 
-			return index;
-		}
+		//	return index;
+		//}
 
 
 		private (int, int) Search(int uid, bool mustHaveSpace = true)
@@ -123,9 +124,10 @@ namespace Popup.Inventory
 				{
 					result.Item2 = Math.Min(result.Item1, result.Item2);
 				}
-				else if (item.GetUID.Equals(uid) && Libs.IsEnablePair(mustHaveSpace, item.HasSpace()))
+				else if (item.GetUID().Equals(uid) && Libs.IsEnablePair(mustHaveSpace, item.HasSpace()))
 				{
-					result.Item2 = GetEmptySlot(result.Item1);
+					result.Item2 = Libs.FindEmptyIndex(ref inventory, result.Item1);
+					//result.Item2 = GetEmptySlot(result.Item1);
 					break;
 				}
 			}
@@ -136,9 +138,9 @@ namespace Popup.Inventory
 
 		private bool AddNewItem(ref Item item)
 		{
-			(int, int) result = Search(item.GetUID, false);
+			(int, int) result = Search(item.GetUID(), false);
 
-			Guard.MustNotInclude(result.Item1, maxSize, "[AddNewItem]");
+			Guard.MustNotInclude(result.Item1, maxSize, "[AddNewItem in inventory]");
 
 			if (Libs.IsInclude(result.Item2, maxSize))
 			{
@@ -152,7 +154,7 @@ namespace Popup.Inventory
 
 		private bool AddStackableItem(ref Item item)
 		{
-			(int, int) result = Search(item.GetUID, true);
+			(int, int) result = Search(item.GetUID(), true);
 
 			if (result.Item1.Equals(result.Item2) && result.Item2.Equals(maxSize))
 			{
@@ -195,7 +197,7 @@ namespace Popup.Inventory
 
             if (result.Item1 < maxSize)
             {
-                return Guard.MustConvertTo<Item>(inventory[UID]);
+                return Guard.MustConvertTo<Item>(inventory[UID], "[PickItem in inventory]");
             }
 
             throw new NotImplementedException();
@@ -233,7 +235,8 @@ namespace Popup.Inventory
 
 		public bool PopItem(int UID)
 		{
-			throw new NotImplementedException();
+			Guard.MustInclude(UID, ref inventory, "[PopItem in inventory]") = null;
+			return true;
 		}
 
 
@@ -245,7 +248,7 @@ namespace Popup.Inventory
 			{
 				if (item != null)
 				{
-					Debug.Log("UID = " + item.GetUID + ", name = " + item.GetName + ", amt = " + item.GetAmount + ", w = " + item.GetWeight + ", v = " + item.GetVolume);
+					Debug.Log("UID = " + item.GetUID() + ", name = " + item.GetName + ", amt = " + item.GetAmount + ", w = " + item.GetWeight + ", v = " + item.GetVolume);
 				}
 				else
 				{
