@@ -8,20 +8,6 @@ using System.Data;
 
 
 
-public interface IItem : IPopupObject
-{
-	string 	GetName();
-	float 	GetWeight();
-	float 	GetVolume();
-	ItemCat GetCategory();
-	int		GetLeftOver();
-	bool	IsExist();
-	bool 	Exhaust();
-	bool	HasSpace();
-}
-
-
-
 namespace Popup.Items
 {
 	using Cfg = Configs.Configs;
@@ -45,7 +31,6 @@ namespace Popup.Items
 		protected int	   maxAmount = int.MaxValue;
 
 
-
         public 	int 	GetUID       () => uid;
 		public 	string 	GetName      () => name;
 		public 	float 	GetWeight    ()	=> 0;
@@ -55,26 +40,23 @@ namespace Popup.Items
 		public  bool 	Exhaust      ()	=> 0 < amount--;
 		public  ItemCat GetCategory  () => category;
 
+
 /* test func start */
 		public void SetCat	  (ItemCat cat )   => category    = cat;  	// test
 		public void SetName	  (string  name)   => this.name   = name; 	// test
 		public void SetUID	  (int 	   UID )   => uid         = UID;  	// test
 		public void SetAmount (int     amount) => this.amount = amount; // test
-		
 		public void SetWeight (float   weight) // test
 		{
 			this.weight = weight;
-			int limit = Libs.Round(Cfg.slotWeightCapacity / weight);
-
-			maxAmount = Math.Min(maxAmount, limit);
+			int limit   = Libs.Round(Cfg.slotWeightCapacity / weight);
+			maxAmount   = Math.Min(maxAmount, limit);
 		}
-
 		public void SetVolume (float   volume) // test
 		{
 			this.volume = volume;
-			int limit = Libs.Round(Cfg.slotVolumeCapacity / volume);
-			
-			maxAmount = Math.Min(maxAmount, limit);
+			int limit   = Libs.Round(Cfg.slotVolumeCapacity / volume);
+			maxAmount   = Math.Min(maxAmount, limit);
 		}
 /* test func end */
 
@@ -103,12 +85,14 @@ namespace Popup.Items
 
 		public EquipItem(int uid) : base(uid) => this.category = ItemCat.equip;
 
+
 		public override bool HasSpace() => false;
 
 
 		public  Grade GetGrade 		    => grade;
 		public 	int   GetSpellAmount    => spellArray == null ? 0 : spellArray.Length;
 		public  Spell GetSpell(int uid) => Guard.MustInclude(uid, ref spellArray, "[GetSpell in EquipItem]");
+
 
 		public override object Clone()
 		{
@@ -127,12 +111,14 @@ namespace Popup.Items
 	{
 		public ToolItem(int uid) : base(uid) => this.category = ItemCat.tool;
 
+
 		public override bool HasSpace() 	   => amount < maxAmount;
 
 
 		private	void	SplitPile (int count)  => amount -= count;
 		private int 	GetSpace			   => maxAmount - amount;
 		public	int		GetAmount			   => amount;
+
 
 		public  bool	AddStack(ref Item item)
 		{
@@ -154,10 +140,7 @@ namespace Popup.Items
 			other.SetUID(ServerJob.RequestNewUID);
 			return other;
 		}
-
 	}
-
-
 }
 
 

@@ -4,6 +4,8 @@ using UnityEngine;
 using System.Data;
 using Popup.Items;
 using Popup.Charactors;
+using Popup.Defines;
+
 
 
 namespace Popup.Framework
@@ -18,6 +20,20 @@ namespace Popup.Framework
     public interface IPopupObject
     {
         int GetUID();
+    }
+
+
+
+    public interface IItem : IPopupObject
+    {
+        string 	GetName();
+        float 	GetWeight();
+        float 	GetVolume();
+        ItemCat GetCategory();
+        int		GetLeftOver();
+        bool	IsExist();
+        bool 	Exhaust();
+        bool	HasSpace();
     }
 
 
@@ -43,5 +59,4 @@ namespace Popup.Framework
         bool            AddCharactor    (int uid);
         bool            AddCharactor    (ref Charactor charactor);
     }
-
 }
