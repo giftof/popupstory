@@ -26,8 +26,8 @@ namespace Popup.Framework
 	{
         //ModelBase PickItem(int uid);
         Item    PickItem    (int uid);
-        bool    UseItem     (int uid);
-        bool    UseItem     (ref Item item);
+        bool    ExhaustItem (int uid);
+        bool    ExhaustItem (ref Item item);
         bool    PopItem     (int uid);
         bool    AddItem     (ref Item item);
         void    SetMaxSize  (int size);

@@ -3,11 +3,12 @@ using System.Collections;
 using Popup.Configs;
 using Popup.Defines;
 using Popup.Library;
+using Popup.Framework;
 
 using Popup.ServerJob;
 
 
-public class Spell
+public class Spell : IPopupObject
 {
 	string			name;
 	int				uid;
@@ -29,7 +30,13 @@ public class Spell
 		uid 		= ServerJob.RequestNewUID;
 		effective 	= SpellEffective.none;
 		element 	= Elements.none;
+
 	}
+
+
+	public 	int GetUID() => uid;
+
+
 }
 
 public class Buff

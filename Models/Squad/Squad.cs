@@ -29,18 +29,17 @@ namespace Popup.Squad
             SetMaxSize(inventorySize);
         }
 
+        public int GetUID() => uid;
 
+        private void InventoryVerify ()              => inventory.EraseDummySlot();
+        public  bool AddItem         (ref Item item) => inventory.AddItem(ref item);
+        public  bool ExhaustItem     (ref Item item) => inventory.ExhaustItem(ref item);
+        public  bool ExhaustItem     (int uid)       => inventory.ExhaustItem(uid);
+        public  Item PickItem        (int uid)       => inventory.PickItem(uid);
+        public  bool PopItem         (int uid)       => inventory.PopItem(uid);
+        public  void SetMaxSize      (int size)      => inventory.SetMaxSize(size);
+        public  void SetName         (string name)   => this.name = name;
 
-        void        InventoryVerify ()              => inventory.EraseDummySlot();
-        public bool AddItem         (ref Item item) => inventory.AddItem(ref item);
-        public bool UseItem         (ref Item item) => inventory.UseItem(ref item);
-        public bool UseItem         (int uid)       => inventory.UseItem(uid);
-        public Item PickItem        (int uid)       => inventory.PickItem(uid);
-        public bool PopItem         (int uid)       => inventory.PopItem(uid);
-        public void SetMaxSize      (int size)      => inventory.SetMaxSize(size);
-        public void SetName         (string name)   => this.name = name;
-
-        public int  GetUID() => uid;
 
 
 

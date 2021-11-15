@@ -7,6 +7,7 @@ using Popup.Items;
 using Popup.Library;
 using Popup.Delegate;
 using Popup.Framework;
+using Popup.Defines;
 
 
 
@@ -14,22 +15,6 @@ using Popup.Framework;
 
 namespace Popup.Inventory
 {
-	// public interface ICompare
-	// {
-	// 	(int, int) TestSearch<T>(T value);
-	// }
-
-	//public interface IInventory
-	//{
-	//	//ModelBase PickItem(int uid);
-	//	Item PickItem	(int uid);
-	//	bool UseItem    (int uid);
-	//	bool UseItem    (Item item);
-	//	bool PopItem    (int uid);
-	//	bool AddItem    (ref Item item);
-	//	void SetMaxSize (int size);
-
-	//}
 
 	public class Inventory : IInventory
 	{
@@ -39,11 +24,10 @@ namespace Popup.Inventory
 
 
 		public Inventory(ref Item[] itemArray, int maxSize) => Init(ref itemArray, maxSize);
-		public Inventory(Item[]     itemArray, int maxSize) => Init(ref itemArray, maxSize);
+		public Inventory(	 Item[] itemArray, int maxSize) => Init(ref itemArray, maxSize);
 		public Inventory(ref Inventory inventory)           => Init(ref inventory.inventory, inventory.maxSize);
 
 
-		public bool UseItem     (ref Item item) => UseItem(item.GetUID());
 		public void SetMaxSize  (int size)		=> maxSize = size;
 
 
@@ -69,10 +53,13 @@ namespace Popup.Inventory
 			foreach (Item element in item)
 			{
 				index = Libs.FindEmptyIndex(ref inventory, index);
-				//index = GetEmptySlot(index);
-				if (!Libs.IsInclude(index, maxSize)) break;
-				//if (maxSize <= index) break;
-				if (element != null && element.IsExist)
+				
+				if (!Libs.IsInclude(index, maxSize))
+				{
+					break;
+				}
+
+				if (element != null && element.IsExist())
 				{
 					inventory[index++] = element;
 				}
@@ -84,31 +71,12 @@ namespace Popup.Inventory
 		{
 			for (int index = 0; index < maxSize; ++index)
 			{
-				if (inventory[index] != null && !inventory[index].IsExist)
+				if (inventory[index] != null && !inventory[index].IsExist())
 				{
 					inventory[index] = null;
 				}
 			}
 		}
-
-
-		//private int GetEmptySlot(int fromIndex = 0)
-		//{
-		//	int index = maxSize;
-
-		//	if (fromIndex.Equals(index)) return index;
-
-		//	for (; fromIndex < maxSize; ++fromIndex)
-		//	{
-		//		if (inventory[fromIndex] == null)
-		//		{
-		//			index = fromIndex;
-		//			break;
-		//		}
-		//	}
-
-		//	return index;
-		//}
 
 
 		private (int, int) Search(int uid, bool mustHaveSpace = true)
@@ -127,7 +95,6 @@ namespace Popup.Inventory
 				else if (item.GetUID().Equals(uid) && Libs.IsEnablePair(mustHaveSpace, item.HasSpace()))
 				{
 					result.Item2 = Libs.FindEmptyIndex(ref inventory, result.Item1);
-					//result.Item2 = GetEmptySlot(result.Item1);
 					break;
 				}
 			}
@@ -161,18 +128,18 @@ namespace Popup.Inventory
 				return false;
 			}
 
-			if (Libs.IsInclude(result.Item1, maxSize) && inventory[result.Item1].AddStack(ref item))
+			if (Libs.IsInclude(result.Item1, maxSize) && ((ToolItem)inventory[result.Item1]).AddStack(ref item))
 			{
 				return true;
 			}
 
 			if (Libs.IsInclude(result.Item2, maxSize))
 			{
-				inventory[result.Item2] = (Item)item.Clone();
-				inventory[result.Item2].AddStack(ref item);
+				inventory[result.Item2] = (ToolItem)item.Clone();
+				((ToolItem)inventory[result.Item2]).AddStack(ref item);
 			}
 
-			if (0 < item.GetAmount)
+			if (0 < ((ToolItem)item).GetAmount)
 			{
 				return AddStackableItem(ref item);
 			}
@@ -183,10 +150,16 @@ namespace Popup.Inventory
 
 		public bool AddItem(ref Item item)
 		{
-			if (item.IsStackable)
+			if (item.GetLeftOver() == 0)
+			{
+				return false;
+			}
+			
+			if (item.GetCategory() == ItemCat.tool)
 			{
 				return AddStackableItem(ref item);
 			}
+
 			return AddNewItem(ref item);
 		}
 
@@ -206,7 +179,7 @@ namespace Popup.Inventory
 
         private bool CheckEmptySlot(ref Item item)
 		{
-			if (!item.IsExist)
+			if (!item.IsExist())
 			{
 				item = null;
 				return true;
@@ -215,7 +188,8 @@ namespace Popup.Inventory
 		}
 
 
-		public bool UseItem(int UID)
+		// public bool UseItem(int UID)
+		public bool ExhaustItem(int UID)
 		{
 			(int, int) result = Search(UID, false);
 
@@ -225,13 +199,14 @@ namespace Popup.Inventory
 				{
 					return false;
 				}
-				inventory[result.Item1].DecreaseAmount();
+				inventory[result.Item1].Exhaust();
 				CheckEmptySlot(ref inventory[result.Item1]);
 				return true;
 			}
 			return false;
 		}
 
+		public bool ExhaustItem (ref Item item) => item.Exhaust();
 
 		public bool PopItem(int UID)
 		{
@@ -248,7 +223,7 @@ namespace Popup.Inventory
 			{
 				if (item != null)
 				{
-					Debug.Log("UID = " + item.GetUID() + ", name = " + item.GetName + ", amt = " + item.GetAmount + ", w = " + item.GetWeight + ", v = " + item.GetVolume);
+					Debug.Log("UID = " + item.GetUID() + ", name = " + item.GetName() + ", amt = " + item.GetLeftOver() + ", w = " + item.GetWeight() + ", v = " + item.GetVolume());
 				}
 				else
 				{
