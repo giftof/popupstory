@@ -188,7 +188,6 @@ namespace Popup.Inventory
 		}
 
 
-		// public bool UseItem(int UID)
 		public bool ExhaustItem(int UID)
 		{
 			(int, int) result = Search(UID, false);

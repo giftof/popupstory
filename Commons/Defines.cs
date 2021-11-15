@@ -27,16 +27,6 @@ namespace Popup.Defines
         equip       = 0x0001,
         tool        = 0x0002,
     }
-    // public enum ItemCat
-    // {
-    //     none,
-    //     amount      = 0x0001,
-    //     equip       = 0x0002,
-    //     tool        = 0x0004,
-    //     hasSpell    = 0x0008,
-    //     stackable   = 0x0010,
-    //     quest       = 0x0020,
-    // }
 
     public enum EquipSlot
     {

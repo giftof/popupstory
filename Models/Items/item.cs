@@ -60,21 +60,21 @@ namespace Popup.Items
 		public void SetName	  (string  name)   => this.name   = name; 	// test
 		public void SetUID	  (int 	   UID )   => uid         = UID;  	// test
 		public void SetAmount (int     amount) => this.amount = amount; // test
+		
 		public void SetWeight (float   weight) // test
 		{
 			this.weight = weight;
 			int limit = Libs.Round(Cfg.slotWeightCapacity / weight);
 
 			maxAmount = Math.Min(maxAmount, limit);
-// Debug.Log("max AMT by w = " + maxAmount);
 		}
+
 		public void SetVolume (float   volume) // test
 		{
 			this.volume = volume;
 			int limit = Libs.Round(Cfg.slotVolumeCapacity / volume);
 			
 			maxAmount = Math.Min(maxAmount, limit);
-// Debug.Log("max AMT by v = " + maxAmount);
 		}
 /* test func end */
 
@@ -83,9 +83,6 @@ namespace Popup.Items
 
 
 		protected bool HaveAttribute	(ItemCat attribute) => 0 < (category & attribute);
-		// public	abstract bool	IsExist();
-		// public	abstract int	GetLeftOver();
-		// public	abstract bool	Exhaust();
 		public 	abstract bool	HasSpace();
 
 
@@ -137,32 +134,16 @@ namespace Popup.Items
 		private int 	GetSpace			   => maxAmount - amount;
 		public	int		GetAmount			   => amount;
 
-		// public  bool	AddStack(ref ToolItem item)
-		// {
-		// 	int enableStack = Math.Min(item.amount, GetSpace);
-
-		// 	amount += enableStack;
-		// 	item.SplitPile(enableStack);
-
-		// 	return item.amount.Equals(0);
-		// }
 		public  bool	AddStack(ref Item item)
 		{
-// Debug.Log("before add: " + item.GetLeftOver());
-// Debug.Log("this maxAmt: " + maxAmount);
 			ToolItem toolItem = (ToolItem)item;
-// Debug.Log("...: " + toolItem.amount);
 			int enableStack = Math.Min(toolItem.amount, GetSpace);
-// Debug.Log("es.: " + enableStack);
 
 			amount += enableStack;
 			toolItem.SplitPile(enableStack);
 			item.SetAmount(toolItem.amount);
-// Debug.Log("...: " + toolItem.amount);
-// Debug.Log("after add: " + item.GetLeftOver());
 
 			return item.GetLeftOver().Equals(0);
-			// return item.amount.Equals(0);
 		}
 
 
