@@ -38,10 +38,10 @@ namespace Popup.Framework
     public interface ICharactor
     {
         ref Charactor   PickCharactor   (int uid);
-        bool        PopCharactor    (int uid);
-        bool        PopCharactor    (ref Charactor charactor);
-        bool        AddCharactor    (int uid);
-        bool        AddCharactor    (ref Charactor charactor);
+        bool            PopCharactor    (int uid);
+        bool            PopCharactor    (ref Charactor charactor);
+        bool            AddCharactor    (int uid);
+        bool            AddCharactor    (ref Charactor charactor);
     }
 
 }
