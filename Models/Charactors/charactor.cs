@@ -9,11 +9,11 @@ using System;
 
 
 
-namespace Popup.Charactor
+namespace Popup.Charactors
 {
     using Cfg = Configs.Configs;
     //using Ivn = Inventory.Inventory;
-    public struct Charactor
+    public class Charactor
     {
         string          name;
         readonly int    uid;

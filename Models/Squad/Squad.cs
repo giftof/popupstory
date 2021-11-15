@@ -7,7 +7,7 @@ using Popup.Framework;
 
 namespace Popup.Squad
 {
-    using Charactor = Charactor.Charactor;
+    using Charactor = Charactors.Charactor;
     using Inventory = Inventory.Inventory;
     using Item = Items.Item;
 

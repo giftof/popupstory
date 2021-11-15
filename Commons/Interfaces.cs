@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Data;
 using Popup.Items;
-using Popup.Charactor;  // why not useable?
+using Popup.Charactors;
 
 
 namespace Popup.Framework
@@ -30,23 +30,13 @@ namespace Popup.Framework
 
     public interface ICharactor
     {
-		Charactor.Charactor   PickCharactor   (int uid);
+        Charactor   PickCharactor   (int uid);
         bool        PopCharactor    (int uid);
-        bool        PopCharactor    (Charactor.Charactor charactor);
+        bool        PopCharactor    (Charactor charactor);
         bool        AddCharactor    (int uid);
-        bool        AddCharactor    (Charactor.Charactor charactor);
+        bool        AddCharactor    (Charactor charactor);
         bool        RemoveCharactor (int uid);
-        bool        RemoveCharactor (Charactor.Charactor charactor);
+        bool        RemoveCharactor (Charactor charactor);
     }
-    //public interface ICharactor
-    //{
-    //    Charactor   PickCharactor   (int uid);  // why not?
-    //    bool        PopCharactor    (int uid);
-    //    bool        PopCharactor    (Charactor charactor);// why not?
-    //    bool        AddCharactor    (int uid);
-    //    bool        AddCharactor    (Charactor charactor);// why not?
-    //    bool        RemoveCharactor (int uid);
-    //    bool        RemoveCharactor (Charactor charactor);// why not?
-    //}
 
 }
