@@ -31,6 +31,10 @@ namespace Popup.Squad
 
         public int GetUID() => uid;
 
+        public object Duplicate() => null;      // impl.
+        public object DuplicateNew() => null;   // impl.
+
+
         private void InventoryVerify ()              => inventory.EraseDummySlot();
         public  bool AddItem         (ref Item item) => inventory.AddItem(ref item);
         public  bool ExhaustItem     (ref Item item) => inventory.ExhaustItem(ref item);
@@ -66,5 +70,6 @@ namespace Popup.Squad
             }
             return false;
         }
+
     }
 }

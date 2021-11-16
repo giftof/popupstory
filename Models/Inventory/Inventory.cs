@@ -81,20 +81,20 @@ namespace Popup.Inventory
 
 		private (int, int) Search(int uid, bool mustHaveSpace = true)
 		{
-			(int, int) 	result = (0, maxSize);
-			Item 		item;
+			(int matchSlotIndex, int emptySlotIndex) result = (0, maxSize);
+			Item item;
 
-			for (; result.Item1 < maxSize; ++result.Item1)
+			for (; result.matchSlotIndex < maxSize; ++result.matchSlotIndex)
 			{
-				item = inventory[result.Item1];
+				item = inventory[result.matchSlotIndex];
 
 				if (item == null)
 				{
-					result.Item2 = Math.Min(result.Item1, result.Item2);
+					result.emptySlotIndex = Math.Min(result.matchSlotIndex, result.emptySlotIndex);
 				}
 				else if (item.GetUID().Equals(uid) && Libs.IsEnablePair(mustHaveSpace, item.HasSpace()))
 				{
-					result.Item2 = Libs.FindEmptyIndex(ref inventory, result.Item1);
+					result.emptySlotIndex = Libs.FindEmptyIndex(ref inventory, result.matchSlotIndex);
 					break;
 				}
 			}
@@ -105,13 +105,13 @@ namespace Popup.Inventory
 
 		private bool AddNewItem(ref Item item)
 		{
-			(int, int) result = Search(item.GetUID(), false);
+			(int matchSlotIndex, int emptySlotIndex) = Search(item.GetUID(), false);
 
-			Guard.MustNotInclude(result.Item1, maxSize, "[AddNewItem in inventory]");
+			Guard.MustNotInclude(matchSlotIndex, maxSize, "[AddNewItem in inventory]");
 
-			if (Libs.IsInclude(result.Item2, maxSize))
+			if (Libs.IsInclude(emptySlotIndex, maxSize))
 			{
-				inventory[result.Item2] = item;
+				inventory[emptySlotIndex] = item;
 				return true;
 			}
 
@@ -121,26 +121,25 @@ namespace Popup.Inventory
 
 		private bool AddStackableItem(ref Item item)
 		{
-			(int, int) result = Search(item.GetUID(), true);
+			(int matchSlotIndex, int emptySlotIndex) = Search(item.GetUID(), true);
 
-			if (result.Item1.Equals(result.Item2) && result.Item2.Equals(maxSize))
+			if (matchSlotIndex.Equals(emptySlotIndex) && emptySlotIndex.Equals(maxSize))
 			{
 				return false;
 			}
 
-			if (Libs.IsInclude(result.Item1, maxSize) && ((ToolItem)inventory[result.Item1]).AddStack(ref item))
+			if (Libs.IsInclude(matchSlotIndex, maxSize) && ((ToolItem)inventory[matchSlotIndex]).AddStack(ref item))
 			{
 				return true;
 			}
 
-			if (Libs.IsInclude(result.Item2, maxSize))
+			if (Libs.IsInclude(emptySlotIndex, maxSize))
 			{
-				//inventory[result.Item2] = (ToolItem)item.Clone();
-				inventory[result.Item2] = (ToolItem)item.DuplicateEmptyNew();
-				((ToolItem)inventory[result.Item2]).AddStack(ref item);
+				inventory[emptySlotIndex] = (ToolItem)item.DuplicateEmptyNew();
+				((ToolItem)inventory[emptySlotIndex]).AddStack(ref item);
 			}
 
-			if (0 < ((ToolItem)item).GetAmount)
+			if (0 < item.GetLeftOver())
 			{
 				return AddStackableItem(ref item);
 			}
@@ -167,9 +166,9 @@ namespace Popup.Inventory
 
         public Item PickItem(int UID)
         {
-            (int, int) result = Search(UID, false);
+            (int matchSlotIndex, _) = Search(UID, false);
 
-            if (result.Item1 < maxSize)
+            if (matchSlotIndex < maxSize)
             {
                 return Guard.MustConvertTo<Item>(inventory[UID], "[PickItem in inventory]");
             }
@@ -191,16 +190,16 @@ namespace Popup.Inventory
 
 		public bool ExhaustItem(int UID)
 		{
-			(int, int) result = Search(UID, false);
+			(int matchSlotIndex, _) = Search(UID, false);
 
-			if (Libs.IsInclude(result.Item1, maxSize))
+			if (Libs.IsInclude(matchSlotIndex, maxSize))
 			{
-				if (CheckEmptySlot(ref inventory[result.Item1])) 
+				if (CheckEmptySlot(ref inventory[matchSlotIndex])) 
 				{
 					return false;
 				}
-				inventory[result.Item1].Exhaust();
-				CheckEmptySlot(ref inventory[result.Item1]);
+				inventory[matchSlotIndex].Exhaust();
+				CheckEmptySlot(ref inventory[matchSlotIndex]);
 				return true;
 			}
 			return false;

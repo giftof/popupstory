@@ -48,7 +48,6 @@ namespace Popup.Charactors
 
 
         public string   GetName         => name;
-        public int      GetUID()        => uid;
         public int      GetLevel        => level;
         public int      GetMaxHp        => maxHp;
         public int      GetMaxMp        => maxMp;
@@ -59,6 +58,11 @@ namespace Popup.Charactors
         public Buff[]   GetBuffArray    => buffArray;
         public Spell[]  GetSpellArray   => spellArray;
         public Item[]   GetEquipArray   => equipArray;
+
+
+        public int      GetUID()        => uid;
+        public object Duplicate() => null;      // impl.
+        public object DuplicateNew() => null;   // impl.
 
 
         void TakeAffect(ref Spell takeSpell)

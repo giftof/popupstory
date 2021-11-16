@@ -19,7 +19,10 @@ namespace Popup.Framework
 
     public interface IPopupObject
     {
-        int GetUID();
+        int     GetUID();
+
+        object  Duplicate();
+        object  DuplicateNew();
     }
 
 
@@ -34,11 +37,14 @@ namespace Popup.Framework
         bool	IsExist();
         bool 	Exhaust();
         bool	HasSpace();
+
+        object  DuplicateEmpty();
+        object  DuplicateEmptyNew();
     }
 
 
 
-	public interface IInventory
+    public interface IInventory
 	{
         //ModelBase PickItem(int uid);
         Item    PickItem    (int uid);

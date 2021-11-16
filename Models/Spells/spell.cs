@@ -36,7 +36,13 @@ public class Spell : IPopupObject
 
 	public 	int GetUID() => uid;
 
-
+	public object Duplicate() => MemberwiseClone();
+	public object DuplicateNew()
+    {
+		Spell other = (Spell)Duplicate();
+		other.uid = ServerJob.RequestNewUID;
+		return other;
+    }
 }
 
 public class Buff
