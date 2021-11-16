@@ -10,10 +10,10 @@ using Popup.ServerJob;
 
 public class Spell : IPopupObject
 {
-	string			name;
-	int				uid;
-	SpellEffective	effective;
-	Elements		element;
+	public string name { get; protected set; }
+	public int uid {get; protected set; }
+	public SpellEffective effective {get; protected set; }
+	public Elements element {get; protected set; }
 
 
 

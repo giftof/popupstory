@@ -23,19 +23,18 @@ namespace Popup.Inventory
 		// Item        lastItem = null;  // cacheing to save few searching
 
 
-		public Inventory(ref Item[] itemArray, int maxSize) => Init(ref itemArray, maxSize);
-		public Inventory(	 Item[] itemArray, int maxSize) => Init(ref itemArray, maxSize);
-		public Inventory(ref Inventory inventory)           => Init(ref inventory.inventory, inventory.maxSize);
+		public Inventory(Item[] itemArray, int maxSize) => Init(itemArray, maxSize);
+		public Inventory(Inventory inventory)           => Init(inventory.inventory, inventory.maxSize);
 
 
 		public void SetMaxSize(int size) => maxSize = size;
 
 
-        private void Init(ref Item[] itemArray, int maxSize)
+        private void Init(Item[] itemArray, int maxSize)
         {
 			InitInventory(maxSize);
 			if (itemArray != null)
-				Insert(ref itemArray);
+				Insert(itemArray);
         }
 
 
@@ -46,20 +45,20 @@ namespace Popup.Inventory
 		}
 
 
-		private void Insert(ref Item[] item)
+		private void Insert(Item[] item)
 		{
 			int index = 0;
 
 			foreach (Item element in item)
 			{
-				index = Libs.FindEmptyIndex(ref inventory, index);
+				index = Libs.FindEmptyIndex(inventory, index);
 				
 				if (!Libs.IsInclude(index, maxSize))
 				{
 					break;
 				}
 
-				if (element != null && element.IsExist())
+				if (element != null && element.IsExist)
 				{
 					inventory[index++] = element;
 				}
@@ -71,7 +70,7 @@ namespace Popup.Inventory
 		{
 			for (int index = 0; index < maxSize; ++index)
 			{
-				if (inventory[index] != null && !inventory[index].IsExist())
+				if (inventory[index] != null && !inventory[index].IsExist)
 				{
 					inventory[index] = null;
 				}
@@ -92,9 +91,9 @@ namespace Popup.Inventory
 				{
 					result.emptySlotIndex = Math.Min(result.matchSlotIndex, result.emptySlotIndex);
 				}
-				else if (item.GetUID().Equals(uid) && Libs.IsEnablePair(mustHaveSpace, item.HasSpace()))
+				else if (item.uid.Equals(uid) && Libs.IsEnablePair(mustHaveSpace, item.HasSpace))
 				{
-					result.emptySlotIndex = Libs.FindEmptyIndex(ref inventory, result.matchSlotIndex);
+					result.emptySlotIndex = Libs.FindEmptyIndex(inventory, result.matchSlotIndex);
 					break;
 				}
 			}
@@ -103,9 +102,9 @@ namespace Popup.Inventory
 		}
 
 
-		private bool AddNewItem(ref Item item)
+		private bool AddNewItem(Item item)
 		{
-			(int matchSlotIndex, int emptySlotIndex) = Search(item.GetUID(), false);
+			(int matchSlotIndex, int emptySlotIndex) = Search(item.uid, false);
 
 			Guard.MustNotInclude(matchSlotIndex, maxSize, "[AddNewItem in inventory]");
 
@@ -119,16 +118,16 @@ namespace Popup.Inventory
 		}
 
 
-		private bool AddStackableItem(ref Item item)
+		private bool AddStackableItem(Item item)
 		{
-			(int matchSlotIndex, int emptySlotIndex) = Search(item.GetUID(), true);
+			(int matchSlotIndex, int emptySlotIndex) = Search(item.uid, true);
 
 			if (matchSlotIndex.Equals(emptySlotIndex) && emptySlotIndex.Equals(maxSize))
 			{
 				return false;
 			}
 
-			if (Libs.IsInclude(matchSlotIndex, maxSize) && ((ToolItem)inventory[matchSlotIndex]).AddStack(ref item))
+			if (Libs.IsInclude(matchSlotIndex, maxSize) && ((ToolItem)inventory[matchSlotIndex]).AddStack(item))
 			{
 				return true;
 			}
@@ -136,31 +135,31 @@ namespace Popup.Inventory
 			if (Libs.IsInclude(emptySlotIndex, maxSize))
 			{
 				inventory[emptySlotIndex] = (ToolItem)item.DuplicateEmptyNew();
-				((ToolItem)inventory[emptySlotIndex]).AddStack(ref item);
+				((ToolItem)inventory[emptySlotIndex]).AddStack(item);
 			}
 
-			if (0 < item.GetLeftOver())
+			if (item.IsExist)
 			{
-				return AddStackableItem(ref item);
+				return AddStackableItem(item);
 			}
 
 			return true;
 		}
 
 
-		public bool AddItem(ref Item item)
+		public bool AddItem(Item item)
 		{
-			if (item.GetLeftOver() == 0)
+			if (!item.IsExist)
 			{
 				return false;
 			}
 			
-			if (item.GetCategory() == ItemCat.tool)
+			if (item.category.Equals(ItemCat.tool))
 			{
-				return AddStackableItem(ref item);
+				return AddStackableItem(item);
 			}
 
-			return AddNewItem(ref item);
+			return AddNewItem(item);
 		}
 
 
@@ -177,9 +176,9 @@ namespace Popup.Inventory
         }
 
 
-        private bool CheckEmptySlot(ref Item item)
+        private bool CheckEmptySlot(Item item)
 		{
-			if (!item.IsExist())
+			if (!item.IsExist)
 			{
 				item = null;
 				return true;
@@ -194,22 +193,22 @@ namespace Popup.Inventory
 
 			if (Libs.IsInclude(matchSlotIndex, maxSize))
 			{
-				if (CheckEmptySlot(ref inventory[matchSlotIndex])) 
+				if (CheckEmptySlot(inventory[matchSlotIndex])) 
 				{
 					return false;
 				}
 				inventory[matchSlotIndex].Use();
-				CheckEmptySlot(ref inventory[matchSlotIndex]);
+				CheckEmptySlot(inventory[matchSlotIndex]);
 				return true;
 			}
 			return false;
 		}
 
-		public bool UseItem (ref Item item) => item.Use();
+		public bool UseItem (Item item) => item.Use();
 
 		public bool PopItem(int UID)
 		{
-			Guard.MustInclude(UID, ref inventory, "[PopItem in inventory]") = null;
+			// Guard.MustInclude(UID, inventory, "[PopItem in inventory]") = null;
 			return true;
 		}
 
@@ -222,7 +221,8 @@ namespace Popup.Inventory
 			{
 				if (item != null)
 				{
-					Debug.Log("UID = " + item.GetUID() + ", name = " + item.GetName() + ", amt = " + item.GetLeftOver() + ", w = " + item.GetWeight() + ", v = " + item.GetVolume());
+					// Debug.Log("UID = " + item.GetUID() + ", name = " + item.GetName() + ", amt = " + item.GetLeftOver() + ", w = " + item.GetWeight() + ", v = " + item.GetVolume());
+					Debug.Log("UID = " + item.uid + ", name = " + item.name + ", amt = " + item.UseableCount + ", w = " + item.Weight() + ", v = " + item.Volume());
 				}
 				else
 				{

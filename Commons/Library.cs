@@ -25,9 +25,9 @@ namespace Popup.Library
 #endif
         }
 
-        public static bool   	IsInclude<T>    (int     index, ref T[] array  )    => 0 <= index && index < array.Length;
+        public static bool   	IsInclude<T>    (int     index, T[] array  )    => 0 <= index && index < array.Length;
         public static bool   	IsInclude       (int     index, int     maxSize)    => index < maxSize;
-        public static void   	IncreaseValue	(ref int dest,  int     amount )    => dest += amount;
+        public static void   	IncreaseValue	(int     dest,  int     amount )    => dest += amount;
         public static bool   	IsUnder         (int     dest,  int     cap    )    => dest < cap;
         public static T      	ConvertTo<T>    (object  item                  )    => (T)item;
         public static T      	FromJson<T>     (string  source                )    => JsonUtility.FromJson<T>(source);
@@ -58,7 +58,7 @@ namespace Popup.Library
         //}
         
 
-        public static int FindEmptyIndex<T>(ref T[] array, int startIndex = 0)
+        public static int FindEmptyIndex<T>(T[] array, int startIndex = 0)
         {
             int index = startIndex;
 
@@ -105,22 +105,22 @@ namespace Popup.Library
         }
 
 
-        public static void MustInRange<T>(int index, ref T[] array, string caller)
+        public static void MustInRange<T>(int index, T[] array, string caller)
         {
-            if (!Libs.IsInclude(index, ref array))
+            if (!Libs.IsInclude(index, array))
             {
                 throw new Error(MakeString(index.ToString(), " is out of range(0 ~ ", array.Length.ToString(), ") - " + caller) );
             }
         }
 
 
-        public static ref T MustInclude<T>(int uid, ref T[] array, string caller) where T: IPopupObject
+        public static T MustInclude<T>(int uid, T[] array, string caller) where T: IPopupObject
         {
             for(int i = 0; i < array.Length; ++i)
             {
-                if (array[i].GetUID().Equals(uid))
+                if (array[i].uid.Equals(uid))
                 {
-                    return ref array[i];
+                    return array[i];
                 }
             }
             throw new Error("Error: not include - " + caller);
@@ -164,7 +164,7 @@ namespace Popup.Library
 
     public static class Alignment
     {
-        public static void ToInclude(ref int value, (int, int) range)
+        public static void ToInclude(int value, (int, int) range)
         {
             if (value < range.Item1) { value = range.Item1; }
             if (range.Item2 < value) { value = range.Item2; }

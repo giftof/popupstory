@@ -7,6 +7,7 @@ using Popup.Items;
 using Popup.Configs;
 using Popup.Defines;
 using Popup.Library;
+using Newtonsoft.Json;
 
 using Popup.ServerJob;
 
@@ -69,15 +70,15 @@ public class Game : MonoBehaviour
     void DEBUG_Convert()
     {
         string TEST_JSON_ITEM1 = "{\"name\":\"glass sword\",\"uid\":88,\"weight\":1.2,\"volume\":3.4,\"amount\":1,\"grade\":4,\"category\":63,\"magicIdArray\":[1,2,3,4,5]}";
-        Item test = Libs.FromJson<EquipItem>(TEST_JSON_ITEM1);
+        EquipItem test = Libs.FromJson<EquipItem>(TEST_JSON_ITEM1);
         string json;
 
-        Debug.Log(test.GetName());
-        Debug.Log(test.GetUID());
-        Debug.Log(test.GetLeftOver());
-        Debug.Log(test.GetWeight());
-        Debug.Log(test.GetVolume());
-        Debug.Log(((EquipItem)test).GetSpellAmount);
+        Debug.Log(test.name);
+        Debug.Log(test.uid);
+        Debug.Log(test.durability);
+        Debug.Log(test.Weight());
+        Debug.Log(test.Volume());
+        Debug.Log(test.SpellAmount);
 
 
         // string json = Libs.ToJson(item8);
@@ -124,117 +125,123 @@ public class Game : MonoBehaviour
     {
         Inventory inventory = new Inventory(null, Configs.squadInventorySize);
 
-        Item item1 = new ToolItem(ServerJob.RequestNewUID);
-        item1.SetName("stack1");
-        item1.SetCat(ItemCat.tool);
-        ((ToolItem)item1).SetAmount(12);
-        item1.SetWeight(0.10f);
-        item1.SetVolume(0.20f);
+        string itemDef1 = $"{{\"uid\":0,\"name\":\"stack1\",\"category\":{(int)ItemCat.tool},\"amount\":12,\"weight\":0.1,\"volume\":0.2}}";
+        Item item1 = JsonConvert.DeserializeObject<ToolItem>(itemDef1);
+        Debug.Log(item1);
+        Debug.Log(item1.uid);
+        Debug.Log(item1.name);
 
-        Item item2 = new ToolItem(ServerJob.RequestNewUID);
-        item2.SetName("stack2");
-        item2.SetCat(ItemCat.tool);
-        ((ToolItem)item2).SetAmount(5);
-        item2.SetWeight(0.50f);
-        item2.SetVolume(0.10f);
 
-        Item item3 = new ToolItem(ServerJob.RequestNewUID);
-        item3.SetName("stack1");
-        item3.SetCat(ItemCat.tool);
-        ((ToolItem)item3).SetAmount(25);
-        item3.SetWeight(0.10f);
-        item3.SetVolume(0.20f);
+        string itemDef2 = $"{{\"uid\":1,\"name\":\"stack2\",\"category\":{(int)ItemCat.tool},\"amount\":5,\"weight\":0.5,\"volume\":0.1}}";
+        Item item2 = JsonConvert.DeserializeObject<ToolItem>(itemDef2);
 
-        Item item4 = new EquipItem(ServerJob.RequestNewUID);
-        item4.SetName("weapon1");
-        item4.SetCat(ItemCat.equip);
-        item4.SetAmount(1);
-        item4.SetWeight(2f);
-        item4.SetVolume(3f);
+        // Item item3 = new ToolItem(ServerJob.RequestNewUID);
+        // item3.SetName("stack1");
+        // item3.SetCat(ItemCat.tool);
+        // ((ToolItem)item3).SetAmount(25);
+        // item3.SetWeight(0.10f);
+        // item3.SetVolume(0.20f);
 
-        Item item5 = new EquipItem(ServerJob.RequestNewUID);
-        item5.SetName("helmet1");
-        item5.SetCat(ItemCat.equip);
-        item5.SetAmount(1);
-        item5.SetWeight(0.2f);
-        item5.SetVolume(1f);
+        // Item item4 = new EquipItem(ServerJob.RequestNewUID);
+        // item4.SetName("weapon1");
+        // item4.SetCat(ItemCat.equip);
+        // item4.SetAmount(1);
+        // item4.SetWeight(2f);
+        // item4.SetVolume(3f);
 
-        Item item6 = new EquipItem(ServerJob.RequestNewUID);
-        item6.SetName("leggings1");
-        item6.SetCat(ItemCat.equip);
-        item6.SetAmount(1);
-        item6.SetWeight(0.5f);
-        item6.SetVolume(5f);
+        // Item item5 = new EquipItem(ServerJob.RequestNewUID);
+        // item5.SetName("helmet1");
+        // item5.SetCat(ItemCat.equip);
+        // item5.SetAmount(1);
+        // item5.SetWeight(0.2f);
+        // item5.SetVolume(1f);
 
-        Item item7 = new EquipItem(ServerJob.RequestNewUID);
-        item7.SetName("chest1");
-        item7.SetCat(ItemCat.equip);
-        item7.SetAmount(1);
-        item7.SetWeight(1f);
-        item7.SetVolume(5f);
+        // Item item6 = new EquipItem(ServerJob.RequestNewUID);
+        // item6.SetName("leggings1");
+        // item6.SetCat(ItemCat.equip);
+        // item6.SetAmount(1);
+        // item6.SetWeight(0.5f);
+        // item6.SetVolume(5f);
 
-        Item item8 = new EquipItem(ServerJob.RequestNewUID);
-        item8.SetName("boots1");
-        item8.SetCat(ItemCat.equip);
-        item8.SetAmount(1);
-        item8.SetWeight(0.2f);
-        item8.SetVolume(1f);
+        // Item item7 = new EquipItem(ServerJob.RequestNewUID);
+        // item7.SetName("chest1");
+        // item7.SetCat(ItemCat.equip);
+        // item7.SetAmount(1);
+        // item7.SetWeight(1f);
+        // item7.SetVolume(5f);
 
-        Item item9 = new EquipItem(ServerJob.RequestNewUID);
-        item9.SetName("gloves1");
-        item9.SetCat(ItemCat.equip);
-        item9.SetAmount(1);
-        item9.SetWeight(0.2f);
-        item9.SetVolume(1f);
+        string itemDef8 = $"{{\"uid\":7,\"name\":\"boots1\",\"category\":{(int)ItemCat.equip},\"durability\":50,\"weight\":0.2,\"volume\":1}}";
+        Item item8 = JsonConvert.DeserializeObject<EquipItem>(itemDef8);
 
-        Item item10 = new ToolItem(ServerJob.RequestNewUID);
-        item10.SetName("stack1");
-        item10.SetCat(ItemCat.tool);
-        item10.SetAmount(10);
-        item10.SetWeight(0.10f);
-        item10.SetVolume(0.20f);
+        // Item item9 = new EquipItem(ServerJob.RequestNewUID);
+        // item9.SetName("gloves1");
+        // item9.SetCat(ItemCat.equip);
+        // item9.SetAmount(1);
+        // item9.SetWeight(0.2f);
+        // item9.SetVolume(1f);
+
+        // Item item10 = new ToolItem(ServerJob.RequestNewUID);
+        // item10.SetName("stack1");
+        // item10.SetCat(ItemCat.tool);
+        // item10.SetAmount(10);
+        // item10.SetWeight(0.10f);
+        // item10.SetVolume(0.20f);
 
         //inventory.DEBUG_ShowAllItems();
 
-        Debug.Log("add item1 = " + inventory.AddItem(ref item1));
-        Debug.Log("add item2 = " + inventory.AddItem(ref item2));
-        Debug.Log("add item3 = " + inventory.AddItem(ref item3));
-        Debug.Log("add item4 = " + inventory.AddItem(ref item4));
-        Debug.Log("add item5 = " + inventory.AddItem(ref item5));
-        Debug.Log("add item6 = " + inventory.AddItem(ref item6));
-        Debug.Log("add item7 = " + inventory.AddItem(ref item7));
-        Debug.Log("add item8 = " + inventory.AddItem(ref item8));
-        //Debug.Log("add item9 = " + inventory.AddItem(ref item9));
-        // Debug.Log("add item1 = " + inventory.AddItem(ref item1));
-        // Debug.Log("add item2 = " + inventory.AddItem(ref item2));
-        // Debug.Log("add item3 = " + inventory.AddItem(ref item3));
+        Debug.Log("add item1 = " + inventory.AddItem(item1));
+        Debug.Log("add item2 = " + inventory.AddItem(item2));
+        // Debug.Log("add item3 = " + inventory.AddItem(item3));
+        // Debug.Log("add item4 = " + inventory.AddItem(item4));
+        // Debug.Log("add item5 = " + inventory.AddItem(item5));
+        // Debug.Log("add item6 = " + inventory.AddItem(item6));
+        // Debug.Log("add item7 = " + inventory.AddItem(item7));
+        Debug.Log("add item8 = " + inventory.AddItem(item8));
+        //Debug.Log("add item9 = " + inventory.AddItem(item9));
+        // Debug.Log("add item1 = " + inventory.AddItem(item1));
+        // Debug.Log("add item2 = " + inventory.AddItem(item2));
+        // Debug.Log("add item3 = " + inventory.AddItem(item3));
 
         //inventory.UseItem(1);
         //inventory.UseItem(2);
 
 
 
-        //Debug.Log("add item10 = " + inventory.AddItem(ref item10));
+        //Debug.Log("add item10 = " + inventory.AddItem(item10));
 
         //inventory.ShowAllItems();
         //Debug.Log(item10.GetAmount);
 
-        Inventory inventory2 = new Inventory(ref inventory);
+        Inventory inventory2 = new Inventory(inventory);
 
-        Debug.Log("use i1 10 = " + inventory.UseItem(10));
-        Debug.Log("use i2 10 = " + inventory2.UseItem(10));
-        Debug.Log("use i1 10 = " + inventory.UseItem(10));
-        Debug.Log("use i2 10 = " + inventory2.UseItem(10));
-        Debug.Log("use i1 10 = " + inventory.UseItem(10));
-        Debug.Log("use i2 10 = " + inventory2.UseItem(10));
-        Debug.Log("use i1 10 = " + inventory.UseItem(10));
-        Debug.Log("use i2 10 = " + inventory2.UseItem(10));
-        Debug.Log("use i1 10 = " + inventory.UseItem(10));
-        Debug.Log("use i2 10 = " + inventory2.UseItem(10));
-        Debug.Log("use i1 10 = " + inventory.UseItem(10));
-        Debug.Log("use i2 10 = " + inventory2.UseItem(10));
-        Debug.Log("use i1 11 = " + inventory.UseItem(11));
-        Debug.Log("use i2 11 = " + inventory2.UseItem(11));
+        // Debug.Log("use i1 10 = " + inventory.UseItem(10));
+        // Debug.Log("use i2 10 = " + inventory2.UseItem(10));
+        // Debug.Log("use i1 10 = " + inventory.UseItem(10));
+        // Debug.Log("use i2 10 = " + inventory2.UseItem(10));
+        // Debug.Log("use i1 10 = " + inventory.UseItem(10));
+        // Debug.Log("use i2 10 = " + inventory2.UseItem(10));
+        // Debug.Log("use i1 10 = " + inventory.UseItem(10));
+        // Debug.Log("use i2 10 = " + inventory2.UseItem(10));
+        // Debug.Log("use i1 10 = " + inventory.UseItem(10));
+        // Debug.Log("use i2 10 = " + inventory2.UseItem(10));
+        // Debug.Log("use i1 10 = " + inventory.UseItem(10));
+        // Debug.Log("use i2 10 = " + inventory2.UseItem(10));
+        // Debug.Log("use i1 11 = " + inventory.UseItem(11));
+        // Debug.Log("use i2 11 = " + inventory2.UseItem(11));
+        Debug.Log("use i1 0 = " + inventory.UseItem(0));
+        Debug.Log("use i2 0 = " + inventory2.UseItem(0));
+        Debug.Log("use i1 0 = " + inventory.UseItem(0));
+        Debug.Log("use i2 0 = " + inventory2.UseItem(0));
+        Debug.Log("use i1 0 = " + inventory.UseItem(0));
+        Debug.Log("use i2 0 = " + inventory2.UseItem(0));
+        Debug.Log("use i1 0 = " + inventory.UseItem(0));
+        Debug.Log("use i2 0 = " + inventory2.UseItem(0));
+        Debug.Log("use i1 0 = " + inventory.UseItem(0));
+        Debug.Log("use i2 0 = " + inventory2.UseItem(0));
+        Debug.Log("use i1 0 = " + inventory.UseItem(0));
+        Debug.Log("use i2 0 = " + inventory2.UseItem(0));
+        Debug.Log("use i1 1 = " + inventory.UseItem(1));
+        Debug.Log("use i2 1 = " + inventory2.UseItem(1));
 
 
         // Debug.Log("use i1 11 = " + inventory.UseItem(11));
@@ -263,5 +270,16 @@ public class Game : MonoBehaviour
         inventory.DEBUG_ShowAllItems();
         inventory2.DEBUG_ShowAllItems();
         // string TEST_JSON_ITEM1 = "{\"name\":\"glass sword\",\"uid\":99,\"weight\":1.2,\"volume\":3.4,\"amount\":1,\"grade\":4,\"category\":63,\"magicIdArray\":[1,2,3,4,5]}";
+
+        // string json = Libs.ToJson(item8);
+        // Debug.Log(json);
+        // Item DT = JsonConvert.DeserializeObject<ToolItem>(json);
+        // Debug.Log(DT.GetName());
+        // Debug.Log(DT.GetWeight());
+        // Debug.Log(DT.GetVolume());
+
+        Debug.Log(JsonConvert.SerializeObject(item1));
+        Debug.Log(JsonConvert.SerializeObject(item2));
+        Debug.Log(JsonConvert.SerializeObject(item8));
     }
 }

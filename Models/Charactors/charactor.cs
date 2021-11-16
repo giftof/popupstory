@@ -15,36 +15,21 @@ namespace Popup.Charactors
 {
     using Cfg = Configs.Configs;
     //using Ivn = Inventory.Inventory;
-    [Serializable]
     public class Charactor : IPopupObject
     {
-        [SerializeField]
-        string          name;
-        [SerializeField]
-        readonly int    uid;
-        [SerializeField]
-        int             level;
-        [SerializeField]
-        int             exp;
-        [SerializeField]
-        int             maxHp;
-        [SerializeField]
-        int             curHp;
-        [SerializeField]
-        int             maxMp;
-        [SerializeField]
-        int             curMp;
-        [SerializeField]
-        int             speed;
-        [SerializeField]
-        int             power;
-        [SerializeField]
-        Buff[]          buffArray;
-        [SerializeField]
-        Spell[]         spellArray;
-        [SerializeField]
-        Item[]          equipArray;
-        //Ivn             inventory;
+        public string name { get; protected set; }
+        public int uid { get; protected set; }
+        public int level { get; protected set; }
+        public int exp { get; protected set; }
+        public int maxHp { get; protected set; }
+        public int curHp { get; protected set; }
+        public int maxMp { get; protected set; }
+        public int curMp { get; protected set; }
+        public int speed { get; protected set; }
+        public int power { get; protected set; }
+        public Buff[] buffArray { get; protected set; }
+        public Spell[] spellArray { get; protected set; }
+        public Item[] equipArray { get; protected set; }
 
 
         public string   GetName         => name;
@@ -65,18 +50,18 @@ namespace Popup.Charactors
         public object DuplicateNew() => null; // impl.
 
 
-        void TakeAffect(ref Spell takeSpell)
+        void TakeAffect(Spell takeSpell)
         {
 
         }
 
         void GiveAffect(int spellIndex, params Charactor[] targetArray)
         {
-            Guard.MustInRange(spellIndex, ref this.spellArray, "[GiveAffect in charactor]");
+            Guard.MustInRange(spellIndex, this.spellArray, "[GiveAffect in charactor]");
 
             foreach (Charactor target in targetArray)
             {
-                target.TakeAffect(ref this.spellArray[spellIndex]);
+                target.TakeAffect(this.spellArray[spellIndex]);
             }
         }
 
@@ -88,9 +73,9 @@ namespace Popup.Charactors
 
         void TakeExp(int amount)
         {
-            Libs.IncreaseValue(ref exp, amount);
+            Libs.IncreaseValue(exp, amount);
             while (Libs.IsUnder((level + 1) * (level + 1), exp)) { ++level; }
-            Alignment.ToInclude(ref level, (Cfg.minLevel, Cfg.maxLevel));
+            Alignment.ToInclude(level, (Cfg.minLevel, Cfg.maxLevel));
         }
 
         void LoseExp(int amount) => TakeExp(-amount);

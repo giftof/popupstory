@@ -16,12 +16,12 @@ namespace Popup.Squad
 
     public class Squad: IInventory, ICharactor, IPopupObject
     {
-        string      name;
-        int         uid;
-        Charactor[] charactors;
-        Inventory   inventory;
-        int         activateCharactorIndex;
-        bool        activateTurn;
+        public string      name { get; protected set; }
+        public int         uid { get; }
+        public Charactor[] charactors { get; protected set; }
+        public Inventory   inventory { get; protected set; }
+        public int         activateCharactorIndex { get; protected set; }
+        public bool        activateTurn { get; protected set; }
 
 
 
@@ -39,8 +39,8 @@ namespace Popup.Squad
 
 
         private void InventoryVerify ()              => inventory.EraseDummySlot();
-        public  bool AddItem         (ref Item item) => inventory.AddItem(ref item);
-        public  bool UseItem         (ref Item item) => inventory.UseItem(ref item);
+        public  bool AddItem         (Item item) => inventory.AddItem(item);
+        public  bool UseItem         (Item item) => inventory.UseItem(item);
         public  bool UseItem         (int uid)       => inventory.UseItem(uid);
         public  Item PickItem        (int uid)       => inventory.PickItem(uid);
         public  bool PopItem         (int uid)       => inventory.PopItem(uid);
@@ -50,21 +50,21 @@ namespace Popup.Squad
 
 
 
-        public ref Charactor PickCharactor(int uid) => ref Guard.MustInclude(uid, ref charactors, "[PickCharactor in squad]");
+        public Charactor PickCharactor(int uid) => Guard.MustInclude(uid, charactors, "[PickCharactor in squad]");
 
         public bool PopCharactor(int uid)
         {
-            Guard.MustInclude(uid, ref charactors, "[PopCharactor in squad]") = null;
+            // Guard.MustInclude(uid, charactors, "[PopCharactor in squad]") = null;
             return true;
         }
 
-        public bool PopCharactor(ref Charactor charactor) => PopCharactor(charactor.GetUID());
+        public bool PopCharactor(Charactor charactor) => PopCharactor(charactor.GetUID());
 
         public bool AddCharactor(int uid) => false;
 
-        public bool AddCharactor(ref Charactor charactor)
+        public bool AddCharactor(Charactor charactor)
         {
-            int index = Libs.FindEmptyIndex(ref charactors);
+            int index = Libs.FindEmptyIndex(charactors);
 
             if (Libs.IsInclude(index, charactors.Length))
             {

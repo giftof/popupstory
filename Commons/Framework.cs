@@ -19,7 +19,7 @@ namespace Popup.Framework
 
     public interface IPopupObject
     {
-        int     GetUID();
+        int uid { get; }
 
         object  Duplicate();
         object  DuplicateNew();
@@ -29,14 +29,12 @@ namespace Popup.Framework
 
     public interface IItem : IPopupObject
     {
-        string 	GetName();
-        float 	GetWeight();
-        float 	GetVolume();
-        ItemCat GetCategory();
-        int		GetLeftOver();
-        bool	IsExist();
-        bool 	Use();
-        bool	HasSpace();
+        // float   Weight();
+        // float   Volume();
+        // bool Use();
+        int UseableCount { get; }
+        // bool IsExist { get; }
+        // bool HasSpace { get; }
 
         object  DuplicateEmpty();
         object  DuplicateEmptyNew();
@@ -49,9 +47,9 @@ namespace Popup.Framework
         //ModelBase PickItem(int uid);
         Item    PickItem    (int uid);
         bool    UseItem     (int uid);
-        bool    UseItem     (ref Item item);
+        bool    UseItem     (Item item);
         bool    PopItem     (int uid);
-        bool    AddItem     (ref Item item);
+        bool    AddItem     (Item item);
         void    SetMaxSize  (int size);
     }
 
@@ -59,10 +57,10 @@ namespace Popup.Framework
 
     public interface ICharactor
     {
-        ref Charactor   PickCharactor   (int uid);
+        Charactor       PickCharactor   (int uid);
         bool            PopCharactor    (int uid);
-        bool            PopCharactor    (ref Charactor charactor);
+        bool            PopCharactor    (Charactor charactor);
         bool            AddCharactor    (int uid);
-        bool            AddCharactor    (ref Charactor charactor);
+        bool            AddCharactor    (Charactor charactor);
     }
 }
