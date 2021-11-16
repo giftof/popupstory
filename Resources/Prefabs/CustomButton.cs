@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using Popup.Delegate;
 using TMPro;
@@ -14,6 +15,7 @@ public class CustomButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
     private TextMeshProUGUI meshProUGUI      = null;
     private ButtonAction    buttonActionDown = null;
     private ButtonAction    buttonActionUp   = null;
+    private Image           image;
 
 
     public void SetText(string message, Color color = default)
@@ -30,7 +32,7 @@ public class CustomButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
         meshProUGUI.color = color;
         meshProUGUI.text = message;
     }
-    
+
     public void AddActionDown   (ButtonAction buttonAction) => buttonActionDown += buttonAction;
     public void AddActionUp     (ButtonAction buttonAction) => buttonActionUp   += buttonAction;
     public void RemoveActionDown(ButtonAction buttonAction) => buttonActionDown -= buttonAction;
@@ -41,11 +43,21 @@ public class CustomButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
     {
         Debug.Log("OnPointerDown");
         buttonActionDown?.Invoke();
+        if (image == null)
+        {
+            image = GetComponent<Image>();
+        }
+        image.color = Color.black;
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
         Debug.Log("OnPointerUp");
         buttonActionUp?.Invoke();
+        if (image == null)
+        {
+            image = GetComponent<Image>();
+        }
+        image.color = Color.white;
     }
 }
