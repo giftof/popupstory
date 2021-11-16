@@ -123,16 +123,16 @@ public class Game : MonoBehaviour
 
     void DEBUG_ShowInventory()
     {
-        Inventory inventory = new Inventory(null, Configs.squadInventorySize);
+        Inventory inventory1 = new Inventory(null, Configs.squadInventorySize);
 
-        string itemDef1 = $"{{\"uid\":0,\"name\":\"stack1\",\"category\":{(int)ItemCat.tool},\"amount\":12,\"weight\":0.1,\"volume\":0.2}}";
+        string itemDef1 = $"{{\"uid\":{ServerJob.RequestNewUID},\"name\":\"stack1\",\"category\":{(int)ItemCat.tool},\"amount\":12,\"weight\":0.1,\"volume\":0.2}}";
         Item item1 = JsonConvert.DeserializeObject<ToolItem>(itemDef1);
         Debug.Log(item1);
         Debug.Log(item1.uid);
         Debug.Log(item1.name);
 
 
-        string itemDef2 = $"{{\"uid\":1,\"name\":\"stack2\",\"category\":{(int)ItemCat.tool},\"amount\":5,\"weight\":0.5,\"volume\":0.1}}";
+        string itemDef2 = $"{{\"uid\":{ServerJob.RequestNewUID},\"name\":\"stack2\",\"category\":{(int)ItemCat.tool},\"amount\":5,\"weight\":0.5,\"volume\":0.1}}";
         Item item2 = JsonConvert.DeserializeObject<ToolItem>(itemDef2);
 
         // Item item3 = new ToolItem(ServerJob.RequestNewUID);
@@ -170,7 +170,7 @@ public class Game : MonoBehaviour
         // item7.SetWeight(1f);
         // item7.SetVolume(5f);
 
-        string itemDef8 = $"{{\"uid\":7,\"name\":\"boots1\",\"category\":{(int)ItemCat.equip},\"durability\":50,\"weight\":0.2,\"volume\":1}}";
+        string itemDef8 = $"{{\"uid\":{ServerJob.RequestNewUID},\"name\":\"boots1\",\"category\":{(int)ItemCat.equip},\"durability\":50,\"weight\":0.2,\"volume\":1}}";
         Item item8 = JsonConvert.DeserializeObject<EquipItem>(itemDef8);
 
         // Item item9 = new EquipItem(ServerJob.RequestNewUID);
@@ -189,14 +189,14 @@ public class Game : MonoBehaviour
 
         //inventory.DEBUG_ShowAllItems();
 
-        Debug.Log("add item1 = " + inventory.AddItem(item1));
-        Debug.Log("add item2 = " + inventory.AddItem(item2));
+        Debug.Log("add item1 = " + inventory1.AddItem(item1));
+        Debug.Log("add item2 = " + inventory1.AddItem(item2));
         // Debug.Log("add item3 = " + inventory.AddItem(item3));
         // Debug.Log("add item4 = " + inventory.AddItem(item4));
         // Debug.Log("add item5 = " + inventory.AddItem(item5));
         // Debug.Log("add item6 = " + inventory.AddItem(item6));
         // Debug.Log("add item7 = " + inventory.AddItem(item7));
-        Debug.Log("add item8 = " + inventory.AddItem(item8));
+        Debug.Log("add item8 = " + inventory1.AddItem(item8));
         //Debug.Log("add item9 = " + inventory.AddItem(item9));
         // Debug.Log("add item1 = " + inventory.AddItem(item1));
         // Debug.Log("add item2 = " + inventory.AddItem(item2));
@@ -212,7 +212,7 @@ public class Game : MonoBehaviour
         //inventory.ShowAllItems();
         //Debug.Log(item10.GetAmount);
 
-        Inventory inventory2 = new Inventory(inventory);
+        Inventory inventory2 = new Inventory(inventory1);
 
         // Debug.Log("use i1 10 = " + inventory.UseItem(10));
         // Debug.Log("use i2 10 = " + inventory2.UseItem(10));
@@ -228,28 +228,22 @@ public class Game : MonoBehaviour
         // Debug.Log("use i2 10 = " + inventory2.UseItem(10));
         // Debug.Log("use i1 11 = " + inventory.UseItem(11));
         // Debug.Log("use i2 11 = " + inventory2.UseItem(11));
-        Debug.Log("use i1 0 = " + inventory.UseItem(0));
-        Debug.Log("use i2 0 = " + inventory2.UseItem(0));
-        Debug.Log("use i1 0 = " + inventory.UseItem(0));
-        Debug.Log("use i2 0 = " + inventory2.UseItem(0));
-        Debug.Log("use i1 0 = " + inventory.UseItem(0));
-        Debug.Log("use i2 0 = " + inventory2.UseItem(0));
-        Debug.Log("use i1 0 = " + inventory.UseItem(0));
-        Debug.Log("use i2 0 = " + inventory2.UseItem(0));
-        Debug.Log("use i1 0 = " + inventory.UseItem(0));
-        Debug.Log("use i2 0 = " + inventory2.UseItem(0));
-        Debug.Log("use i1 0 = " + inventory.UseItem(0));
-        Debug.Log("use i2 0 = " + inventory2.UseItem(0));
-        Debug.Log("use i1 1 = " + inventory.UseItem(1));
-        Debug.Log("use i2 1 = " + inventory2.UseItem(1));
+        Debug.Log("use i1 3 = " + inventory1.UseItem(3));
+        Debug.Log("use i2 3 = " + inventory2.UseItem(3));
+        Debug.Log("use i1 3 = " + inventory1.UseItem(3));
+        Debug.Log("use i2 3 = " + inventory2.UseItem(3));
+        Debug.Log("use i1 3 = " + inventory1.UseItem(3));
+        Debug.Log("use i2 3 = " + inventory2.UseItem(3));
+        Debug.Log("use i1 3 = " + inventory1.UseItem(3));
+        Debug.Log("use i2 3 = " + inventory2.UseItem(3));
+        Debug.Log("use i1 3 = " + inventory1.UseItem(3));
+        Debug.Log("use i2 3 = " + inventory2.UseItem(3));
+        Debug.Log("use i1 3 = " + inventory1.UseItem(3));
+        Debug.Log("use i2 3 = " + inventory2.UseItem(3));
+        Debug.Log("use i1 4 = " + inventory1.UseItem(4));
+        Debug.Log("use i2 4 = " + inventory2.UseItem(4));
 
 
-        // Debug.Log("use i1 11 = " + inventory.UseItem(11));
-
-        // Debug.Log("use i2 10 = " + inventory2.UseItem(10));
-        // Debug.Log("use i2 11 = " + inventory2.UseItem(11));
-
-        // Debug.Log("use i1 10 = " + inventory.UseItem(10));
         // Debug.Log("use i1 11 = " + inventory.UseItem(11));
 
         // Debug.Log("use i2 10 = " + inventory2.UseItem(10));
@@ -267,7 +261,13 @@ public class Game : MonoBehaviour
         // Debug.Log("use i2 10 = " + inventory2.UseItem(10));
         // Debug.Log("use i2 11 = " + inventory2.UseItem(11));
 
-        inventory.DEBUG_ShowAllItems();
+        // Debug.Log("use i1 10 = " + inventory.UseItem(10));
+        // Debug.Log("use i1 11 = " + inventory.UseItem(11));
+
+        // Debug.Log("use i2 10 = " + inventory2.UseItem(10));
+        // Debug.Log("use i2 11 = " + inventory2.UseItem(11));
+
+        inventory1.DEBUG_ShowAllItems();
         inventory2.DEBUG_ShowAllItems();
         // string TEST_JSON_ITEM1 = "{\"name\":\"glass sword\",\"uid\":99,\"weight\":1.2,\"volume\":3.4,\"amount\":1,\"grade\":4,\"category\":63,\"magicIdArray\":[1,2,3,4,5]}";
 

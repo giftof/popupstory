@@ -10,10 +10,10 @@ using Popup.Defines;
 
 namespace Popup.Framework
 {
-    public interface IConverterToModel<T>
-    {
-        T DataConvert(IDataReader data);
-    }
+    // public interface IConverterToModel<T>
+    // {
+    //     T DataConvert(IDataReader data);
+    // }
 
 
 
@@ -29,12 +29,7 @@ namespace Popup.Framework
 
     public interface IItem : IPopupObject
     {
-        // float   Weight();
-        // float   Volume();
-        // bool Use();
         int UseableCount { get; }
-        // bool IsExist { get; }
-        // bool HasSpace { get; }
 
         object  DuplicateEmpty();
         object  DuplicateEmptyNew();
@@ -44,7 +39,6 @@ namespace Popup.Framework
 
     public interface IInventory
 	{
-        //ModelBase PickItem(int uid);
         Item    PickItem    (int uid);
         bool    UseItem     (int uid);
         bool    UseItem     (Item item);

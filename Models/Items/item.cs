@@ -1,10 +1,7 @@
-﻿using UnityEngine;
-using System.Collections;
-using Popup.Library;
+﻿using Popup.Library;
 using Popup.Defines;
 using Popup.Framework;
 using System;
-using System.Data;
 using Newtonsoft.Json;
 
 
@@ -27,7 +24,7 @@ namespace Popup.Items
 		[JsonProperty]
 		public ItemCat category { get; protected set; }
 
-		public Item(int uid) => this.uid = uid;
+		// public Item(int uid) => this.uid = uid;
 
 		protected bool HaveAttribute (ItemCat attribute) => 0 < (category & attribute);
 
@@ -59,7 +56,7 @@ namespace Popup.Items
 		[JsonProperty]
 		public int durability { get; protected set; }
 
-		public EquipItem(int uid) : base(uid) => category = ItemCat.equip;
+		// public EquipItem(int uid) : base(uid) => category = ItemCat.equip;
 
 		public int SpellAmount => spellArray == null ? 0 : spellArray.Length;
 		public Spell Spell(int uid) => Guard.MustInclude(uid, spellArray, "[GetSpell in EquipItem]");
@@ -71,18 +68,18 @@ namespace Popup.Items
 		public override float Weight() => weight;
 		public override float Volume() => volume;
 		public override object Duplicate() => MemberwiseClone();
-		public override object DuplicateNew()
-        {
-			EquipItem other = (EquipItem)Duplicate();
-			other.uid = ServerJob.RequestNewUID;
-			return other;
-        }
-		public override object DuplicateEmpty()
-		{
-			EquipItem other = (EquipItem)Duplicate();
-			other.durability = 0;
-			return other;
-		}
+		public override object DuplicateNew() => (((EquipItem)Duplicate()).uid = ServerJob.RequestNewUID);
+        // {
+		// 	EquipItem other = (EquipItem)Duplicate();
+		// 	other.uid = ServerJob.RequestNewUID;
+		// 	return other;
+        // }
+		public override object DuplicateEmpty() => (((EquipItem)Duplicate()).durability = 0);
+		// {
+		// 	EquipItem other = (EquipItem)Duplicate();
+		// 	other.durability = 0;
+		// 	return other;
+		// }
 		public override object DuplicateEmptyNew()
 		{
 			EquipItem other = (EquipItem)Duplicate();
@@ -102,18 +99,25 @@ namespace Popup.Items
 		public int amount { get; protected set; }
 		private int maxAmount { get; set; } = int.MaxValue;
 	
-		public ToolItem(int uid) : base(uid) => category = ItemCat.tool;
+		// public ToolItem(int uid) : base(uid) => category = ItemCat.tool;
 
 		private	void Decrease(int count) => amount -= count;
 		private	void Increase(int count) => amount += count;
 		private int Space => maxAmount - amount;
 
-		public bool	AddStack(Item item)
+		private void SetMaxAmount()
 		{
 			if (maxAmount.Equals(int.MaxValue))
 			{
-				maxAmount = Math.Min(Libs.Round(Cfg.slotWeightCapacity / weight), Libs.Round(Cfg.slotVolumeCapacity / volume));
+				maxAmount = Math.Min(
+					Libs.Round(Cfg.slotWeightCapacity / weight),
+					Libs.Round(Cfg.slotVolumeCapacity / volume));
 			}
+		}
+
+		public bool	AddStack(Item item)
+		{
+			SetMaxAmount();
 
 			int enableStack = Math.Min(((ToolItem)item).amount, Space);
 
@@ -129,18 +133,20 @@ namespace Popup.Items
 		public override float Weight() => amount * weight;
 		public override float Volume() => amount * volume;
 		public override object Duplicate() => MemberwiseClone();
-		public override object DuplicateNew()
-		{
-			ToolItem other = (ToolItem)Duplicate();
-			other.uid = ServerJob.RequestNewUID;
-			return other;
-		}
-		public override object DuplicateEmpty()
-		{
-			ToolItem other = (ToolItem)Duplicate();
-			other.amount = 0;
-			return other;
-		}
+		public override object DuplicateNew() => (((ToolItem)Duplicate()).uid = ServerJob.RequestNewUID);
+		// {
+		// 	return (((ToolItem)Duplicate()).uid = ServerJob.RequestNewUID);
+		// 	// ToolItem other = (ToolItem)Duplicate();
+		// 	// other.uid = ServerJob.RequestNewUID;
+		// 	// return other;
+		// }
+		public override object DuplicateEmpty() => (((ToolItem)Duplicate()).amount = 0);
+		// {
+		// 	return (((ToolItem)Duplicate()).amount = 0);
+		// 	// ToolItem other = (ToolItem)Duplicate();
+		// 	// other.amount = 0;
+		// 	// return other;
+		// }
 		public override object DuplicateEmptyNew()
 		{
             ToolItem other = (ToolItem)Duplicate();
