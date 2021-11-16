@@ -56,7 +56,7 @@ namespace Popup.Library
 
         //    return result;
         //}
-
+        
 
         public static int FindEmptyIndex<T>(ref T[] array, int startIndex = 0)
         {
