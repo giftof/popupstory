@@ -16,13 +16,13 @@ namespace Popup.Items
 	public abstract class Item : IItem
 	{
 		[SerializeField]
-		private   string   name;
+		protected string   name;
         [SerializeField]
-        private   int 	   uid;
+		protected int 	   uid;
         [SerializeField]
-		private   float	   weight;
+		protected float	   weight;
 		[SerializeField]
-		private   float	   volume;
+		protected float	   volume;
 		[SerializeField]
 		protected ItemCat  category;
 		[SerializeField]
@@ -37,7 +37,7 @@ namespace Popup.Items
 		public 	float 	GetVolume    ()	=> 0;
 		public  bool	IsExist      ()	=> 0 < amount;
 		public  int 	GetLeftOver  ()	=> amount;
-		public  bool 	Exhaust      ()	=> 0 < amount--;
+		public  bool 	Use			 ()	=> 0 < amount--;
 		public  ItemCat GetCategory  () => category;
 
 
@@ -86,7 +86,7 @@ namespace Popup.Items
 		Spell[]		spellArray;
 
 
-		public EquipItem(int uid) : base(uid) => this.category = ItemCat.equip;
+		public EquipItem(int uid) : base(uid)   => category = ItemCat.equip;
 
 
 		public override bool HasSpace() => false;
@@ -125,23 +125,23 @@ namespace Popup.Items
 
 	public class ToolItem : Item
 	{
-		public ToolItem(int uid) : base(uid) => this.category = ItemCat.tool;
+		public ToolItem(int uid) : base(uid)   => category = ItemCat.tool;
 
 
 		public override bool HasSpace() 	   => amount < maxAmount;
 
 
-		private	void	SplitPile (int count)  => amount -= count;
+		private	void	Decrease (int count)   => amount -= count;
+		private	void	Increase (int count)   => amount += count;
 		private int 	GetSpace			   => maxAmount - amount;
-		//public	int		GetAmount			   => amount;
 
 
 		public  bool	AddStack(ref Item item)
 		{
 			int enableStack = Math.Min(item.GetLeftOver(), GetSpace);
 
-			amount += enableStack;
-			((ToolItem)item).SplitPile(enableStack);
+			((ToolItem)item).Decrease(enableStack);
+			Increase(enableStack);
 			return item.GetLeftOver().Equals(0);
 		}
 

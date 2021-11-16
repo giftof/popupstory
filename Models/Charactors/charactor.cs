@@ -60,9 +60,9 @@ namespace Popup.Charactors
         public Item[]   GetEquipArray   => equipArray;
 
 
-        public int      GetUID()        => uid;
-        public object Duplicate() => null;      // impl.
-        public object DuplicateNew() => null;   // impl.
+        public int    GetUID()       => uid;
+        public object Duplicate()    => null; // impl.
+        public object DuplicateNew() => null; // impl.
 
 
         void TakeAffect(ref Spell takeSpell)

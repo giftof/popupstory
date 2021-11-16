@@ -221,18 +221,20 @@ public class Game : MonoBehaviour
 
         Inventory inventory2 = new Inventory(ref inventory);
 
-        Debug.Log("use i1 10 = " + inventory.ExhaustItem(10));
-        Debug.Log("use i2 10 = " + inventory2.ExhaustItem(10));
-        Debug.Log("use i1 10 = " + inventory.ExhaustItem(10));
-        Debug.Log("use i2 10 = " + inventory2.ExhaustItem(10));
-        Debug.Log("use i1 10 = " + inventory.ExhaustItem(10));
-        Debug.Log("use i2 10 = " + inventory2.ExhaustItem(10));
-        Debug.Log("use i1 10 = " + inventory.ExhaustItem(10));
-        Debug.Log("use i2 10 = " + inventory2.ExhaustItem(10));
-        Debug.Log("use i1 10 = " + inventory.ExhaustItem(10));
-        Debug.Log("use i2 10 = " + inventory2.ExhaustItem(10));
-        Debug.Log("use i1 10 = " + inventory.ExhaustItem(10));
-        Debug.Log("use i2 10 = " + inventory2.ExhaustItem(10));
+        Debug.Log("use i1 10 = " + inventory.UseItem(10));
+        Debug.Log("use i2 10 = " + inventory2.UseItem(10));
+        Debug.Log("use i1 10 = " + inventory.UseItem(10));
+        Debug.Log("use i2 10 = " + inventory2.UseItem(10));
+        Debug.Log("use i1 10 = " + inventory.UseItem(10));
+        Debug.Log("use i2 10 = " + inventory2.UseItem(10));
+        Debug.Log("use i1 10 = " + inventory.UseItem(10));
+        Debug.Log("use i2 10 = " + inventory2.UseItem(10));
+        Debug.Log("use i1 10 = " + inventory.UseItem(10));
+        Debug.Log("use i2 10 = " + inventory2.UseItem(10));
+        Debug.Log("use i1 10 = " + inventory.UseItem(10));
+        Debug.Log("use i2 10 = " + inventory2.UseItem(10));
+        Debug.Log("use i1 11 = " + inventory.UseItem(11));
+        Debug.Log("use i2 11 = " + inventory2.UseItem(11));
 
 
         // Debug.Log("use i1 11 = " + inventory.UseItem(11));

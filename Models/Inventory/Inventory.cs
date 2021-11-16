@@ -28,7 +28,7 @@ namespace Popup.Inventory
 		public Inventory(ref Inventory inventory)           => Init(ref inventory.inventory, inventory.maxSize);
 
 
-		public void SetMaxSize  (int size)		=> maxSize = size;
+		public void SetMaxSize(int size) => maxSize = size;
 
 
         private void Init(ref Item[] itemArray, int maxSize)
@@ -188,7 +188,7 @@ namespace Popup.Inventory
 		}
 
 
-		public bool ExhaustItem(int UID)
+		public bool UseItem(int UID)
 		{
 			(int matchSlotIndex, _) = Search(UID, false);
 
@@ -198,14 +198,14 @@ namespace Popup.Inventory
 				{
 					return false;
 				}
-				inventory[matchSlotIndex].Exhaust();
+				inventory[matchSlotIndex].Use();
 				CheckEmptySlot(ref inventory[matchSlotIndex]);
 				return true;
 			}
 			return false;
 		}
 
-		public bool ExhaustItem (ref Item item) => item.Exhaust();
+		public bool UseItem (ref Item item) => item.Use();
 
 		public bool PopItem(int UID)
 		{

@@ -35,7 +35,7 @@ namespace Popup.Framework
         ItemCat GetCategory();
         int		GetLeftOver();
         bool	IsExist();
-        bool 	Exhaust();
+        bool 	Use();
         bool	HasSpace();
 
         object  DuplicateEmpty();
@@ -48,8 +48,8 @@ namespace Popup.Framework
 	{
         //ModelBase PickItem(int uid);
         Item    PickItem    (int uid);
-        bool    ExhaustItem (int uid);
-        bool    ExhaustItem (ref Item item);
+        bool    UseItem     (int uid);
+        bool    UseItem     (ref Item item);
         bool    PopItem     (int uid);
         bool    AddItem     (ref Item item);
         void    SetMaxSize  (int size);

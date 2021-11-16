@@ -17,7 +17,7 @@ public class Spell : IPopupObject
 
 
 
-	public Spell(string attribute)  // fix
+	public Spell(string attribute)  // impl.
 	{
 		if (string.IsNullOrEmpty(attribute))
 		{
