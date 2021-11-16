@@ -68,7 +68,11 @@ namespace Popup.Items
 		public 	abstract bool	HasSpace();
 
 
-		public abstract object Clone();
+		public abstract object Duplicate();
+		public abstract object DuplicateNew();
+		public abstract object DuplicateEmpty();
+		public abstract object DuplicateEmptyNew();
+		//public abstract object Clone();
 	}
 
 
@@ -94,13 +98,34 @@ namespace Popup.Items
 		public  Spell GetSpell(int uid) => Guard.MustInclude(uid, ref spellArray, "[GetSpell in EquipItem]");
 
 
-		public override object Clone()
+		public override object Duplicate() => MemberwiseClone();
+		public override object DuplicateNew()
+        {
+			EquipItem other = (EquipItem)MemberwiseClone();
+			other.SetUID(ServerJob.RequestNewUID);
+			return other;
+        }
+		public override object DuplicateEmpty()
 		{
 			EquipItem other = (EquipItem)MemberwiseClone();
-			other.amount = 0;
+			other.SetAmount(0);
+			return other;
+		}
+		public override object DuplicateEmptyNew()
+		{
+			EquipItem other = (EquipItem)MemberwiseClone();
+			other.SetAmount(0);
 			other.SetUID(ServerJob.RequestNewUID);
 			return other;
 		}
+
+		//public override object Clone()
+		//{
+		//	EquipItem other = (EquipItem)MemberwiseClone();
+		//	other.amount = 0;
+		//	other.SetUID(ServerJob.RequestNewUID);
+		//	return other;
+		//}
 	}
 
 
@@ -122,24 +147,52 @@ namespace Popup.Items
 
 		public  bool	AddStack(ref Item item)
 		{
-			ToolItem toolItem = (ToolItem)item;
-			int enableStack = Math.Min(toolItem.amount, GetSpace);
+			int enableStack = Math.Min(item.GetLeftOver(), GetSpace);
 
 			amount += enableStack;
-			toolItem.SplitPile(enableStack);
-			item.SetAmount(toolItem.amount);
-
+			((ToolItem)item).SplitPile(enableStack);
+			//item.SetAmount(item.GetLeftOver() - enableStack);
 			return item.GetLeftOver().Equals(0);
+
+			//ToolItem toolItem = (ToolItem)item;
+			//int enableStack = Math.Min(toolItem.amount, GetSpace);
+
+			//amount += enableStack;
+			//toolItem.SplitPile(enableStack);
+			//item.SetAmount(toolItem.amount);
+
+			//return item.GetLeftOver().Equals(0);
 		}
 
 
-		public override object Clone()
+		public override object Duplicate() => MemberwiseClone();
+		public override object DuplicateNew()
 		{
 			ToolItem other = (ToolItem)MemberwiseClone();
-			other.amount = 0;
 			other.SetUID(ServerJob.RequestNewUID);
 			return other;
 		}
+		public override object DuplicateEmpty()
+		{
+			ToolItem other = (ToolItem)MemberwiseClone();
+			other.SetAmount(0);
+			return other;
+		}
+		public override object DuplicateEmptyNew()
+		{
+			ToolItem other = (ToolItem)MemberwiseClone();
+			other.SetAmount(0);
+			other.SetUID(ServerJob.RequestNewUID);
+			return other;
+		}
+
+		//public override object Clone()
+		//{
+		//	ToolItem other = (ToolItem)MemberwiseClone();
+		//	other.amount = 0;
+		//	other.SetUID(ServerJob.RequestNewUID);
+		//	return other;
+		//}
 	}
 }
 

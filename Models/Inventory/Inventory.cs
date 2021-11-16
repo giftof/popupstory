@@ -135,7 +135,8 @@ namespace Popup.Inventory
 
 			if (Libs.IsInclude(result.Item2, maxSize))
 			{
-				inventory[result.Item2] = (ToolItem)item.Clone();
+				//inventory[result.Item2] = (ToolItem)item.Clone();
+				inventory[result.Item2] = (ToolItem)item.DuplicateEmptyNew();
 				((ToolItem)inventory[result.Item2]).AddStack(ref item);
 			}
 
@@ -226,7 +227,7 @@ namespace Popup.Inventory
 				}
 				else
 				{
-					Debug.Log("here is empty slot");
+					DebugC.Log("[here is empty slot]", Color.yellow);
 				}
 			}
 			Debug.Log("----- show all items end -----");
