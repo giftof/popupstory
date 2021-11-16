@@ -70,7 +70,13 @@ namespace Popup.Library
             return index;
         }
 
-        
+
+        public static void PutCenter(Transform parent, Transform child)
+        {
+            child.SetParent(parent);
+            //child.parent = parent;
+            child.localPosition = Vector3.zero;
+        }
     }
 
 

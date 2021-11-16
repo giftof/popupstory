@@ -11,6 +11,7 @@ namespace Popup.Delegate
     public delegate bool DCompare<T>(T value);
     public delegate T ConvertFromString<T>(IDataReader data);
 
+    public delegate void ButtonAction();
     //public class Delegate : MonoBehaviour
     //{
     //    // Start is called before the first frame update

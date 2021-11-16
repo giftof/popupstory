@@ -3,14 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Popup.Defines;
+//using UnityEngine.UIElements;
 
 
 
 public class Entrance : MonoBehaviour
 {
-    public  Button  toLobby;
-    public  Button  toGame;
-    private Manager manager;
+    public  Button       toLobby;
+    public  Button       toGame;
+    private Manager      manager;
+    public  CustomButton gpgs;
 
 
 
@@ -19,16 +21,7 @@ public class Entrance : MonoBehaviour
         Initialize();
 
         Debug.Log("enter Entrance");
-        toLobby.onClick.AddListener(() =>
-        {
-            manager.eventSystem.enabled = false;
-            manager.sceneController.Load(SceneType.lobby);
-        });
-        toGame.onClick.AddListener(() =>
-        {
-            manager.eventSystem.enabled = false;
-            manager.sceneController.Load(SceneType.game);
-        });
+        TEST_SET();
     }
 
 
@@ -43,5 +36,26 @@ public class Entrance : MonoBehaviour
         }
 
         manager.eventSystem.enabled = true;
+    }
+
+
+
+    private void TEST_SET()
+    {
+
+        toLobby.onClick.AddListener(() =>
+        {
+            manager.eventSystem.enabled = false;
+            manager.sceneController.Load(SceneType.lobby);
+        });
+
+        toGame.onClick.AddListener(() =>
+        {
+            manager.eventSystem.enabled = false;
+            manager.sceneController.Load(SceneType.game);
+        });
+
+        gpgs.SetText("GPGS");
+
     }
 }
