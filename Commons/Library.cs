@@ -14,26 +14,15 @@ namespace Popup.Library
     using Configs = Configs.Configs;
     public static class Libs
     {
-        //private utils() { }
-
-        //private static readonly Lazy<utils> instance = new Lazy<utils>(() => new utils());
-
-        //public static utils Instance
-        //{
-        //    get { return instance.Value; }
-        //}
-
         public static void Quit()
         {
+#if UNITY_EDITOR
+             Debug.Log("call quit on UNITY_EDITOR");
+             UnityEditor.EditorApplication.isPlaying = false;
+#else
             Debug.Log("call quit on not UNITY_EDITOR");
             Application.Quit();
-// #if UNITY_EDITOR
-//             Debug.Log("call quit on UNITY_EDITOR");
-//             UnityEditor.EditorApplication.isPlaying = false;
-// #else
-//             Debug.Log("call quit on not UNITY_EDITOR");
-//             Application.Quit();
-// #endif
+#endif
         }
 
         public static bool   	IsInclude<T>    (int     index, ref T[] array  )    => 0 <= index && index < array.Length;
@@ -45,28 +34,29 @@ namespace Popup.Library
         public static string	ToJson<T>       (T       source                )    => JsonUtility.ToJson(source);
 		public static int		Round			(float	 value                 )    => (int)Math.Round(value);
         public static bool      IsEnablePair    (bool    _lock, bool    _key   )    => !_lock || (_lock && _key);
-        
 
-   		public static int[] TextToIntArray(string text, int falseValue = -1)
-		{
-			int[] result = null;
 
-			if (text != null)
-			{
-				string[] split = text.Split(',');
-				result = new int[split.Length];
+        //public static int[] TextToIntArray(string text, int falseValue = -1)
+        //{
+        //    int[] result = null;
 
-				for (int index = 0; index < split.Length; ++index)
-				{
-					if (!int.TryParse(split[index], out result[index]))
-					{
-						result[index] = -1;
-					}
-				}
-			}
+        //    if (text != null)
+        //    {
+        //        string[] split = text.Split(',');
+        //        result = new int[split.Length];
 
-			return result;
-		}
+        //        for (int index = 0; index < split.Length; ++index)
+        //        {
+        //            if (!int.TryParse(split[index], out result[index]))
+        //            {
+        //                result[index] = -1;
+        //            }
+        //        }
+        //    }
+
+        //    return result;
+        //}
+
 
         public static int FindEmptyIndex<T>(ref T[] array, int startIndex = 0)
         {
@@ -82,6 +72,8 @@ namespace Popup.Library
 
         
     }
+
+
 
     public static class Guard
     {
@@ -162,6 +154,8 @@ namespace Popup.Library
         }
     }
 
+
+
     public static class Alignment
     {
         public static void ToInclude(ref int value, (int, int) range)
@@ -170,6 +164,8 @@ namespace Popup.Library
             if (range.Item2 < value) { value = range.Item2; }
         }
     }
+
+
 
     public static class DebugC
     {
