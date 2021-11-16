@@ -6,7 +6,6 @@ using Newtonsoft.Json;
 
 
 
-
 namespace Popup.Items
 {
 	using Cfg = Configs.Configs;
@@ -23,8 +22,6 @@ namespace Popup.Items
 		public float volume { get; protected set; }
 		[JsonProperty]
 		public ItemCat category { get; protected set; }
-
-		// public Item(int uid) => this.uid = uid;
 
 		protected bool HaveAttribute (ItemCat attribute) => 0 < (category & attribute);
 
@@ -45,8 +42,6 @@ namespace Popup.Items
 
 
 
-
-
 	public class EquipItem : Item
 	{
 		[JsonProperty]
@@ -55,8 +50,6 @@ namespace Popup.Items
 		public Spell[] spellArray { get; protected set; }
 		[JsonProperty]
 		public int durability { get; protected set; }
-
-		// public EquipItem(int uid) : base(uid) => category = ItemCat.equip;
 
 		public int SpellAmount => spellArray == null ? 0 : spellArray.Length;
 		public Spell Spell(int uid) => Guard.MustInclude(uid, spellArray, "[GetSpell in EquipItem]");
@@ -69,27 +62,9 @@ namespace Popup.Items
 		public override float Volume() => volume;
 		public override object Duplicate() => MemberwiseClone();
 		public override object DuplicateNew() => (((EquipItem)Duplicate()).uid = ServerJob.RequestNewUID);
-        // {
-		// 	EquipItem other = (EquipItem)Duplicate();
-		// 	other.uid = ServerJob.RequestNewUID;
-		// 	return other;
-        // }
 		public override object DuplicateEmpty() => (((EquipItem)Duplicate()).durability = 0);
-		// {
-		// 	EquipItem other = (EquipItem)Duplicate();
-		// 	other.durability = 0;
-		// 	return other;
-		// }
-		public override object DuplicateEmptyNew()
-		{
-			EquipItem other = (EquipItem)Duplicate();
-			other.durability = 0;
-			other.uid = ServerJob.RequestNewUID;
-			return other;
-		}
+		public override object DuplicateEmptyNew() => (((EquipItem)DuplicateNew()).durability = 0);
 	}
-
-
 
 
 
@@ -98,8 +73,6 @@ namespace Popup.Items
 		[JsonProperty]
 		public int amount { get; protected set; }
 		private int maxAmount { get; set; } = int.MaxValue;
-	
-		// public ToolItem(int uid) : base(uid) => category = ItemCat.tool;
 
 		private	void Decrease(int count) => amount -= count;
 		private	void Increase(int count) => amount += count;
@@ -134,25 +107,7 @@ namespace Popup.Items
 		public override float Volume() => amount * volume;
 		public override object Duplicate() => MemberwiseClone();
 		public override object DuplicateNew() => (((ToolItem)Duplicate()).uid = ServerJob.RequestNewUID);
-		// {
-		// 	return (((ToolItem)Duplicate()).uid = ServerJob.RequestNewUID);
-		// 	// ToolItem other = (ToolItem)Duplicate();
-		// 	// other.uid = ServerJob.RequestNewUID;
-		// 	// return other;
-		// }
 		public override object DuplicateEmpty() => (((ToolItem)Duplicate()).amount = 0);
-		// {
-		// 	return (((ToolItem)Duplicate()).amount = 0);
-		// 	// ToolItem other = (ToolItem)Duplicate();
-		// 	// other.amount = 0;
-		// 	// return other;
-		// }
-		public override object DuplicateEmptyNew()
-		{
-            ToolItem other = (ToolItem)Duplicate();
-            other.amount = 0;
-            other.uid = ServerJob.RequestNewUID;
-            return other;
-		}
+		public override object DuplicateEmptyNew() => (((ToolItem)DuplicateNew()).amount = 0);
 	}
 }
