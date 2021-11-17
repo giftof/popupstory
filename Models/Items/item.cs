@@ -17,6 +17,8 @@ namespace Popup.Items
 		[JsonProperty]
 		public int uid { get; protected set; }
 		[JsonProperty]
+		public int slotId { get; protected set; }
+		[JsonProperty]
 		public float weight { get; protected set; }
 		[JsonProperty]
 		public float volume { get; protected set; }
@@ -31,6 +33,7 @@ namespace Popup.Items
 		public abstract bool HasSpace { get; }
 		[JsonIgnore]
 		public abstract int UseableCount { get; }
+		public abstract bool HaveSpace(string _);
 		public abstract bool Use();
 		public abstract float Weight();
 		public abstract float Volume();
@@ -57,6 +60,7 @@ namespace Popup.Items
 		public override bool IsExist => 0 < durability;
 		public override bool HasSpace => false;
 		public override int UseableCount => durability;
+		public override bool HaveSpace(string _) => false;
 		public override bool Use() => 0 < durability--;
 		public override float Weight() => weight;
 		public override float Volume() => volume;
@@ -102,12 +106,20 @@ namespace Popup.Items
 		public override bool IsExist => 0 < amount;
 		public override bool HasSpace => amount < maxAmount;
 		public override int UseableCount => amount;
+		public override bool HaveSpace(string name) => this.name.Equals(name) && HasSpace;
 		public override bool Use() => 0 < amount--;
 		public override float Weight() => amount * weight;
 		public override float Volume() => amount * volume;
 		public override object Duplicate() => MemberwiseClone();
 		public override object DuplicateNew() => (((ToolItem)Duplicate()).uid = ServerJob.RequestNewUID);
 		public override object DuplicateEmpty() => (((ToolItem)Duplicate()).amount = 0);
-		public override object DuplicateEmptyNew() => (((ToolItem)DuplicateNew()).amount = 0);
+		// public override object DuplicateEmptyNew() => (((ToolItem)DuplicateNew()).amount = 0);
+		public override object DuplicateEmptyNew()
+		{
+			ToolItem toolItem = (ToolItem)MemberwiseClone();
+			toolItem.uid = ServerJob.RequestNewUID;
+			toolItem.amount = 0;
+			return toolItem;
+		}
 	}
 }

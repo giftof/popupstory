@@ -4,6 +4,8 @@ using System;
 using System.Text;
 using Popup.Configs;
 using Popup.Framework;
+using Newtonsoft.Json;
+using System.Linq;
 
 
 
@@ -30,8 +32,10 @@ namespace Popup.Library
         public static void   	IncreaseValue	(int     dest,  int     amount )    => dest += amount;
         public static bool   	IsUnder         (int     dest,  int     cap    )    => dest < cap;
         public static T      	ConvertTo<T>    (object  item                  )    => (T)item;
-        public static T      	FromJson<T>     (string  source                )    => JsonUtility.FromJson<T>(source);
-        public static string	ToJson<T>       (T       source                )    => JsonUtility.ToJson(source);
+        public static T      	FromJson<T>     (string  source                )    => JsonConvert.DeserializeObject<T>(source);
+        public static string	ToJson<T>       (T       source                )    => JsonConvert.SerializeObject(source);
+        // public static T      	FromJson<T>     (string  source                )    => JsonUtility.FromJson<T>(source);
+        // public static string	ToJson<T>       (T       source                )    => JsonUtility.ToJson(source);
 		public static int		Round			(float	 value                 )    => (int)Math.Round(value);
         public static bool      IsEnablePair    (bool    _lock, bool    _key   )    => !_lock || (_lock && _key);
 
@@ -58,6 +62,12 @@ namespace Popup.Library
         //}
         
 
+        // public static T FindFirstEmpty<T>(T[] array) => array.FirstOrDefault(e => e == null);
+        // public static T FindMatchElement<T>(int uid, T[] array) where T: IPopupObject => array.FirstOrDefault(e=> e.uid == uid);
+        // public static T FindSpace<T>(int uid, T[] array) where T: IItem => array.FirstOrDefault(e => e.HasSpace);
+
+        public static bool IsExist<T>(T obj) where T: IPopupObject => obj?.IsExist ?? false;
+        public static bool IsSoldOut<T>(T obj) where T: IPopupObject => obj != null && !obj.IsExist;
         public static int FindEmptyIndex<T>(T[] array, int startIndex = 0)
         {
             int index = startIndex;

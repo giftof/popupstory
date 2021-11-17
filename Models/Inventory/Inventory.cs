@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System.Linq;
 using Popup.Configs;
 using Popup.Items;
 using Popup.Library;
@@ -18,50 +19,41 @@ namespace Popup.Inventory
 
 	public class Inventory : IInventory
 	{
-		Item[]  inventory;
+		Dictionary<int, Item> inventory;
+		// public Item[]  inventory;
 		int     maxSize;
 		// Item        lastItem = null;  // cacheing to save few searching
 
 
-		public Inventory(Item[] itemArray, int maxSize) => Init(itemArray, maxSize);
-		public Inventory(Inventory inventory)           => Init(inventory.inventory, inventory.maxSize);
+		// public Inventory() => Init(null, Configs.Configs.warehouseSize); // test
+		public Inventory(Dictionary<int, Item> itemDict, int maxSize) => Init(itemDict, maxSize);
+		public Inventory(Inventory inventory) => Init(inventory.inventory, inventory.maxSize);
 
 
 		public void SetMaxSize(int size) => maxSize = size;
 
-
-        private void Init(Item[] itemArray, int maxSize)
+        private void Init(Dictionary<int, Item> itemDict, int maxSize)
         {
 			InitInventory(maxSize);
-			if (itemArray != null)
-				Insert(itemArray);
+			if (!itemDict?.Count.Equals(0) ?? false)
+				Copy(itemDict);
         }
 
 
 		private void InitInventory(int maxSize)
 		{
 			this.maxSize = maxSize;
-			inventory = new Item[maxSize];
+			inventory = new Dictionary<int, Item>();
 		}
 
 
-		private void Insert(Item[] item)
+		private bool HaveNewSpace => inventory.Count < maxSize;
+		private void Copy(Dictionary<int, Item> itemDict) => inventory = new Dictionary<int, Item>(itemDict);
+		private void Merge(Dictionary<int, Item> itemDict)
 		{
-			int index = 0;
-
-			foreach (Item element in item)
+			foreach(KeyValuePair<int, Item> item in itemDict)
 			{
-				index = Libs.FindEmptyIndex(inventory, index);
-				
-				if (!Libs.IsInclude(index, maxSize))
-				{
-					break;
-				}
-
-				if (element != null && element.IsExist)
-				{
-					inventory[index++] = element;
-				}
+				_ = inventory.ContainsKey(item.Key) ? false : AddItem(item.Value);
 			}
 		}
 
@@ -78,127 +70,65 @@ namespace Popup.Inventory
 		}
 
 
-		private (int, int) Search(int uid, bool mustHaveSpace = true)
-		{
-			(int matchSlotIndex, int emptySlotIndex) result = (0, maxSize);
-			Item item;
-
-			for (; result.matchSlotIndex < maxSize; ++result.matchSlotIndex)
-			{
-				item = inventory[result.matchSlotIndex];
-
-				if (item == null)
-				{
-					result.emptySlotIndex = Math.Min(result.matchSlotIndex, result.emptySlotIndex);
-				}
-				else if (item.uid.Equals(uid) && Libs.IsEnablePair(mustHaveSpace, item.HasSpace))
-				{
-					result.emptySlotIndex = Libs.FindEmptyIndex(inventory, result.matchSlotIndex);
-					break;
-				}
-			}
-
-			return result;
-		}
-
-
 		private bool AddNewItem(Item item)
 		{
-			(int matchSlotIndex, int emptySlotIndex) = Search(item.uid, false);
-
-			Guard.MustNotInclude(matchSlotIndex, maxSize, "[AddNewItem in inventory]");
-
-			if (Libs.IsInclude(emptySlotIndex, maxSize))
+			if (!inventory.ContainsKey(item.uid) && HaveNewSpace)
 			{
-				inventory[emptySlotIndex] = item;
+				inventory.Add(item.uid, item);
 				return true;
 			}
-
 			return false;
 		}
 
 
 		private bool AddStackableItem(Item item)
 		{
-			(int matchSlotIndex, int emptySlotIndex) = Search(item.uid, true);
+			var pick = from element in inventory
+					   where (element.Value.HaveSpace(item.name) == true)
+					   select element;
 
-			if (matchSlotIndex.Equals(emptySlotIndex) && emptySlotIndex.Equals(maxSize))
+			foreach (var value in pick)
 			{
-				return false;
+				if (((ToolItem)value.Value).AddStack(item)) return true;
 			}
 
-			if (Libs.IsInclude(matchSlotIndex, maxSize) && ((ToolItem)inventory[matchSlotIndex]).AddStack(item))
+			while (HaveNewSpace)
 			{
-				return true;
+				Item newSpace = (ToolItem)item.DuplicateEmptyNew();
+				bool result = ((ToolItem)newSpace).AddStack(item);
+				inventory.Add(newSpace.uid, newSpace);
+
+				if (result) return true;
 			}
 
-			if (Libs.IsInclude(emptySlotIndex, maxSize))
-			{
-				inventory[emptySlotIndex] = (ToolItem)item.DuplicateEmptyNew();
-				((ToolItem)inventory[emptySlotIndex]).AddStack(item);
-			}
-
-			if (item.IsExist)
-			{
-				return AddStackableItem(item);
-			}
-
-			return true;
+			return false;
 		}
 
 
 		public bool AddItem(Item item)
 		{
-			if (!item.IsExist)
-			{
-				return false;
-			}
-			
-			if (item.category.Equals(ItemCat.tool))
-			{
-				return AddStackableItem(item);
-			}
-
-			return AddNewItem(item);
+			if (!Libs.IsExist(item)) return false;
+			return item.category.Equals(ItemCat.tool)
+				? AddStackableItem(item)
+				: AddNewItem(item);
 		}
 
 
-        public Item PickItem(int UID)
-        {
-            (int matchSlotIndex, _) = Search(UID, false);
-
-            if (matchSlotIndex < maxSize)
-            {
-                return Guard.MustConvertTo<Item>(inventory[UID], "[PickItem in inventory]");
-            }
-
-            throw new NotImplementedException();
-        }
+        public Item PickItem(int UID) => inventory[UID];
 
 
-        private bool CheckEmptySlot(Item item)
+        private void CheckEmpty(Item item)
 		{
-			if (!item.IsExist)
-			{
-				item = null;
-				return true;
-			}
-			return false;
+			if (Libs.IsSoldOut(item)) PopItemForce(item.uid);
 		}
 
 
 		public bool UseItem(int UID)
 		{
-			(int matchSlotIndex, _) = Search(UID, false);
-
-			if (Libs.IsInclude(matchSlotIndex, maxSize))
+			if (inventory.TryGetValue(UID, out Item item))
 			{
-				if (CheckEmptySlot(inventory[matchSlotIndex])) 
-				{
-					return false;
-				}
-				inventory[matchSlotIndex].Use();
-				CheckEmptySlot(inventory[matchSlotIndex]);
+				item.Use();
+				CheckEmpty(item);
 				return true;
 			}
 			return false;
@@ -206,28 +136,17 @@ namespace Popup.Inventory
 
 		public bool UseItem (Item item) => item.Use();
 
-		public bool PopItem(int UID)
-		{
-			// Guard.MustInclude(UID, inventory, "[PopItem in inventory]") = null;
-			return true;
-		}
+		public bool PopItem(int UID) => inventory.ContainsKey(UID) ? inventory.Remove(UID) : false;
+		public bool PopItemForce(int UID) => inventory.Remove(UID);
 
 
 		public void DEBUG_ShowAllItems()
 		{
 			Debug.Log("----- show all items start -----");
 
-			foreach (Item item in inventory)
+			foreach (KeyValuePair<int, Item> item in inventory)
 			{
-				if (item != null)
-				{
-					// Debug.Log("UID = " + item.GetUID() + ", name = " + item.GetName() + ", amt = " + item.GetLeftOver() + ", w = " + item.GetWeight() + ", v = " + item.GetVolume());
-					Debug.Log("UID = " + item.uid + ", name = " + item.name + ", amt = " + item.UseableCount + ", w = " + item.Weight() + ", v = " + item.Volume());
-				}
-				else
-				{
-					DebugC.Log("[here is empty slot]", Color.yellow);
-				}
+				Debug.Log("UID = " + item.Value.uid + ", name = " + item.Value.name + ", amt = " + item.Value.UseableCount + ", w = " + item.Value.Weight() + ", v = " + item.Value.Volume());
 			}
 			Debug.Log("----- show all items end -----");
 		}

@@ -4,6 +4,7 @@ using UnityEngine;
 using Popup.Framework;
 using Popup.Library;
 using Popup.Configs;
+using Newtonsoft.Json;
 
 
 
@@ -13,14 +14,23 @@ namespace Popup.Squad
     using Inventory = Inventory.Inventory;
     using Configs   = Configs.Configs;
     using Item      = Items.Item;
+    using ServerJob = ServerJob.ServerJob;
 
     public class Squad: IInventory, ICharactor, IPopupObject
     {
+		[JsonProperty]
         public string      name { get; protected set; }
-        public int         uid { get; }
+		[JsonProperty]
+        public int         uid { get; protected set; }
+		[JsonProperty]
+		public int slotId { get; protected set; }
+		[JsonProperty]
         public Charactor[] charactors { get; protected set; }
+		[JsonProperty]
         public Inventory   inventory { get; protected set; }
+		[JsonProperty]
         public int         activateCharactorIndex { get; protected set; }
+		[JsonProperty]
         public bool        activateTurn { get; protected set; }
 
 
@@ -34,8 +44,9 @@ namespace Popup.Squad
 
         public int GetUID() => uid;
 
-        public object Duplicate() => null;      // impl.
-        public object DuplicateNew() => null;   // impl.
+        public bool IsExist => 0 < charactors.Length;
+        public object Duplicate() => MemberwiseClone();      // impl.
+        public object DuplicateNew() => (((Squad)Duplicate()).uid = ServerJob.RequestNewUID);   // impl.
 
 
         private void InventoryVerify ()              => inventory.EraseDummySlot();
@@ -58,7 +69,7 @@ namespace Popup.Squad
             return true;
         }
 
-        public bool PopCharactor(Charactor charactor) => PopCharactor(charactor.GetUID());
+        public bool PopCharactor(Charactor charactor) => PopCharactor(charactor.uid);
 
         public bool AddCharactor(int uid) => false;
 

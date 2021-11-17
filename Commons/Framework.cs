@@ -20,6 +20,8 @@ namespace Popup.Framework
     public interface IPopupObject
     {
         int uid { get; }
+        int slotId { get; }
+        bool IsExist { get; }
 
         object  Duplicate();
         object  DuplicateNew();
@@ -30,6 +32,7 @@ namespace Popup.Framework
     public interface IItem : IPopupObject
     {
         int UseableCount { get; }
+        bool HasSpace { get; }
 
         object  DuplicateEmpty();
         object  DuplicateEmptyNew();

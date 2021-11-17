@@ -41,6 +41,7 @@ public class Game : MonoBehaviour
         });
         //StartCoroutine(WaitDB());
         DEBUG_ShowInventory();
+        // DEBUG_LINQ();
         //DEBUG_Convert();
     }
 
@@ -66,6 +67,28 @@ public class Game : MonoBehaviour
     //    }
     //    DEBUG_Convert();
     //}
+
+    void DEBUG_LINQ()
+    {
+        string TEST_JSON_ITEM1 = "{\"name\":\"glass sword\",\"uid\":88,\"weight\":1.2,\"volume\":3.4,\"amount\":1,\"grade\":4,\"category\":63,\"magicIdArray\":[1,2,3,4,5]}";
+        EquipItem test = Libs.FromJson<EquipItem>(TEST_JSON_ITEM1);
+
+        Debug.Log(test.name);
+        Debug.Log(test.uid);
+        Debug.Log(test.durability);
+        Debug.Log(test.Weight());
+        Debug.Log(test.Volume());
+        Debug.Log(test.SpellAmount);
+
+
+        // Inventory inventory = new Inventory();
+
+        // Item empty = Libs.FindFirstEmpty(inventory.inventory);
+        // Debug.Log(empty);
+        // Debug.Log(inventory.inventory.Length);
+        // Debug.Log(inventory.inventory[0].GetHashCode());
+        // Debug.Log(empty.GetHashCode());
+    }
 
     void DEBUG_Convert()
     {

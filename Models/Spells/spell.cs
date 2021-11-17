@@ -4,14 +4,19 @@ using Popup.Configs;
 using Popup.Defines;
 using Popup.Library;
 using Popup.Framework;
+using Newtonsoft.Json;
 
 using Popup.ServerJob;
 
 
 public class Spell : IPopupObject
 {
-	public string name { get; protected set; }
+	[JsonProperty]
 	public int uid {get; protected set; }
+	[JsonProperty]
+	public int slotId { get; protected set; }
+	[JsonProperty]
+	public string name { get; protected set; }
 	public SpellEffective effective {get; protected set; }
 	public Elements element {get; protected set; }
 
@@ -34,16 +39,14 @@ public class Spell : IPopupObject
 	}
 
 
-	public 	int GetUID() => uid;
+	// public 	int GetUID() => uid;
+
+	public bool IsExist => false; // impl.
 
 	public object Duplicate() => MemberwiseClone();
-	public object DuplicateNew()
-    {
-		Spell other = (Spell)Duplicate();
-		other.uid = ServerJob.RequestNewUID;
-		return other;
-    }
+	public object DuplicateNew() => ((Spell)Duplicate()).uid = ServerJob.RequestNewUID;
 }
+
 
 public class Buff
 {
