@@ -16,27 +16,30 @@ using Popup.Defines;
 
 namespace Popup.Inventory
 {
-
+	using ServerJob = ServerJob.ServerJob;
 	public class Inventory : IInventory
 	{
 		Dictionary<int, Item> inventory;
-		List<int> candidate;
+		int[] usedSlot;
+		int useableCount;
+
 
 		public Inventory(int maxSize)
 		{
 			InitInventory();
-			InitCandidate(maxSize);
+			InitUsedSlot(maxSize);
 		}
+
 
 		private void InitInventory() => inventory = new Dictionary<int, Item>();
 
-		private void InitCandidate(int maxSize)
+		private void InitUsedSlot(int maxSize)
 		{
-			candidate = new List<int>();
-			for (int i = 0; i < maxSize; ++i) candidate.Add(i);
+			usedSlot = new int[maxSize];
+			useableCount = maxSize;
 		}
 
-		private bool HaveNewSpace => 0 < candidate.Count;
+		private bool HaveNewSpace => 0 < useableCount;
         private bool IsExhaust(Item item) => (Libs.IsExhaust(item)) ? (PopForce(item.uid) == item) : false;
 		private void Copy(SortedDictionary<int, Item> itemDict) => inventory = new Dictionary<int, Item>(itemDict);
 		private void Merge(Inventory inventory) => Merge(inventory.inventory);
@@ -48,21 +51,14 @@ namespace Popup.Inventory
 			}
 		}
 
-		private int CandidateId() //  => candidate.FirstOrDefault(e => true);
+		private bool UpdateUseableCount(int flag) => (useableCount += flag == 0 ? 1 : -1) != -1;
+		private bool ReverseFlag(int index) => UpdateUseableCount(usedSlot[index] = usedSlot[index] == 1 ? 0 : 1);
+		
+		private int CandidateId()
 		{
-			int id = candidate.ElementAt(0);
-			candidate.RemoveAt(0);
-			return id;
-		}
-
-		private void CandidateAppend(int id)
-		{
-			int index = candidate
-						.Select((value, index) => (value, index))
-						.FirstOrDefault(pair=> id < pair.value && 0 < ++pair.index).index;
-
-			index = (0 < candidate.Count && index == 0) ? candidate.Count: index;
-			candidate.Insert(index, id);
+			return usedSlot
+					.Select((flag, index) => (flag, index))
+					.FirstOrDefault(t => (t.flag == 0 && ReverseFlag(t.index)) || ++t.index < 0).index;
 		}
 
 		private bool AddNew(Item item)
@@ -90,7 +86,8 @@ namespace Popup.Inventory
 
 			while (HaveNewSpace)
 			{
-				Item newSpace = (ToolItem)item.DuplicateEmptyNew();
+				Item newSpace = (ToolItem)item.DeepCopy(ServerJob.RequestNewUID);
+				newSpace.slotId = CandidateId();
 				inventory.Add(newSpace.uid, newSpace);
 				if (((ToolItem)newSpace).AddStack(item))
 					return true;
@@ -109,6 +106,15 @@ namespace Popup.Inventory
 		}
 
 
+		public void Swap(Item item1, Item item2)
+		{
+			int tempSlotId = item1.slotId;
+
+			item1.slotId = item2.slotId;
+			item2.slotId = tempSlotId;
+		}
+
+
 		public void EraseExhaustedSlot()
 		{
 			var removeList = from pair in inventory
@@ -118,7 +124,7 @@ namespace Popup.Inventory
 			foreach (KeyValuePair<int, Item> pair in removeList)
 			{
 				inventory.Remove(pair.Key);
-				CandidateAppend(pair.Value.slotId);
+				ReverseFlag(pair.Value.slotId);
 			}
 		}
 
@@ -144,18 +150,33 @@ namespace Popup.Inventory
 		{
 			Item item = inventory[UID];
 			inventory.Remove(item.uid);
-			CandidateAppend(item.slotId);
+			ReverseFlag(item.slotId);
 			return item;
 		}
+
+
+
+
 
 
 		public void DEBUG_ShowAllItems()
 		{
 			Debug.Log("----- show all items start -----");
+			int index = 0;
 
 			foreach (KeyValuePair<int, Item> item in inventory)
 			{
-				Debug.Log("UID = " + item.Value.uid + ", name = " + item.Value.name + ", amt = " + item.Value.UseableCount + ", w = " + item.Value.Weight() + ", v = " + item.Value.Volume());
+				while (index++ < item.Value.slotId)
+				{
+					DebugC.Log($"[Empty Slot: {index - 1}]", Color.green);
+				}
+
+				Debug.Log("UID = " + item.Value.uid + ", name = " + item.Value.name + ", slotId = " + item.Value.slotId + ", amt = " + item.Value.UseableCount + ", w = " + item.Value.Weight() + ", v = " + item.Value.Volume());
+			}
+
+			while (index++ < usedSlot.Length)
+			{
+				DebugC.Log($"[Empty Slot: {index - 1}]", Color.green);
 			}
 			Debug.Log("----- show all items end -----");
 		}

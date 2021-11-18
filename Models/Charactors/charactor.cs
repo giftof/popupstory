@@ -50,23 +50,8 @@ namespace Popup.Charactors
         public Item[] equipArray { get; protected set; }
 
 
-        // public string   GetName         => name;
-        // public int      GetLevel        => level;
-        // public int      GetMaxHp        => maxHp;
-        // public int      GetMaxMp        => maxMp;
-        // public int      GetCurrentHp    => curHp;
-        // public int      GetCurrentMp    => curMp;
-        // public int      GetSpeed        => speed;
-        // public int      GetPower        => power;
-        // public Buff[]   GetBuffArray    => buffArray;
-        // public Spell[]  GetSpellArray   => spellArray;
-        // public Item[]   GetEquipArray   => equipArray;
-
-
-        // public int    GetUID()       => uid;
     	public bool IsExist => false; // impl.
-        public object Duplicate() => MemberwiseClone();
-        public object DuplicateNew() => (((Charactor)Duplicate()).uid = ServerJob.RequestNewUID);
+        public object DeepCopy(int? uid = null, int? notDefinedCount = null) => MemberwiseClone();
 
 
         void TakeAffect(Spell takeSpell)

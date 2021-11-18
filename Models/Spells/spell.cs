@@ -43,8 +43,8 @@ public class Spell : IPopupObject
 
 	public bool IsExist => false; // impl.
 
-	public object Duplicate() => MemberwiseClone();
-	public object DuplicateNew() => ((Spell)Duplicate()).uid = ServerJob.RequestNewUID;
+	public object DeepCopy(int? uid = null, int? charge = null) => MemberwiseClone();
+	// public object DuplicateNew() => ((Spell)Duplicate()).uid = ServerJob.RequestNewUID;
 }
 
 

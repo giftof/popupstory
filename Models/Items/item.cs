@@ -9,7 +9,6 @@ using Newtonsoft.Json;
 namespace Popup.Items
 {
 	using Cfg = Configs.Configs;
-	using ServerJob = ServerJob.ServerJob;
 	public abstract class Item : IItem
 	{
 		[JsonProperty]
@@ -37,10 +36,7 @@ namespace Popup.Items
 		public abstract bool Use();
 		public abstract float Weight();
 		public abstract float Volume();
-		public abstract object Duplicate();
-		public abstract object DuplicateNew();
-		public abstract object DuplicateEmpty();
-		public abstract object DuplicateEmptyNew();
+		public abstract object DeepCopy(int? _ = null, int? __ = null);
 	}
 
 
@@ -64,10 +60,13 @@ namespace Popup.Items
 		public override bool Use() => 0 < durability--;
 		public override float Weight() => weight;
 		public override float Volume() => volume;
-		public override object Duplicate() => MemberwiseClone();
-		public override object DuplicateNew() => (((EquipItem)Duplicate()).uid = ServerJob.RequestNewUID);
-		public override object DuplicateEmpty() => (((EquipItem)Duplicate()).durability = 0);
-		public override object DuplicateEmptyNew() => (((EquipItem)DuplicateNew()).durability = 0);
+		public override object DeepCopy(int? uid, int? durability)
+		{
+			EquipItem equipItem = (EquipItem)MemberwiseClone();
+			equipItem.uid = uid ?? 0;
+			equipItem.durability = durability ?? 0;
+			return equipItem;
+		}
 	}
 
 
@@ -110,15 +109,11 @@ namespace Popup.Items
 		public override bool Use() => 0 < amount--;
 		public override float Weight() => amount * weight;
 		public override float Volume() => amount * volume;
-		public override object Duplicate() => MemberwiseClone();
-		public override object DuplicateNew() => (((ToolItem)Duplicate()).uid = ServerJob.RequestNewUID);
-		public override object DuplicateEmpty() => (((ToolItem)Duplicate()).amount = 0);
-		// public override object DuplicateEmptyNew() => (((ToolItem)DuplicateNew()).amount = 0);
-		public override object DuplicateEmptyNew()
+		public override object DeepCopy(int? uid, int? amount)
 		{
 			ToolItem toolItem = (ToolItem)MemberwiseClone();
-			toolItem.uid = ServerJob.RequestNewUID;
-			toolItem.amount = 0;
+			toolItem.uid = uid ?? 0;
+			toolItem.amount = amount ?? 0;
 			return toolItem;
 		}
 	}

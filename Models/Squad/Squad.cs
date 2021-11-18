@@ -45,8 +45,7 @@ namespace Popup.Squad
         public int GetUID() => uid;
 
         public bool IsExist => 0 < charactors.Length;
-        public object Duplicate() => MemberwiseClone();      // impl.
-        public object DuplicateNew() => (((Squad)Duplicate()).uid = ServerJob.RequestNewUID);   // impl.
+        public object DeepCopy(int? uid = null, int? memberCount = null) => MemberwiseClone();      // impl.
 
 
         private void InventoryVerify ()             => inventory.EraseExhaustedSlot();
@@ -55,7 +54,6 @@ namespace Popup.Squad
         public  bool UseItem         (int uid)      => inventory.Use(uid);
         public  Item PickItem        (int uid)      => inventory.Pick(uid);
         public  Item PopItem         (int uid)      => inventory.Pop(uid);
-        // public  void SetMaxSize      (int size)      => inventory.SetMaxSize(size);
         public  void SetName         (string name)  => this.name = name;
 
 

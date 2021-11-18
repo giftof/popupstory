@@ -23,8 +23,8 @@ namespace Popup.Framework
         int slotId { get; }
         bool IsExist { get; }
 
-        object  Duplicate();
-        object  DuplicateNew();
+        object  DeepCopy(int? _ = null, int? __ = null);
+        // object  DuplicateNew();
     }
 
 
@@ -34,8 +34,8 @@ namespace Popup.Framework
         int UseableCount { get; }
         bool HasSpace { get; }
 
-        object  DuplicateEmpty();
-        object  DuplicateEmptyNew();
+        // object  DuplicateEmpty();
+        // object  DuplicateEmptyNew();
     }
 
 
