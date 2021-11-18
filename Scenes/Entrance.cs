@@ -56,7 +56,7 @@ public class Entrance : MonoBehaviour
             manager.sceneController.Load(SceneType.game);
         });
 
-        gpgs.SetText("GPGS");
+        gpgs.SetText("GPGS", Color.red);
         gpgs.AddActionDown(()=> Debug.Log("(0): Hello Added action DOWN is... mmm... !!!"));
         gpgs.AddActionDown(()=> Debug.Log("(1): Hello Added action DOWN is... mmm... !!!"));
         gpgs.AddActionUp(()=> Debug.Log("(0): Hello Added action UP is... mmm... !!!"));

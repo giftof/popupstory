@@ -28,9 +28,8 @@ public class CustomButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
             meshProUGUI.transform.SetParent(transform);
             meshProUGUI.transform.localPosition = Vector3.zero;
         }
-
         meshProUGUI.color = color;
-        meshProUGUI.text = message;
+        meshProUGUI.SetText(message);
     }
 
     public void AddActionDown   (ButtonAction buttonAction) => buttonActionDown += buttonAction;
