@@ -38,7 +38,7 @@ namespace Popup.Squad
         public Squad(int uid, int inventorySize = Configs.squadInventorySize)
         {
             this.uid = uid;
-            SetMaxSize(inventorySize);
+            inventory = new Inventory(inventorySize);
         }
 
 
@@ -49,14 +49,14 @@ namespace Popup.Squad
         public object DuplicateNew() => (((Squad)Duplicate()).uid = ServerJob.RequestNewUID);   // impl.
 
 
-        private void InventoryVerify ()              => inventory.EraseDummySlot();
-        public  bool AddItem         (Item item) => inventory.AddItem(item);
-        public  bool UseItem         (Item item) => inventory.UseItem(item);
-        public  bool UseItem         (int uid)       => inventory.UseItem(uid);
-        public  Item PickItem        (int uid)       => inventory.PickItem(uid);
-        public  bool PopItem         (int uid)       => inventory.PopItem(uid);
-        public  void SetMaxSize      (int size)      => inventory.SetMaxSize(size);
-        public  void SetName         (string name)   => this.name = name;
+        private void InventoryVerify ()             => inventory.EraseExhaustedSlot();
+        public  bool AddItem         (Item item)    => inventory.Add(item);
+        public  bool UseItem         (Item item)    => inventory.Use(item);
+        public  bool UseItem         (int uid)      => inventory.Use(uid);
+        public  Item PickItem        (int uid)      => inventory.Pick(uid);
+        public  Item PopItem         (int uid)      => inventory.Pop(uid);
+        // public  void SetMaxSize      (int size)      => inventory.SetMaxSize(size);
+        public  void SetName         (string name)  => this.name = name;
 
 
 

@@ -17,7 +17,7 @@ namespace Popup.Items
 		[JsonProperty]
 		public int uid { get; protected set; }
 		[JsonProperty]
-		public int slotId { get; protected set; }
+		public int slotId { get; set; }
 		[JsonProperty]
 		public float weight { get; protected set; }
 		[JsonProperty]

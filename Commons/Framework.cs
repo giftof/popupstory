@@ -42,12 +42,12 @@ namespace Popup.Framework
 
     public interface IInventory
 	{
-        Item    PickItem    (int uid);
-        bool    UseItem     (int uid);
-        bool    UseItem     (Item item);
-        bool    PopItem     (int uid);
-        bool    AddItem     (Item item);
-        void    SetMaxSize  (int size);
+        // Item    Pick    (int uid);
+        // bool    Use     (int uid);
+        // bool    Use     (Item item);
+        // bool    Pop     (int uid);
+        // bool    Add     (Item item);
+        // void    SetMaxSize  (int size);
     }
 
 

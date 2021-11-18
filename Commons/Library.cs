@@ -67,7 +67,7 @@ namespace Popup.Library
         // public static T FindSpace<T>(int uid, T[] array) where T: IItem => array.FirstOrDefault(e => e.HasSpace);
 
         public static bool IsExist<T>(T obj) where T: IPopupObject => obj?.IsExist ?? false;
-        public static bool IsSoldOut<T>(T obj) where T: IPopupObject => obj != null && !obj.IsExist;
+        public static bool IsExhaust<T>(T obj) where T: IPopupObject => obj != null && !obj.IsExist;
         public static int FindEmptyIndex<T>(T[] array, int startIndex = 0)
         {
             int index = startIndex;
