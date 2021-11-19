@@ -3,13 +3,15 @@ namespace Popup.Defines
 {
     public enum ObjectType
     {
-        equipItem,
-        toolItem,
-        spell,
-        buff,
-        charactor,
-        inventory,
-        squad,
+        CustomButton,
+        TextMesh,
+        //EquipItem,
+        //ToolItem,
+        //Spell,
+        //Buff,
+        //Charactor,
+        //Inventory,
+        //Squad,
     }
 
     public enum Elements

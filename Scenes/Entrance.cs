@@ -10,14 +10,15 @@ using Popup.Items;
 
 public class Entrance : MonoBehaviour
 {
-    public  Button       toLobby;
-    public  Button       toGame;
-    private Manager      manager;
-    public  CustomButton gpgs;
+    public Button toLobby;
+    public Button toGame;
+    private Manager manager;
+    public CustomButton gpgs;
+    //private ObjectPool objectPool;
 
 
 
-    void Awake()
+    void Start()
     {
         Initialize();
 
@@ -29,13 +30,9 @@ public class Entrance : MonoBehaviour
 
     private void Initialize()
     {
+        //objectPool = (ObjectPool)FindObjectOfType(typeof(ObjectPool));
         manager = (Manager)FindObjectOfType(typeof(Manager));
-
-        if (manager == null)
-        {
-            manager = Instantiate(Resources.Load<Manager>("Prefabs/Global/Manager"));
-        }
-
+        manager = manager ?? Instantiate(Resources.Load<Manager>("Prefabs/Global/Manager"));
         manager.eventSystem.enabled = true;
     }
 

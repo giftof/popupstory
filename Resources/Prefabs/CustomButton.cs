@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using Popup.Delegate;
+using Popup.Defines;
+using Popup.Library;
 using TMPro;
 
 
@@ -12,51 +14,53 @@ using TMPro;
 
 public class CustomButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
-    private TextMeshProUGUI meshProUGUI      = null;
-    private ButtonAction    buttonActionDown = null;
-    private ButtonAction    buttonActionUp   = null;
-    private Image           image;
+    private GameObject textMesh = null;
+    private ButtonAction buttonActionDown = null;
+    private ButtonAction buttonActionUp = null;
+    private Image image = null;
+
 
 
     public void SetText(string message, Color color = default)
     {
-        Debug.Log("     [enter SetText]");
-
-        if (meshProUGUI == null)
+        TextMeshProUGUI ugui;
+        if (textMesh == null)
         {
-            meshProUGUI = Instantiate(Resources.Load<TextMeshProUGUI>("Prefabs/TextMeshUGUI"));
-            meshProUGUI.transform.SetParent(transform);
-            meshProUGUI.transform.localPosition = Vector3.zero;
+            textMesh = (GameObject)ObjectPool.Instance.Request(ObjectType.TextMesh);
+            textMesh.SetActive(true);
+            textMesh.transform.SetParent(transform);
+            textMesh.transform.localPosition = Vector3.zero;
         }
-        meshProUGUI.color = color;
-        meshProUGUI.SetText(message);
+        ugui = textMesh.GetComponent<TextMeshProUGUI>();
+        ugui.color = color;
+        ugui.SetText(message);
     }
 
-    public void AddActionDown   (ButtonAction buttonAction) => buttonActionDown += buttonAction;
-    public void AddActionUp     (ButtonAction buttonAction) => buttonActionUp   += buttonAction;
+    public void AddActionDown(ButtonAction buttonAction) => buttonActionDown += buttonAction;
+    public void AddActionUp(ButtonAction buttonAction) => buttonActionUp += buttonAction;
     public void RemoveActionDown(ButtonAction buttonAction) => buttonActionDown -= buttonAction;
-    public void RemoveActionUp  (ButtonAction buttonAction) => buttonActionUp   -= buttonAction;
-
+    public void RemoveActionUp(ButtonAction buttonAction) => buttonActionUp -= buttonAction;
 
     public void OnPointerDown(PointerEventData eventData)
     {
         Debug.Log("OnPointerDown");
         buttonActionDown?.Invoke();
-        if (image == null)
-        {
-            image = GetComponent<Image>();
-        }
-        image.color = Color.black;
+        image = image ?? GetComponent<Image>();
+
+        TEST_DOWN();
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
         Debug.Log("OnPointerUp");
         buttonActionUp?.Invoke();
-        if (image == null)
-        {
-            image = GetComponent<Image>();
-        }
-        image.color = Color.white;
+        image = image ?? GetComponent<Image>();
+
+        TEST_UP();
     }
+
+
+
+    public void TEST_DOWN() => image.color = Color.black;  // test
+    public void TEST_UP() => image.color = Color.white; // test
 }

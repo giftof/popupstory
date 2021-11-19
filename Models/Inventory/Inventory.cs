@@ -40,7 +40,7 @@ namespace Popup.Inventory
 		}
 
 		private bool HaveNewSpace => 0 < useableCount;
-        private bool IsExhaust(Item item) => (Libs.IsExhaust(item)) ? (PopForce(item.uid) == item) : false;
+		private bool IsExhaust(Item item) => Libs.IsExhaust(item) && (PopForce(item.uid) == item);
 		private void Copy(SortedDictionary<int, Item> itemDict) => inventory = new Dictionary<int, Item>(itemDict);
 		private void Merge(Inventory inventory) => Merge(inventory.inventory);
 		private void Merge(Dictionary<int, Item> itemDict)
@@ -75,7 +75,7 @@ namespace Popup.Inventory
 		private bool AddStackable(Item item)
 		{
 			var pick = from element in inventory
-					   where element.Value.HaveSpace(item.name)
+					   where element.Value.HaveSpace(item.Name)
 					   select element;
 
 			foreach (var value in pick)
@@ -100,7 +100,7 @@ namespace Popup.Inventory
 		public bool Add(Item item)
 		{
 			if (!Libs.IsExist(item)) return false;
-			return item.category.Equals(ItemCat.tool)
+			return item.Category.Equals(ItemCat.tool)
 				? AddStackable(item)
 				: AddNew(item);
 		}
@@ -171,7 +171,7 @@ namespace Popup.Inventory
 					DebugC.Log($"[Empty Slot: {index - 1}]", Color.green);
 				}
 
-				Debug.Log("UID = " + item.Value.uid + ", name = " + item.Value.name + ", slotId = " + item.Value.slotId + ", amt = " + item.Value.UseableCount + ", w = " + item.Value.Weight() + ", v = " + item.Value.Volume());
+				Debug.Log("UID = " + item.Value.uid + ", name = " + item.Value.Name + ", slotId = " + item.Value.slotId + ", amt = " + item.Value.UseableCount + ", w = " + item.Value.TWeight() + ", v = " + item.Value.TVolume());
 			}
 
 			while (index++ < usedSlot.Length)

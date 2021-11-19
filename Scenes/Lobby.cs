@@ -13,7 +13,7 @@ public class Lobby : MonoBehaviour
     private Manager manager;
 
     // Start is called before the first frame update
-    void Awake()
+    void Start()
     {
         Initialize();
 

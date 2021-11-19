@@ -24,7 +24,7 @@ public class Game : MonoBehaviour
     private Manager manager;
 
     // Start is called before the first frame update
-    void Awake()
+    void Start()
     {
         Initialize();
 
@@ -73,11 +73,11 @@ public class Game : MonoBehaviour
         string TEST_JSON_ITEM1 = "{\"name\":\"glass sword\",\"uid\":88,\"weight\":1.2,\"volume\":3.4,\"amount\":1,\"grade\":4,\"category\":63,\"magicIdArray\":[1,2,3,4,5]}";
         EquipItem test = Libs.FromJson<EquipItem>(TEST_JSON_ITEM1);
 
-        Debug.Log(test.name);
+        Debug.Log(test.Name);
         Debug.Log(test.uid);
-        Debug.Log(test.durability);
-        Debug.Log(test.Weight());
-        Debug.Log(test.Volume());
+        Debug.Log(test.Durability);
+        Debug.Log(test.TWeight());
+        Debug.Log(test.TVolume());
         Debug.Log(test.SpellAmount);
 
 
@@ -96,11 +96,11 @@ public class Game : MonoBehaviour
         EquipItem test = Libs.FromJson<EquipItem>(TEST_JSON_ITEM1);
         string json;
 
-        Debug.Log(test.name);
+        Debug.Log(test.Name);
         Debug.Log(test.uid);
-        Debug.Log(test.durability);
-        Debug.Log(test.Weight());
-        Debug.Log(test.Volume());
+        Debug.Log(test.Durability);
+        Debug.Log(test.TWeight());
+        Debug.Log(test.TVolume());
         Debug.Log(test.SpellAmount);
 
 
@@ -153,7 +153,7 @@ public class Game : MonoBehaviour
         Item item1 = JsonConvert.DeserializeObject<ToolItem>(itemDef1);
         Debug.Log(item1);
         Debug.Log(item1.uid);
-        Debug.Log(item1.name);
+        Debug.Log(item1.Name);
 
 
         string itemDef2 = $"{{\"uid\":{ServerJob.RequestNewUID},\"name\":\"stack2\",\"category\":{(int)ItemCat.tool},\"amount\":5,\"weight\":0.5,\"volume\":0.1}}";
