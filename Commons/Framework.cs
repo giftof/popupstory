@@ -20,7 +20,7 @@ namespace Popup.Framework
     public interface IPopupObject
     {
         int uid { get; }
-        int slotId { get; }
+        int SlotId { get; }
         bool IsExist { get; }
 
         object  DeepCopy(int? _ = null, int? __ = null);
@@ -32,7 +32,8 @@ namespace Popup.Framework
     public interface IItem : IPopupObject
     {
         int UseableCount { get; }
-        bool HasSpace { get; }
+        bool HaveSpace(string name = null);
+        //bool HasSpace { get; }
 
         // object  DuplicateEmpty();
         // object  DuplicateEmptyNew();
@@ -52,12 +53,17 @@ namespace Popup.Framework
 
 
 
-    public interface ICharactor
+    public interface ICharactor : IPopupObject
     {
-        Charactor       PickCharactor   (int uid);
-        bool            PopCharactor    (int uid);
-        bool            PopCharactor    (Charactor charactor);
-        bool            AddCharactor    (int uid);
-        bool            AddCharactor    (Charactor charactor);
+        int Size { get; }
+        bool IsAlive { get; }
+        bool IsCorpse { get; }
+        bool IsOccupied { get; }
+        //Charactor PickCharactor   (int uid);
+
+        //bool            PopCharactor    (int uid);
+        //bool            PopCharactor    (Charactor charactor);
+        //bool            AddCharactor    (int uid);
+        //bool            AddCharactor    (Charactor charactor);
     }
 }

@@ -18,68 +18,76 @@ namespace Popup.Charactors
     using Cfg = Configs.Configs;
     //using Ivn = Inventory.Inventory;
     using ServerJob = ServerJob.ServerJob;
-    public class Charactor : IPopupObject
+    public class Charactor : ICharactor
     {
         [JsonProperty]
-        public string name { get; protected set; }
+        //public string Name { get; protected set; }
+        public string Name { get; set; }
         [JsonProperty]
-        public int uid { get; protected set; }
-		[JsonProperty]
-		public int slotId { get; protected set; }
+        //public int uid { get; protected set; }
+        public int uid { get; set; }
         [JsonProperty]
-        public int level { get; protected set; }
+        //public int Size { get; protected set; }
+        public int Size { get; set; }
         [JsonProperty]
-        public int exp { get; protected set; }
+		public int SlotId { get; protected set; }
         [JsonProperty]
-        public int maxHp { get; protected set; }
+        public int Level { get; protected set; }
         [JsonProperty]
-        public int curHp { get; protected set; }
+        public int Exp { get; protected set; }
         [JsonProperty]
-        public int maxMp { get; protected set; }
+        public int MaxHp { get; protected set; }
         [JsonProperty]
-        public int curMp { get; protected set; }
+        public int CurHp { get; protected set; }
         [JsonProperty]
-        public int speed { get; protected set; }
+        public int MaxMp { get; protected set; }
         [JsonProperty]
-        public int power { get; protected set; }
+        public int CurMp { get; protected set; }
         [JsonProperty]
-        public Buff[] buffArray { get; protected set; }
+        public int Speed { get; protected set; }
         [JsonProperty]
-        public Spell[] spellArray { get; protected set; }
+        public int Power { get; protected set; }
         [JsonProperty]
-        public Item[] equipArray { get; protected set; }
+        public Buff[] BuffArray { get; protected set; }
+        [JsonProperty]
+        public Spell[] SpellArray { get; protected set; }
+        [JsonProperty]
+        public Item[] EquipArray { get; protected set; }
 
 
-    	public bool IsExist => false; // impl.
-        public object DeepCopy(int? uid = null, int? notDefinedCount = null) => MemberwiseClone();
+        public bool IsAlive => 0 < CurHp;
+        public bool IsCorpse => !IsAlive;
+        public bool IsOccupied => true;
 
 
-        void TakeAffect(Spell takeSpell)
+    	public bool IsExist => IsOccupied; // impl.
+        public object DeepCopy(int? uid = null, int? notDefinedCount = null) => MemberwiseClone(); // impl.
+
+
+        public void TakeAffect(Spell spell)
         {
-
+            CurHp -= spell.AffectiveValue(this);
         }
 
-        void GiveAffect(int spellIndex, params Charactor[] targetArray)
+        public void GiveAffect(int spellIndex, params Charactor[] targetArray)
         {
-            Guard.MustInRange(spellIndex, this.spellArray, "[GiveAffect in charactor]");
+            Guard.MustInRange(spellIndex, this.SpellArray, "[GiveAffect in charactor]");
 
             foreach (Charactor target in targetArray)
-            {
-                target.TakeAffect(this.spellArray[spellIndex]);
-            }
+                target.TakeAffect(this.SpellArray[spellIndex]);
         }
 
         void ChangeName(string newName)
         {
             // check is name changeable
-            name = newName;
+            Name = newName;
         }
 
         void TakeExp(int amount)
         {
-            Libs.IncreaseValue(exp, amount);
-            while (Libs.IsUnder((level + 1) * (level + 1), exp)) { ++level; }
-            Alignment.ToInclude(level, (Cfg.minLevel, Cfg.maxLevel));
+            Libs.IncreaseValue(Exp, amount);
+            while (Libs.IsUnder((Level + 1) * (Level + 1), Exp)) { ++Level; }
+            Alignment.ToInclude(Level, (Cfg.minLevel, Cfg.maxLevel));
         }
 
         void LoseExp(int amount) => TakeExp(-amount);
@@ -99,5 +107,4 @@ namespace Popup.Charactors
 
         }
     }
-
 }

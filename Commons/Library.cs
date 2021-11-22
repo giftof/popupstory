@@ -154,6 +154,13 @@ namespace Popup.Library
             }
         }
 
+        public static void MustNotInclude(object key, IDictionary dictionary, string caller)
+        {
+            if (dictionary.Contains(key))
+            {
+                throw new Error("Error: include - " + caller);
+            }
+        }
 
         public static T MustConvertTo<T> (object item, string caller) where T: class
         {

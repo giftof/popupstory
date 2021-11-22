@@ -147,7 +147,7 @@ public class Game : MonoBehaviour
     void DEBUG_ShowInventory()
     {
         // Inventory inventory1 = new Inventory(null, Configs.squadInventorySize);
-        Inventory inventory1 = new Inventory(Configs.squadInventorySize);
+        Inventory inventory1 = new WareHouse(Configs.squadInventorySize);
 
         string itemDef1 = $"{{\"uid\":{ServerJob.RequestNewUID},\"name\":\"stack1\",\"category\":{(int)ItemCat.tool},\"amount\":12,\"weight\":0.1,\"volume\":0.2}}";
         Item item1 = JsonConvert.DeserializeObject<ToolItem>(itemDef1);
@@ -252,20 +252,20 @@ public class Game : MonoBehaviour
         // Debug.Log("use i2 10 = " + inventory2.UseItem(10));
         // Debug.Log("use i1 11 = " + inventory.UseItem(11));
         // Debug.Log("use i2 11 = " + inventory2.UseItem(11));
-        Debug.Log("use i1 3 = " + inventory1.Use(3));
-        Debug.Log("use i2 3 = " + inventory2.Use(3));
-        Debug.Log("use i1 3 = " + inventory1.Use(3));
-        Debug.Log("use i2 3 = " + inventory2.Use(3));
-        Debug.Log("use i1 3 = " + inventory1.Use(3));
-        Debug.Log("use i2 3 = " + inventory2.Use(3));
-        Debug.Log("use i1 3 = " + inventory1.Use(3));
-        Debug.Log("use i2 3 = " + inventory2.Use(3));
-        Debug.Log("use i1 3 = " + inventory1.Use(3));
-        Debug.Log("use i2 3 = " + inventory2.Use(3));
-        Debug.Log("use i1 3 = " + inventory1.Use(3));
-        Debug.Log("use i2 3 = " + inventory2.Use(3));
-        Debug.Log("use i1 4 = " + inventory1.Use(4));
-        Debug.Log("use i2 4 = " + inventory2.Use(4));
+        //Debug.Log("use i1 3 = " + inventory1.Use(3));
+        //Debug.Log("use i2 3 = " + inventory2.Use(3));
+        //Debug.Log("use i1 3 = " + inventory1.Use(3));
+        //Debug.Log("use i2 3 = " + inventory2.Use(3));
+        //Debug.Log("use i1 3 = " + inventory1.Use(3));
+        //Debug.Log("use i2 3 = " + inventory2.Use(3));
+        //Debug.Log("use i1 3 = " + inventory1.Use(3));
+        //Debug.Log("use i2 3 = " + inventory2.Use(3));
+        //Debug.Log("use i1 3 = " + inventory1.Use(3));
+        //Debug.Log("use i2 3 = " + inventory2.Use(3));
+        //Debug.Log("use i1 3 = " + inventory1.Use(3));
+        //Debug.Log("use i2 3 = " + inventory2.Use(3));
+        //Debug.Log("use i1 4 = " + inventory1.Use(4));
+        //Debug.Log("use i2 4 = " + inventory2.Use(4));
 
 
         // Debug.Log("use i1 11 = " + inventory.UseItem(11));

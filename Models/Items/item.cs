@@ -16,7 +16,7 @@ namespace Popup.Items
 		[JsonProperty]
 		public int uid { get; protected set; }
 		[JsonProperty]
-		public int slotId { get; set; }
+		public int SlotId { get; set; }
 		[JsonProperty]
 		public float Weight { get; protected set; }
 		[JsonProperty]
@@ -28,15 +28,15 @@ namespace Popup.Items
 
 		[JsonIgnore]
 		public abstract bool IsExist { get; }
-		[JsonIgnore]
-		public abstract bool HasSpace { get; }
+		//[JsonIgnore]
+		//public abstract bool HasSpace { get; }
 		[JsonIgnore]
 		public abstract int UseableCount { get; }
-		public abstract bool HaveSpace(string _);
+		public abstract bool HaveSpace(string _ = null);
 		public abstract bool Use();
 		public abstract float TWeight();
 		public abstract float TVolume();
-		public abstract object DeepCopy(int? _ = null, int? __ = null);
+		public abstract object DeepCopy(int? uid = null, int? amt = null);
 	}
 
 
@@ -54,9 +54,9 @@ namespace Popup.Items
 		public Spell Spell(int uid) => Guard.MustInclude(uid, SpellArray, "[GetSpell in EquipItem]");
 
 		public override bool IsExist => 0 < Durability;
-		public override bool HasSpace => false;
+		//public override bool HasSpace => false;
 		public override int UseableCount => Durability;
-		public override bool HaveSpace(string _) => false;
+		public override bool HaveSpace(string _ = null) => false;
 		public override bool Use() => 0 < Durability--;
 		public override float TWeight() => Weight;
 		public override float TVolume() => Volume;
@@ -96,16 +96,15 @@ namespace Popup.Items
 			SetMaxAmount();
 
 			int enableStack = Math.Min(((ToolItem)item).Amount, Space);
-
 			((ToolItem)item).Decrease(enableStack);
 			Increase(enableStack);
 			return item.UseableCount.Equals(0);
 		}
 
 		public override bool IsExist => 0 < Amount;
-		public override bool HasSpace => Amount < MaxAmount;
+		//public override bool HasSpace => Amount < MaxAmount;
 		public override int UseableCount => Amount;
-		public override bool HaveSpace(string name) => this.Name.Equals(name) && HasSpace;
+		public override bool HaveSpace(string name = null) => (name == null || this.Name.Equals(name)) && Amount < MaxAmount;
 		public override bool Use() => 0 < Amount--;
 		public override float TWeight() => Amount * Weight;
 		public override float TVolume() => Amount * Volume;

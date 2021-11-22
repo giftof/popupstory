@@ -1,9 +1,11 @@
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Popup.Framework;
 using Popup.Library;
 using Popup.Configs;
+using Popup.Inventory;
 using Newtonsoft.Json;
 
 
@@ -16,71 +18,143 @@ namespace Popup.Squad
     using Item      = Items.Item;
     using ServerJob = ServerJob.ServerJob;
 
-    public class Squad: IInventory, ICharactor, IPopupObject
+    public class Squad: IInventory, IPopupObject
     {
 		[JsonProperty]
-        public string      name { get; protected set; }
+        public string Name { get; protected set; }
 		[JsonProperty]
-        public int         uid { get; protected set; }
+        public int uid { get; protected set; }
 		[JsonProperty]
-		public int slotId { get; protected set; }
+		public int SlotId { get; protected set; }
 		[JsonProperty]
-        public Charactor[] charactors { get; protected set; }
+        public LinkedList<Charactor> Charactors { get; protected set; }
+        //public Charactor[] Charactors { get; protected set; }
+        [JsonIgnore]
+        private int OccupiedSize { get; set; }
+        [JsonProperty]
+        public Inventory Inventory { get; protected set; }
 		[JsonProperty]
-        public Inventory   inventory { get; protected set; }
+        public int ActivateCharactorIndex { get; protected set; }
 		[JsonProperty]
-        public int         activateCharactorIndex { get; protected set; }
-		[JsonProperty]
-        public bool        activateTurn { get; protected set; }
-
+        public bool ActivateTurn { get; protected set; }
 
 
         public Squad(int uid, int inventorySize = Configs.squadInventorySize)
         {
             this.uid = uid;
-            inventory = new Inventory(inventorySize);
+            OccupiedSize = 0;
+            Charactors = new LinkedList<Charactor>();
+            Inventory = new WareHouse(inventorySize);
         }
 
 
         public int GetUID() => uid;
 
-        public bool IsExist => 0 < charactors.Length;
-        public object DeepCopy(int? uid = null, int? memberCount = null) => MemberwiseClone();      // impl.
-
-
-        private void InventoryVerify ()             => inventory.EraseExhaustedSlot();
-        public  bool AddItem         (Item item)    => inventory.Add(item);
-        public  bool UseItem         (Item item)    => inventory.Use(item);
-        public  bool UseItem         (int uid)      => inventory.Use(uid);
-        public  Item PickItem        (int uid)      => inventory.Pick(uid);
-        public  Item PopItem         (int uid)      => inventory.Pop(uid);
-        public  void SetName         (string name)  => this.name = name;
-
-
-
-
-        public Charactor PickCharactor(int uid) => Guard.MustInclude(uid, charactors, "[PickCharactor in squad]");
-
-        public bool PopCharactor(int uid)
+        //public bool IsExist => 0 < Charactors.Count;
+        public bool IsExist => Charactors.FirstOrDefault(c => c.IsAlive) != null;
+        public object DeepCopy(int? uid = null, int? _ = null)
         {
-            // Guard.MustInclude(uid, charactors, "[PopCharactor in squad]") = null;
-            return true;
+            Inventory.EraseExhaustedSlot();
+
+            Squad squad = (Squad)MemberwiseClone();
+            squad.uid = uid ?? squad.uid;
+
+            return squad;
         }
 
-        public bool PopCharactor(Charactor charactor) => PopCharactor(charactor.uid);
-
-        public bool AddCharactor(int uid) => false;
-
-        public bool AddCharactor(Charactor charactor)
+        public bool Use(Item item) => Inventory.Use(item);
+        public bool Add(Item item) => Inventory.Add(item);
+        public bool Add(Charactor charactor)
         {
-            int index = Libs.FindEmptyIndex(charactors);
+            if (!charactor.IsExist) return false;
+            if (Configs.squadSize < OccupiedSize + charactor.Size) return false;
 
-            if (Libs.IsInclude(index, charactors.Length))
+
+            OccupiedSize += charactor.Size;
+            return Charactors.AddLast(charactor) != null;
+        }
+        public void SetName(string name) => Name = name;
+
+        private void Crash(Charactor target, Spell spell) => target?.TakeAffect(spell);
+
+        public (uint, LinkedListNode<Charactor>) MoveBackward(LinkedListNode<Charactor> target, uint step)
+        {
+            if (target.Value.uid.Equals(Charactors.Last.Value.uid)) return (0, null);
+            LinkedListNode<Charactor> position = target;
+
+            while (position.Next != null && position.Next.Value.Size <= step)
             {
-                charactors[index] = charactor;
-                return true;
+                Crash(position.Value, null);
+                Crash(position.Next.Value, null);
+                step -= (uint)position.Next.Value.Size;
+                position = position.Next;
             }
-            return false;
+
+            Charactors.Remove(target);
+            Charactors.AddAfter(position, target);
+            return (step, target.Next);
+        }
+
+        public (uint, LinkedListNode<Charactor>) MoveForward(LinkedListNode<Charactor> target, uint step)
+        {
+            if (target.Value.uid.Equals(Charactors.First.Value.uid)) return (0, null);
+            LinkedListNode<Charactor> position = target;
+
+            while (position.Previous != null && position.Previous.Value.Size <= step)
+            {
+                Crash(position.Value, null);
+                Crash(position.Previous.Value, null);
+                step -= (uint)position.Value.Size;
+                position = position.Previous;
+            }
+
+            Charactors.Remove(target);
+            Charactors.AddAfter(position, target);
+            return (step, target.Previous);
+        }
+
+
+
+
+        //public Charactor PickCharactor(int uid) => Guard.MustInclude(uid, Charactors, "[PickCharactor in squad]");
+
+        //public bool PopCharactor(int uid)
+        //{
+        //    // Guard.MustInclude(uid, charactors, "[PopCharactor in squad]") = null;
+        //    return true;
+        //}
+
+        //public bool PopCharactor(Charactor charactor) => PopCharactor(charactor.uid);
+
+        //public bool AddCharactor(int uid) => false;
+
+        //public bool AddCharactor(Charactor charactor)
+        //{
+        //    int index = Libs.FindEmptyIndex(Charactors);
+
+        //    if (Libs.IsInclude(index, Charactors.Length))
+        //    {
+        //        Charactors[index] = charactor;
+        //        return true;
+        //    }
+        //    return false;
+        //}
+        public LinkedListNode<Charactor> Node(int offset)
+        {
+            LinkedListNode<Charactor> target = Charactors.First;
+
+            while (0 < offset-- && target != null)
+                target = target.Next;
+            return target;
+        }
+
+
+        public void DEBUG_TEST()
+        {
+            foreach (Charactor c in Charactors)
+            {
+                Debug.Log($"name = {c.Name}");
+            }
         }
 
     }
