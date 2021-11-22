@@ -198,7 +198,6 @@ namespace Popup.Inventory
 		protected abstract bool AddNew(Item item);
 		protected abstract bool HaveSpace();
 		public abstract void EraseExhaustedSlot();
-		//public abstract bool Use(int slotId);
 		public abstract bool Use(Item item);
 
 
@@ -281,17 +280,7 @@ namespace Popup.Inventory
 			return false;
 		}
 
-		//public override bool Use(int slotId)
-  //      {
-		//	Item use = wareHouse.FirstOrDefault(e => e.Value.SlotId.Equals(slotId) && e.Value.IsExist).Value;
 
-		//	if (use?.Use() ?? false)
-  //          {
-		//		if (!use.IsExist)
-		//			wareHouse.Remove(use.uid);
-		//	}
-		//	return false;
-  //      }
 
 
 

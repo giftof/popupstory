@@ -28,16 +28,12 @@ namespace Popup.Squad
 		public int SlotId { get; protected set; }
         [JsonProperty]
         public Dictionary<int, Charactor> Charactors { get; protected set; }
-        /*public LinkedList<Charactor> Charactors { get; protected set; }*/
-        //public Charactor[] Charactors { get; protected set; }
         [JsonIgnore]
         private int OccupiedSize { get; set; }
         [JsonProperty]
         public Inventory Inventory { get; protected set; }
 		[JsonIgnore]
         public int? ActivateCharactor { get; protected set; }
-/*		[JsonProperty]
-        public bool ActivateTurn { get; protected set; }*/
 
         public Squad(int uid, int inventorySize = Configs.squadInventorySize)
         {
@@ -52,25 +48,6 @@ namespace Popup.Squad
 
         public bool IsExist => 0 < Charactors.Count;
         public bool IsAlive => !Charactors.FirstOrDefault(p => p.Value.IsAlive).Equals(null);
-/*        public bool IsAlive()
-        {
-            return !Charactors.FirstOrDefault(p => p.Value.IsAlive).Equals(null);
-            KeyValuePair<int, Charactor> anyone = Charactors.FirstOrDefault(p => p.Value.IsAlive);
-            return !anyone.Equals(null);
-            if (anyone.Equals(null))
-            {
-
-            }
-            Debug.Log(anyone);
-            Debug.Log(anyone.Key);
-            Debug.Log(anyone.Value);
-            return true;
-
-            return Charactors.FirstOrDefault(p => p.Value.IsAlive) == default;
-
-        }
-*/
-        //public bool IsExist => Charactors.FirstOrDefault(c => c.IsAlive) != null;
         public object DeepCopy(int? uid = null, int? _ = null)
         {
             Inventory.EraseExhaustedSlot();
@@ -165,38 +142,12 @@ namespace Popup.Squad
         }
 
 
-        //public Charactor PickCharactor(int uid) => Guard.MustInclude(uid, Charactors, "[PickCharactor in squad]");
 
-        //public bool PopCharactor(int uid)
-        //{
-        //    // Guard.MustInclude(uid, charactors, "[PopCharactor in squad]") = null;
-        //    return true;
-        //}
 
-        //public bool PopCharactor(Charactor charactor) => PopCharactor(charactor.uid);
 
-        //public bool AddCharactor(int uid) => false;
 
-        //public bool AddCharactor(Charactor charactor)
-        //{
-        //    int index = Libs.FindEmptyIndex(Charactors);
 
-        //    if (Libs.IsInclude(index, Charactors.Length))
-        //    {
-        //        Charactors[index] = charactor;
-        //        return true;
-        //    }
-        //    return false;
-        //}
-/*        public LinkedListNode<Charactor> Node(int offset)
-        {
-            LinkedListNode<Charactor> target = Charactors.First;
 
-            while (0 < offset-- && target != null)
-                target = target.Next;
-            return target;
-        }
-*/
 
         public void DEBUG_TEST()
         {

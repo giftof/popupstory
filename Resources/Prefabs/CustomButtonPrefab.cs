@@ -30,6 +30,7 @@ public class CustomButtonPrefab : MonoBehaviour, IPointerDownHandler, IPointerUp
             textMesh.SetActive(true);
             textMesh.transform.SetParent(transform);
             textMesh.transform.localPosition = Vector3.zero;
+            textMesh.GetComponent<RectTransform>().sizeDelta = Vector2.one * 20;
         }
         ugui = textMesh.GetComponent<TextMeshProUGUI>();
         ugui.color = color;

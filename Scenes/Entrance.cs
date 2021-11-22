@@ -151,6 +151,8 @@ public class Entrance : MonoBehaviour
         gpgsButton.transform.SetParent(canvas.transform);
         gpgsButton.transform.localPosition = Vector3.down * 300;
         gpgsButton.SetText("GPGS", Color.red);
+        gpgsButton.transform.GetComponent<RectTransform>().sizeDelta = Vector2.one * 20;
+
         gpgsButton.AddActionDown(() => Debug.Log("(0): Hello Added action DOWN is... mmm... !!!"));
         gpgsButton.AddActionDown(() => Debug.Log("(1): Hello Added action DOWN is... mmm... !!!"));
         gpgsButton.AddActionUp(() => Debug.Log("(0): Hello Added action UP is... mmm... !!!"));

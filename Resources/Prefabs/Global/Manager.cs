@@ -9,15 +9,13 @@ using UnityEngine.EventSystems;
 
 public class Manager : MonoBehaviour
 {
-    public Auth             auth;
-    public EventSystem      eventSystem;
-    public SceneController  sceneController;
+    public Auth auth;
+    public EventSystem eventSystem;
+    public SceneController sceneController;
+    public GUIGuide uiGuide;
 
     private void Awake()
     {
         DontDestroyOnLoad(this);
-        //DontDestroyOnLoad(eventSystem);
-        //DontDestroyOnLoad(auth);
-        //DontDestroyOnLoad(sceneController);
     }
 }
