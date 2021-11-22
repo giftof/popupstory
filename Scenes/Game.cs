@@ -31,13 +31,13 @@ public class Game : MonoBehaviour
         Debug.Log("enter Game");
         toEntrance.onClick.AddListener(() =>
         {
-            manager.eventSystem.enabled = false;
-            manager.sceneController.Load(SceneType.entrance);
+            Manager.Instance.eventSystem.enabled = false;
+            Manager.Instance.sceneController.Load(SceneType.entrance);
         });
         toLobby.onClick.AddListener(() =>
         {
-            manager.eventSystem.enabled = false;
-            manager.sceneController.Load(SceneType.lobby);
+            Manager.Instance.eventSystem.enabled = false;
+            Manager.Instance.sceneController.Load(SceneType.lobby);
         });
         //StartCoroutine(WaitDB());
         DEBUG_ShowInventory();
@@ -49,14 +49,9 @@ public class Game : MonoBehaviour
 
     private void Initialize()
     {
-        manager = (Manager)FindObjectOfType(typeof(Manager));
-
-        if (manager == null)
-        {
-            manager = Instantiate(Resources.Load<Manager>("Prefabs/Global/Manager"));
-        }
-
-        manager.eventSystem.enabled = true;
+        _ = FindObjectOfType(typeof(Manager)) ?? Instantiate(Resources.Load<Manager>(Path.manager));
+        Manager.Instance.eventSystem.enabled = true;
+        Manager.Instance.guiGuide.InitializeCanvas();
     }
 
     //IEnumerator WaitDB()
@@ -147,7 +142,7 @@ public class Game : MonoBehaviour
     void DEBUG_ShowInventory()
     {
         // Inventory inventory1 = new Inventory(null, Configs.squadInventorySize);
-        Inventory inventory1 = new WareHouse(Configs.squadInventorySize);
+        Inventory inventory1 = new WareHouse(Config.squadInventorySize);
 
         string itemDef1 = $"{{\"uid\":{ServerJob.RequestNewUID},\"name\":\"stack1\",\"category\":{(int)ItemCat.tool},\"amount\":12,\"weight\":0.1,\"volume\":0.2}}";
         Item item1 = JsonConvert.DeserializeObject<ToolItem>(itemDef1);

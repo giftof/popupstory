@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Popup.Defines;
+using Popup.Configs;
+
 
 
 using Popup.Items;
@@ -16,7 +18,6 @@ public class Entrance : MonoBehaviour
 {
     public Button toLobby;
     public Button toGame;
-    private Manager manager;
     [SerializeField]
     private Canvas canvas;
     private GameObject gpgs = null;
@@ -35,9 +36,9 @@ public class Entrance : MonoBehaviour
 
     private void Initialize()
     {
-        manager = (Manager)FindObjectOfType(typeof(Manager));
-        manager = manager ?? Instantiate(Resources.Load<Manager>("Prefabs/Global/Manager"));
-        manager.eventSystem.enabled = true;
+        _ = FindObjectOfType(typeof(Manager)) ?? Instantiate(Resources.Load<Manager>(Path.manager));
+        Manager.Instance.eventSystem.enabled = true;
+        Manager.Instance.guiGuide.InitializeCanvas();
     }
 
 
@@ -135,14 +136,14 @@ public class Entrance : MonoBehaviour
 
         toLobby.onClick.AddListener(() =>
         {
-            manager.eventSystem.enabled = false;
-            manager.sceneController.Load(SceneType.lobby);
+            Manager.Instance.eventSystem.enabled = false;
+            Manager.Instance.sceneController.Load(SceneType.lobby);
         });
 
         toGame.onClick.AddListener(() =>
         {
-            manager.eventSystem.enabled = false;
-            manager.sceneController.Load(SceneType.game);
+            Manager.Instance.eventSystem.enabled = false;
+            Manager.Instance.sceneController.Load(SceneType.game);
         });
 
         gpgs = gpgs ?? (GameObject)ObjectPool.Instance.Request(Prefab.CustomButton);

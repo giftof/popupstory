@@ -15,7 +15,7 @@ using System;
 
 namespace Popup.Charactors
 {
-    using Cfg = Configs.Configs;
+    using Cfg = Configs.Config;
     //using Ivn = Inventory.Inventory;
     using ServerJob = ServerJob.ServerJob;
     public class Charactor : ICharactor

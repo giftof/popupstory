@@ -13,7 +13,7 @@ using System.Linq;
 
 namespace Popup.Library
 {
-    using Configs = Configs.Configs;
+    using Config = Configs.Config;
     public static class Libs
     {
         public static void Quit()
@@ -105,7 +105,7 @@ namespace Popup.Library
 
         private static string MakeString(params string[] args)
         {
-            StringBuilder stringBuilder = new StringBuilder(string.Empty, Configs.stringSize);
+            StringBuilder stringBuilder = new StringBuilder(string.Empty, Config.stringSize);
 
             foreach (string element in args)
             {

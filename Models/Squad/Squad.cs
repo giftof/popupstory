@@ -14,7 +14,7 @@ namespace Popup.Squad
 {
     using Charactor = Charactors.Charactor;
     using Inventory = Inventory.Inventory;
-    using Configs   = Configs.Configs;
+    using Config   = Configs.Config;
     using Item      = Items.Item;
     using ServerJob = ServerJob.ServerJob;
 
@@ -35,7 +35,7 @@ namespace Popup.Squad
 		[JsonIgnore]
         public int? ActivateCharactor { get; protected set; }
 
-        public Squad(int uid, int inventorySize = Configs.squadInventorySize)
+        public Squad(int uid, int inventorySize = Config.squadInventorySize)
         {
             this.uid = uid;
             OccupiedSize = 0;
@@ -64,7 +64,7 @@ namespace Popup.Squad
         
         public bool AddLast(Charactor charactor)
         {
-            if (charactor == null || Configs.squadSize < OccupiedSize + charactor.Size) return false;
+            if (charactor == null || Config.squadSize < OccupiedSize + charactor.Size) return false;
             int lastSlotId = IsExist ? Charactors.Max(p => p.Value.SlotId) + 1 : 0;
 
             charactor.SetSlotId(lastSlotId);
@@ -76,7 +76,7 @@ namespace Popup.Squad
         
         public bool AddFirst(Charactor charactor)
         {
-            if (charactor == null || Configs.squadSize < OccupiedSize + charactor.Size) return false;
+            if (charactor == null || Config.squadSize < OccupiedSize + charactor.Size) return false;
 
             foreach (KeyValuePair<int, Charactor> pair in Charactors)
                 pair.Value.ShiftPosition(1);

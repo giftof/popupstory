@@ -1,11 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Popup.Configs;
+
+
 
 public class GUIGuide : MonoBehaviour
 {
-    Canvas canvas;
+    public Canvas canvas;
 
-    public void InitializeCanvas() => canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
+    public void InitializeCanvas() => canvas = GameObject.Find(OName.canvas).GetComponent<Canvas>();
 
 }

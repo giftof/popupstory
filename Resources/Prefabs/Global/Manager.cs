@@ -12,10 +12,17 @@ public class Manager : MonoBehaviour
     public Auth auth;
     public EventSystem eventSystem;
     public SceneController sceneController;
-    public GUIGuide uiGuide;
+    public GUIGuide guiGuide;
+
+    public static Manager Instance = null;
 
     private void Awake()
     {
+        if (Instance != null)
+            Destroy(this);
+        Instance = this;
         DontDestroyOnLoad(this);
+        Debug.Log("MANAGER DONE");
     }
+
 }

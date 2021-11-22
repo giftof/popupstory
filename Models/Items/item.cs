@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 
 namespace Popup.Items
 {
-	using Cfg = Configs.Configs;
+	using Cfg = Configs.Config;
 	public abstract class Item : IItem
 	{
 		[JsonProperty]

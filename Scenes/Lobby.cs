@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Popup.Defines;
+using Popup.Configs;
 
 
 
@@ -10,7 +11,6 @@ public class Lobby : MonoBehaviour
 {
     public Button toEntrance;
     public Button toGame;
-    private Manager manager;
 
     // Start is called before the first frame update
     void Start()
@@ -20,13 +20,13 @@ public class Lobby : MonoBehaviour
         Debug.Log("enter Lobby");
         toEntrance.onClick.AddListener(() =>
         {
-            manager.eventSystem.enabled = false;
-            manager.sceneController.Load(SceneType.entrance);
+            Manager.Instance.eventSystem.enabled = false;
+            Manager.Instance.sceneController.Load(SceneType.entrance);
         });
         toGame.onClick.AddListener(() =>
         {
-            manager.eventSystem.enabled = false;
-            manager.sceneController.Load(SceneType.game);
+            Manager.Instance.eventSystem.enabled = false;
+            Manager.Instance.sceneController.Load(SceneType.game);
         });
     }
 
@@ -34,13 +34,8 @@ public class Lobby : MonoBehaviour
 
     private void Initialize()
     {
-        manager = (Manager)FindObjectOfType(typeof(Manager));
-
-        if (manager == null)
-        {
-            manager = Instantiate(Resources.Load<Manager>("Prefabs/Global/Manager"));
-        }
-
-        manager.eventSystem.enabled = true;
+        _ = FindObjectOfType(typeof(Manager)) ?? Instantiate(Resources.Load<Manager>(Path.manager));
+        Manager.Instance.eventSystem.enabled = true;
+        Manager.Instance.guiGuide.InitializeCanvas();
     }
 }

@@ -23,5 +23,7 @@ public class SceneController : MonoBehaviour
             yield return null;
         operation.allowSceneActivation = true;
         operation = null;
+
+        Manager.Instance.guiGuide.InitializeCanvas();
     }
 }

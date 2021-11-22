@@ -15,7 +15,7 @@ public class ObjectPool : MonoBehaviour
     Dictionary<Prefab, Queue<object>> pool;
     Dictionary<Prefab, Dictionary<int, object>> credit;
 
-    public static ObjectPool Instance;
+    public static ObjectPool Instance = null;
 
     [SerializeField]
     private GameObject[] prefab;
@@ -32,6 +32,8 @@ public class ObjectPool : MonoBehaviour
 
     void Awake()
     {
+        if (Instance != null)
+            Destroy(this);
         Instance = this;
         pool = new Dictionary<Prefab, Queue<object>>();
         BuildContainer();
@@ -105,7 +107,7 @@ public class ObjectPool : MonoBehaviour
         ClearContainer();
 
         foreach (KeyValuePair<Prefab, Queue<object>> pair in pool)
-            Fill(pair.Value, pair.Key, Configs.extraPoolSize);
+            Fill(pair.Value, pair.Key, Config.extraPoolSize);
     }
 
     //public List<object> Request(ObjectType type, uint amount) => pool.ContainsKey(type) ? Pop(pool[type], type, amount) : null;
