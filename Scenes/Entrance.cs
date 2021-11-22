@@ -148,16 +148,31 @@ public class Entrance : MonoBehaviour
 
         gpgs = gpgs ?? (GameObject)ObjectPool.Instance.Request(Prefab.CustomButton);
         gpgs.SetActive(true);
+        gpgs.name = "GPGS";
+Debug.Log(gpgs.GetInstanceID());
         CustomButtonPrefab gpgsButton = gpgs.GetComponent<CustomButtonPrefab>();
         gpgsButton.transform.SetParent(canvas.transform);
-        gpgsButton.transform.localPosition = Vector3.down * 300;
-        gpgsButton.SetText("GPGS", Color.red);
+        /*gpgsButton.transform.localScale = Vector2.one;*/
         gpgsButton.transform.GetComponent<RectTransform>().sizeDelta = Vector2.one * 20;
+        gpgsButton.transform.localPosition = Manager.Instance.guiGuide.Position(gpgs, GUIPosition.RightBottom);
+        gpgsButton.SetText("GPGS", Color.red);
 
         gpgsButton.AddActionDown(() => Debug.Log("(0): Hello Added action DOWN is... mmm... !!!"));
         gpgsButton.AddActionDown(() => Debug.Log("(1): Hello Added action DOWN is... mmm... !!!"));
         gpgsButton.AddActionUp(() => Debug.Log("(0): Hello Added action UP is... mmm... !!!"));
         gpgsButton.AddActionUp(() => Debug.Log("(1): Hello Added action UP is... mmm... !!!"));
+
+
+        GameObject test = (GameObject)ObjectPool.Instance.Request(Prefab.CustomButton);
+        test.SetActive(true);
+        test.name = "TEST";
+Debug.Log(test.GetInstanceID());
+        CustomButtonPrefab testPrefab = test.GetComponent<CustomButtonPrefab>();
+        /*testPrefab.transform.SetParent(canvas.transform);*/
+        /*testPrefab.transform.localScale = Vector2.one;*/
+        testPrefab.transform.GetComponent<RectTransform>().sizeDelta = Vector2.one * 5;
+        testPrefab.transform.localPosition = Manager.Instance.guiGuide.Position(test, GUIPosition.LeftTop, gpgs);
+        testPrefab.GetComponent<Image>().color = Color.blue;
 
 
         List<int> list = new List<int>();

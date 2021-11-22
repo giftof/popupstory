@@ -79,10 +79,14 @@ public class ObjectPool : MonoBehaviour
 
     private List<object> Pop(Queue<object> source, Prefab type, uint amount)
     {
+        List<object> temp = new List<object>();
+
         Fill(source, type, amount);
+        while (0 < amount--) temp.Add(source.Dequeue());
+        return temp;
         //Spare(source, type, amount);
         //return source.Where(e => e != null && 0 < amount-- && ToCredit(type, e)).ToList();
-        return source.Where(e => e != null && 0 < amount--).ToList();
+        /*return source.Where(e => e != null && 0 < amount--).ToList();*/
     }
 
     private void ClearContainer()

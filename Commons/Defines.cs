@@ -1,6 +1,35 @@
 
 namespace Popup.Defines
 {
+    public enum GUIPosition
+    {
+        LeftBottom,
+        LeftMid,
+        LeftTop,
+        MidBottom,
+        Center,
+        MidTop,
+        RightBottom,
+        RightMid,
+        RightTop,
+    }
+
+    public enum Anchor
+    {
+        RightTop,
+        RightCenter,
+        RightBottom,
+        LeftTop,
+        LeftCenter,
+        LeftBottom,
+        TopLeft,
+        TopCenter,
+        TopRight,
+        BottomLeft,
+        BottomCenter,
+        BottomRight,
+    }
+
     public enum Prefab
     {
         CustomButton,
