@@ -129,9 +129,7 @@ namespace Popup.Library
             for(int i = 0; i < array.Length; ++i)
             {
                 if (array[i].uid.Equals(uid))
-                {
                     return array[i];
-                }
             }
             throw new Error("Error: not include - " + caller);
         }
@@ -140,26 +138,26 @@ namespace Popup.Library
         public static void MustInclude(int index, int maxSize, string caller)
         {
             if (!Libs.IsInclude(index, maxSize))
-            {
                 throw new Error("Error: not include - " + caller);
-            }
         }
 
+
+        public static void MustInclude(int key, IDictionary dictionary, string caller)
+        {
+            if (!dictionary.Contains(key))
+                throw new Error("Error: not include - " + caller);
+        }
 
         public static void MustNotInclude(int index, int maxSize, string caller)
         {
             if (Libs.IsInclude(index, maxSize))
-            {
                 throw new Error("Error: include - " + caller);
-            }
         }
 
         public static void MustNotInclude(object key, IDictionary dictionary, string caller)
         {
             if (dictionary.Contains(key))
-            {
                 throw new Error("Error: include - " + caller);
-            }
         }
 
         public static T MustConvertTo<T> (object item, string caller) where T: class

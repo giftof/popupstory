@@ -63,10 +63,10 @@ namespace Popup.Charactors
     	public bool IsExist => IsOccupied; // impl.
         public object DeepCopy(int? uid = null, int? notDefinedCount = null) => MemberwiseClone(); // impl.
 
-
-        public void TakeAffect(Spell spell)
+        public void TakeAffect(params Spell[] spell)
         {
-            CurHp -= spell?.AffectiveValue(this) ?? 0;
+            foreach (Spell sp in spell)
+                CurHp -= sp?.AffectiveValue(this) ?? 0;
         }
 
         public void GiveAffect(int spellIndex, params Charactor[] targetArray)
@@ -76,6 +76,9 @@ namespace Popup.Charactors
             foreach (Charactor target in targetArray)
                 target.TakeAffect(this.SpellArray[spellIndex]);
         }
+
+        public void SetSlotId(int slotId) => SlotId = slotId;
+        public void ShiftPosition(int offset) => SlotId += offset;
 
         void ChangeName(string newName)
         {

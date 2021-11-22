@@ -109,14 +109,15 @@ public class Entrance : MonoBehaviour
         c3.uid = ServerJob.RequestNewUID;
         c3.Name = "c3";
         c3.Size = 2;
-        squad.Add(c1);
-        squad.Add(c2);
-        squad.Add(c3);
-        LinkedListNode<Charactor> target = squad.Node(0);
-        Debug.Log(target.Value.Name);
+        squad.AddLast(c1);
+        squad.AddLast(c2);
+        squad.AddLast(c3);
+
         squad.DEBUG_TEST();
-        squad.MoveBackward(target, 2);
+        squad.ShiftBackward(c1, 2);
         squad.DEBUG_TEST();
+
+
         //float cur = Time.time;
         //for (int i = 0; i < 1000; ++i)
         //{

@@ -26,32 +26,51 @@ namespace Popup.Squad
         public int uid { get; protected set; }
 		[JsonProperty]
 		public int SlotId { get; protected set; }
-		[JsonProperty]
-        public LinkedList<Charactor> Charactors { get; protected set; }
+        [JsonProperty]
+        public Dictionary<int, Charactor> Charactors { get; protected set; }
+        /*public LinkedList<Charactor> Charactors { get; protected set; }*/
         //public Charactor[] Charactors { get; protected set; }
         [JsonIgnore]
         private int OccupiedSize { get; set; }
         [JsonProperty]
         public Inventory Inventory { get; protected set; }
-		[JsonProperty]
-        public int ActivateCharactorIndex { get; protected set; }
-		[JsonProperty]
-        public bool ActivateTurn { get; protected set; }
-
+		[JsonIgnore]
+        public int? ActivateCharactor { get; protected set; }
+/*		[JsonProperty]
+        public bool ActivateTurn { get; protected set; }*/
 
         public Squad(int uid, int inventorySize = Configs.squadInventorySize)
         {
             this.uid = uid;
             OccupiedSize = 0;
-            Charactors = new LinkedList<Charactor>();
+            Charactors = new Dictionary<int, Charactor>();
             Inventory = new WareHouse(inventorySize);
         }
 
 
         public int GetUID() => uid;
 
-        //public bool IsExist => 0 < Charactors.Count;
-        public bool IsExist => Charactors.FirstOrDefault(c => c.IsAlive) != null;
+        public bool IsExist => 0 < Charactors.Count;
+        public bool IsAlive => !Charactors.FirstOrDefault(p => p.Value.IsAlive).Equals(null);
+/*        public bool IsAlive()
+        {
+            return !Charactors.FirstOrDefault(p => p.Value.IsAlive).Equals(null);
+            KeyValuePair<int, Charactor> anyone = Charactors.FirstOrDefault(p => p.Value.IsAlive);
+            return !anyone.Equals(null);
+            if (anyone.Equals(null))
+            {
+
+            }
+            Debug.Log(anyone);
+            Debug.Log(anyone.Key);
+            Debug.Log(anyone.Value);
+            return true;
+
+            return Charactors.FirstOrDefault(p => p.Value.IsAlive) == default;
+
+        }
+*/
+        //public bool IsExist => Charactors.FirstOrDefault(c => c.IsAlive) != null;
         public object DeepCopy(int? uid = null, int? _ = null)
         {
             Inventory.EraseExhaustedSlot();
@@ -62,58 +81,88 @@ namespace Popup.Squad
             return squad;
         }
 
+        public void SetName(string name) => Name = name;
         public bool Use(Item item) => Inventory.Use(item);
         public bool Add(Item item) => Inventory.Add(item);
-        public bool Add(Charactor charactor)
+        
+        public bool AddLast(Charactor charactor)
         {
-            if (!charactor.IsExist) return false;
-            if (Configs.squadSize < OccupiedSize + charactor.Size) return false;
+            if (charactor == null || Configs.squadSize < OccupiedSize + charactor.Size) return false;
+            int lastSlotId = IsExist ? Charactors.Max(p => p.Value.SlotId) + 1 : 0;
 
-
+            charactor.SetSlotId(lastSlotId);
+            Charactors.Add(charactor.uid, charactor);
             OccupiedSize += charactor.Size;
-            return Charactors.AddLast(charactor) != null;
+
+            return true;
         }
-        public void SetName(string name) => Name = name;
-
-        private void Crash(Charactor target, Spell spell) => target?.TakeAffect(spell);
-
-        public (uint, LinkedListNode<Charactor>) MoveBackward(LinkedListNode<Charactor> target, uint step)
+        
+        public bool AddFirst(Charactor charactor)
         {
-            if (target.Value.uid.Equals(Charactors.Last.Value.uid)) return (0, null);
-            LinkedListNode<Charactor> position = target;
+            if (charactor == null || Configs.squadSize < OccupiedSize + charactor.Size) return false;
 
-            while (position.Next != null && position.Next.Value.Size <= step)
+            foreach (KeyValuePair<int, Charactor> pair in Charactors)
+                pair.Value.ShiftPosition(1);
+
+            charactor.SetSlotId(0);
+            Charactors.Add(charactor.uid, charactor);
+            OccupiedSize += charactor.Size;
+
+            return true;
+        }
+
+        private void CollisionAffect(Charactor target, Spell spell) => target?.TakeAffect(spell);
+
+        public int ShiftForward(Charactor target, int step)
+        {
+            Guard.MustInclude(target.uid, Charactors, "[ShiftForward in Squad]");
+
+            var list = from pair in Charactors
+                       where pair.Value.SlotId < target.SlotId
+                       orderby pair.Value.SlotId descending
+                       select pair.Value;
+
+            foreach (Charactor c in list)
             {
-                Crash(position.Value, null);
-                Crash(position.Next.Value, null);
-                step -= (uint)position.Next.Value.Size;
-                position = position.Next;
+                if (c.Size < step)
+                {
+                    step -= c.Size;
+                    c.ShiftPosition(1);
+                    target.ShiftPosition(-1);
+                    CollisionAffect(c, null);
+                    CollisionAffect(target, null);
+                }
+                else break;
+            }
+            
+            return step;
+        }
+
+        public int ShiftBackward(Charactor target, int step)
+        {
+            Debug.Log(target.uid);
+            Guard.MustInclude(target.uid, Charactors, "[ShiftBackward in Squad]");
+
+            var list = from pair in Charactors
+                       where target.SlotId < pair.Value.SlotId
+                       orderby pair.Value.SlotId ascending
+                       select pair.Value;
+
+            foreach (Charactor c in list)
+            {
+                if (c.Size < step)
+                {
+                    step -= c.Size;
+                    c.ShiftPosition(-1);
+                    target.ShiftPosition(1);
+                    CollisionAffect(c, null);
+                    CollisionAffect(target, null);
+                }
+                else break;
             }
 
-            Charactors.Remove(target);
-            Charactors.AddAfter(position, target);
-            return (step, target.Next);
+            return step;
         }
-
-        public (uint, LinkedListNode<Charactor>) MoveForward(LinkedListNode<Charactor> target, uint step)
-        {
-            if (target.Value.uid.Equals(Charactors.First.Value.uid)) return (0, null);
-            LinkedListNode<Charactor> position = target;
-
-            while (position.Previous != null && position.Previous.Value.Size <= step)
-            {
-                Crash(position.Value, null);
-                Crash(position.Previous.Value, null);
-                step -= (uint)position.Value.Size;
-                position = position.Previous;
-            }
-
-            Charactors.Remove(target);
-            Charactors.AddAfter(position, target);
-            return (step, target.Previous);
-        }
-
-
 
 
         //public Charactor PickCharactor(int uid) => Guard.MustInclude(uid, Charactors, "[PickCharactor in squad]");
@@ -139,7 +188,7 @@ namespace Popup.Squad
         //    }
         //    return false;
         //}
-        public LinkedListNode<Charactor> Node(int offset)
+/*        public LinkedListNode<Charactor> Node(int offset)
         {
             LinkedListNode<Charactor> target = Charactors.First;
 
@@ -147,13 +196,18 @@ namespace Popup.Squad
                 target = target.Next;
             return target;
         }
-
+*/
 
         public void DEBUG_TEST()
         {
-            foreach (Charactor c in Charactors)
+            var list = from pair in Charactors
+                       where pair.Value != null
+                       orderby pair.Value.SlotId ascending
+                       select pair.Value;
+
+            foreach (Charactor c in list)
             {
-                Debug.Log($"name = {c.Name}");
+                Debug.Log($"name = {c.Name}, uid = {c.uid}, slotId = {c.SlotId}");
             }
         }
 
