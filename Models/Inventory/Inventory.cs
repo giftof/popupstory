@@ -202,17 +202,17 @@ namespace Popup.Inventory
 		public abstract bool Use(Item item);
 
 
-		public bool Add(Item item)
-		{
-			if (Libs.IsExhaust(item)) return false;
-			return item.Category.Equals(ItemCat.tool)
-				? AddStackable(item)
-				: AddNew(item);
-		}
+        public bool Add(Item item)
+        {
+            if (Libs.IsExhaust(item)) return false;
+            return item.Category.Equals(ItemCat.tool)
+                ? AddStackable(item)
+                : AddNew(item);
+        }
 
 
 
-		public abstract void DEBUG_ShowAllItems();
+        public abstract void DEBUG_ShowAllItems();
 	}
 
 

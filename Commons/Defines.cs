@@ -1,12 +1,12 @@
 
 namespace Popup.Defines
 {
-    public enum ObjectType
+    public enum Prefab
     {
         CustomButton,
         TextMesh,
-        //EquipItem,
-        //ToolItem,
+        EquipItem,
+        ToolItem,
         //Spell,
         //Buff,
         //Charactor,

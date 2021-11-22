@@ -17,8 +17,9 @@ public class Entrance : MonoBehaviour
     public Button toLobby;
     public Button toGame;
     private Manager manager;
-    public CustomButton gpgs;
-    //private ObjectPool objectPool;
+    [SerializeField]
+    private Canvas canvas;
+    private GameObject gpgs = null;
 
 
 
@@ -34,7 +35,6 @@ public class Entrance : MonoBehaviour
 
     private void Initialize()
     {
-        //objectPool = (ObjectPool)FindObjectOfType(typeof(ObjectPool));
         manager = (Manager)FindObjectOfType(typeof(Manager));
         manager = manager ?? Instantiate(Resources.Load<Manager>("Prefabs/Global/Manager"));
         manager.eventSystem.enabled = true;
@@ -144,11 +144,16 @@ public class Entrance : MonoBehaviour
             manager.sceneController.Load(SceneType.game);
         });
 
-        gpgs.SetText("GPGS", Color.red);
-        gpgs.AddActionDown(()=> Debug.Log("(0): Hello Added action DOWN is... mmm... !!!"));
-        gpgs.AddActionDown(()=> Debug.Log("(1): Hello Added action DOWN is... mmm... !!!"));
-        gpgs.AddActionUp(()=> Debug.Log("(0): Hello Added action UP is... mmm... !!!"));
-        gpgs.AddActionUp(()=> Debug.Log("(1): Hello Added action UP is... mmm... !!!"));
+        gpgs = gpgs ?? (GameObject)ObjectPool.Instance.Request(Prefab.CustomButton);
+        gpgs.SetActive(true);
+        CustomButtonPrefab gpgsButton = gpgs.GetComponent<CustomButtonPrefab>();
+        gpgsButton.transform.SetParent(canvas.transform);
+        gpgsButton.transform.localPosition = Vector3.down * 300;
+        gpgsButton.SetText("GPGS", Color.red);
+        gpgsButton.AddActionDown(() => Debug.Log("(0): Hello Added action DOWN is... mmm... !!!"));
+        gpgsButton.AddActionDown(() => Debug.Log("(1): Hello Added action DOWN is... mmm... !!!"));
+        gpgsButton.AddActionUp(() => Debug.Log("(0): Hello Added action UP is... mmm... !!!"));
+        gpgsButton.AddActionUp(() => Debug.Log("(1): Hello Added action UP is... mmm... !!!"));
 
 
         List<int> list = new List<int>();

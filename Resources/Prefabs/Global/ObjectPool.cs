@@ -12,8 +12,8 @@ using Popup.Library;
 
 public class ObjectPool : MonoBehaviour
 {
-    Dictionary<ObjectType, Queue<object>> pool;
-    Dictionary<ObjectType, Dictionary<int, object>> credit;
+    Dictionary<Prefab, Queue<object>> pool;
+    Dictionary<Prefab, Dictionary<int, object>> credit;
 
     public static ObjectPool Instance;
 
@@ -33,11 +33,11 @@ public class ObjectPool : MonoBehaviour
     void Awake()
     {
         Instance = this;
-        pool = new Dictionary<ObjectType, Queue<object>>();
+        pool = new Dictionary<Prefab, Queue<object>>();
         BuildContainer();
     }
 
-    private bool Fill(Queue<object> dest, ObjectType type, uint amount)
+    private bool Fill(Queue<object> dest, Prefab type, uint amount)
     {
         if (dest.Count < amount)
             MakeExtra(dest, type, amount - (uint)dest.Count);
@@ -45,7 +45,7 @@ public class ObjectPool : MonoBehaviour
         return true;
     }
 
-    private void MakeExtra(Queue<object> source, ObjectType type, uint amount)
+    private void MakeExtra(Queue<object> source, Prefab type, uint amount)
     {
         while (0 < amount--)
         {
@@ -75,7 +75,7 @@ public class ObjectPool : MonoBehaviour
     //    return false;
     //}
 
-    private List<object> Pop(Queue<object> source, ObjectType type, uint amount)
+    private List<object> Pop(Queue<object> source, Prefab type, uint amount)
     {
         Fill(source, type, amount);
         //Spare(source, type, amount);
@@ -85,13 +85,13 @@ public class ObjectPool : MonoBehaviour
 
     private void ClearContainer()
     {
-        foreach (KeyValuePair<ObjectType, Queue<object>> pair in pool)
+        foreach (KeyValuePair<Prefab, Queue<object>> pair in pool)
             pair.Value.Clear();
     }
 
     private void BuildContainer()
     {
-        foreach (ObjectType element in Enum.GetValues(typeof(ObjectType)))
+        foreach (Prefab element in Enum.GetValues(typeof(Prefab)))
         {
             pool.Add(element, new Queue<object>());
         }
@@ -104,23 +104,23 @@ public class ObjectPool : MonoBehaviour
     {
         ClearContainer();
 
-        foreach (KeyValuePair<ObjectType, Queue<object>> pair in pool)
+        foreach (KeyValuePair<Prefab, Queue<object>> pair in pool)
             Fill(pair.Value, pair.Key, Configs.extraPoolSize);
     }
 
     //public List<object> Request(ObjectType type, uint amount) => pool.ContainsKey(type) ? Pop(pool[type], type, amount) : null;
     //public object Request(ObjectType type) => pool.ContainsKey(type) ? Pop(pool[type], type, 1)[0] : null;
 
-    public List<object> Request(ObjectType type, uint amount)
+    public List<object> Request(Prefab type, uint amount)
     {
         return pool.ContainsKey(type) ? Pop(pool[type], type, amount) : null;
     }
-    public object Request(ObjectType type)
+    public object Request(Prefab type)
     {
         return pool.ContainsKey(type) ? Pop(pool[type], type, 1)[0] : null;
     }
 
-    public void Return(ObjectType type, object obj)
+    public void Return(Prefab type, object obj)
     {
         if (pool.ContainsKey(type))
         {

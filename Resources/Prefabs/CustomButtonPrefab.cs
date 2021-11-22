@@ -12,7 +12,7 @@ using TMPro;
 
 
 
-public class CustomButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
+public class CustomButtonPrefab : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
     private GameObject textMesh = null;
     private ButtonAction buttonActionDown = null;
@@ -26,7 +26,7 @@ public class CustomButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
         TextMeshProUGUI ugui;
         if (textMesh == null)
         {
-            textMesh = (GameObject)ObjectPool.Instance.Request(ObjectType.TextMesh);
+            textMesh = (GameObject)ObjectPool.Instance.Request(Prefab.TextMesh);
             textMesh.SetActive(true);
             textMesh.transform.SetParent(transform);
             textMesh.transform.localPosition = Vector3.zero;

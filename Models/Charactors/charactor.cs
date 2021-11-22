@@ -66,7 +66,7 @@ namespace Popup.Charactors
 
         public void TakeAffect(Spell spell)
         {
-            CurHp -= spell.AffectiveValue(this);
+            CurHp -= spell?.AffectiveValue(this) ?? 0;
         }
 
         public void GiveAffect(int spellIndex, params Charactor[] targetArray)
