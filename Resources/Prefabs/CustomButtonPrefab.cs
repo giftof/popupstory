@@ -17,9 +17,14 @@ public class CustomButtonPrefab : MonoBehaviour, IPointerDownHandler, IPointerUp
     private GameObject textMesh = null;
     private ButtonAction buttonActionDown = null;
     private ButtonAction buttonActionUp = null;
-    private Image image = null;
+    [SerializeField]
+    private Image image;
+    [SerializeField]
+    private Sprite[] sprites;
 
 
+
+    void Awake() => image.sprite = sprites[0];
 
     public void SetText(string message, Color color = default)
     {
@@ -46,7 +51,6 @@ public class CustomButtonPrefab : MonoBehaviour, IPointerDownHandler, IPointerUp
     {
         Debug.Log("OnPointerDown");
         buttonActionDown?.Invoke();
-        image = image ?? GetComponent<Image>();
 
         TEST_DOWN();
     }
@@ -55,13 +59,12 @@ public class CustomButtonPrefab : MonoBehaviour, IPointerDownHandler, IPointerUp
     {
         Debug.Log("OnPointerUp");
         buttonActionUp?.Invoke();
-        image = image ?? GetComponent<Image>();
 
         TEST_UP();
     }
 
 
 
-    public void TEST_DOWN() => image.color = Color.black;  // test
-    public void TEST_UP() => image.color = Color.white; // test
+    public void TEST_DOWN() => image.sprite = sprites[0];  // test
+    public void TEST_UP() => image.sprite = sprites[0]; // test
 }
