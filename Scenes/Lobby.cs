@@ -4,13 +4,17 @@ using UnityEngine;
 using UnityEngine.UI;
 using Popup.Defines;
 using Popup.Configs;
+using Popup.Library;
 
 
 
 public class Lobby : MonoBehaviour
 {
-    public Button toEntrance;
-    public Button toGame;
+    [SerializeField] Button toEntrance;
+    [SerializeField] Button toGame;
+    [SerializeField] InventoryPouchPrefab userPouch;
+    [SerializeField] InventoryPouchPrefab shopPouch;
+
 
     // Start is called before the first frame update
     void Start()
@@ -18,6 +22,23 @@ public class Lobby : MonoBehaviour
         Initialize();
 
         Debug.Log("enter Lobby");
+        DEBUG_BTN();
+        DEBUG_POUCH();
+    }
+
+
+
+    private void Initialize()
+    {
+        _ = FindObjectOfType(typeof(Manager)) ?? Instantiate(Resources.Load<Manager>(Path.manager));
+        Manager.Instance.eventSystem.enabled = true;
+        Manager.Instance.guiGuide.InitializeCanvas();
+    }
+
+
+
+    void DEBUG_BTN()
+    {
         toEntrance.onClick.AddListener(() =>
         {
             Manager.Instance.eventSystem.enabled = false;
@@ -30,12 +51,12 @@ public class Lobby : MonoBehaviour
         });
     }
 
-
-
-    private void Initialize()
+    void DEBUG_POUCH()
     {
-        _ = FindObjectOfType(typeof(Manager)) ?? Instantiate(Resources.Load<Manager>(Path.manager));
-        Manager.Instance.eventSystem.enabled = true;
-        Manager.Instance.guiGuide.InitializeCanvas();
+        userPouch.gameObject.PositionOnParent(GUIPosition.LeftBottom);
+        shopPouch.gameObject.PositionOnParent(GUIPosition.RightBottom);
+        //userPouch.transform.localPosition = Manager.Instance.guiGuide.Position(userPouch.gameObject, GUIPosition.LeftBottom);
+        //shopPouch.transform.localPosition = Manager.Instance.guiGuide.Position(shopPouch.gameObject, GUIPosition.RightBottom);
+        //GUIGuide.
     }
 }

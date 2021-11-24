@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Popup.Defines;
 using Popup.Configs;
+using Popup.Library;
 
 
 
@@ -88,7 +89,8 @@ Debug.Log(gpgs.GetInstanceID());
         gpgsButton.transform.SetParent(canvas.transform);
         /*gpgsButton.transform.localScale = Vector2.one;*/
         gpgsButton.transform.GetComponent<RectTransform>().sizeDelta = Vector2.one * 20;
-        gpgsButton.transform.localPosition = Manager.Instance.guiGuide.Position(gpgs, GUIPosition.RightBottom);
+        gpgs.PositionOnParent(GUIPosition.RightBottom);
+        //gpgsButton.transform.localPosition = Manager.Instance.guiGuide.Position(gpgs, GUIPosition.RightBottom);
         gpgsButton.SetText("GPGS", Color.red);
 
         gpgsButton.AddActionDown(() => Debug.Log("(0): Hello Added action DOWN is... mmm... !!!"));
@@ -97,16 +99,16 @@ Debug.Log(gpgs.GetInstanceID());
         gpgsButton.AddActionUp(() => Debug.Log("(1): Hello Added action UP is... mmm... !!!"));
 
 
-        GameObject test = (GameObject)ObjectPool.Instance.Request(Prefab.CustomButton);
-        test.SetActive(true);
-        test.name = "TEST";
-Debug.Log(test.GetInstanceID());
-        CustomButtonPrefab testPrefab = test.GetComponent<CustomButtonPrefab>();
-        /*testPrefab.transform.SetParent(canvas.transform);*/
-        /*testPrefab.transform.localScale = Vector2.one;*/
-        testPrefab.transform.GetComponent<RectTransform>().sizeDelta = Vector2.one * 5;
-        testPrefab.transform.localPosition = Manager.Instance.guiGuide.Position(test, GUIPosition.LeftTop, gpgs);
-        testPrefab.GetComponent<Image>().color = Color.blue;
+//        GameObject test = (GameObject)ObjectPool.Instance.Request(Prefab.CustomButton);
+//        test.SetActive(true);
+//        test.name = "TEST";
+//Debug.Log(test.GetInstanceID());
+//        CustomButtonPrefab testPrefab = test.GetComponent<CustomButtonPrefab>();
+//        /*testPrefab.transform.SetParent(canvas.transform);*/
+//        /*testPrefab.transform.localScale = Vector2.one;*/
+//        testPrefab.transform.GetComponent<RectTransform>().sizeDelta = Vector2.one * 5;
+//        //testPrefab.transform.localPosition = Manager.Instance.guiGuide.Position(test, GUIPosition.LeftTop, gpgs);
+//        testPrefab.GetComponent<Image>().color = Color.blue;
 
 
         List<int> list = new List<int>();

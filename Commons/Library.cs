@@ -3,6 +3,7 @@ using System.Collections;
 using System;
 using System.Text;
 using Popup.Configs;
+using Popup.Defines;
 using Popup.Framework;
 using Newtonsoft.Json;
 using System.Linq;
@@ -27,17 +28,17 @@ namespace Popup.Library
 #endif
         }
 
-        public static bool   	IsInclude<T>    (int     index, T[] array  )    => 0 <= index && index < array.Length;
-        public static bool   	IsInclude       (int     index, int     maxSize)    => index < maxSize;
-        public static void   	IncreaseValue	(int     dest,  int     amount )    => dest += amount;
-        public static bool   	IsUnder         (int     dest,  int     cap    )    => dest < cap;
-        public static T      	ConvertTo<T>    (object  item                  )    => (T)item;
-        public static T      	FromJson<T>     (string  source                )    => JsonConvert.DeserializeObject<T>(source);
-        public static string	ToJson<T>       (T       source                )    => JsonConvert.SerializeObject(source);
+        public static bool IsInclude<T>(int index, T[] array) => 0 <= index && index < array.Length;
+        public static bool IsInclude(int index, int maxSize) => index < maxSize;
+        public static void IncreaseValue(int dest, int amount) => dest += amount;
+        public static bool IsUnder(int dest, int cap) => dest < cap;
+        public static T ConvertTo<T>(object item) => (T)item;
+        public static T FromJson<T>(string source) => JsonConvert.DeserializeObject<T>(source);
+        public static string ToJson<T>(T source) => JsonConvert.SerializeObject(source);
         // public static T      	FromJson<T>     (string  source                )    => JsonUtility.FromJson<T>(source);
         // public static string	ToJson<T>       (T       source                )    => JsonUtility.ToJson(source);
-		public static int		Round			(float	 value                 )    => (int)Math.Round(value);
-        public static bool      IsEnablePair    (bool    _lock, bool    _key   )    => !_lock || (_lock && _key);
+        public static int Round(float value) => (int)Math.Round(value);
+        public static bool IsEnablePair(bool _lock, bool _key) => !_lock || (_lock && _key);
 
 
         //public static int[] TextToIntArray(string text, int falseValue = -1)
@@ -60,14 +61,14 @@ namespace Popup.Library
 
         //    return result;
         //}
-        
+
 
         // public static T FindFirstEmpty<T>(T[] array) => array.FirstOrDefault(e => e == null);
         // public static T FindMatchElement<T>(int uid, T[] array) where T: IPopupObject => array.FirstOrDefault(e=> e.uid == uid);
         // public static T FindSpace<T>(int uid, T[] array) where T: IItem => array.FirstOrDefault(e => e.HasSpace);
 
-        public static bool IsExist<T>(T obj) where T: IPopupObject => obj?.IsExist ?? false;
-        public static bool IsExhaust<T>(T obj) where T: IPopupObject => obj != null && !obj.IsExist;
+        public static bool IsExist<T>(T obj) where T : IPopupObject => obj?.IsExist ?? false;
+        public static bool IsExhaust<T>(T obj) where T : IPopupObject => obj != null && !obj.IsExist;
         public static int FindEmptyIndex<T>(T[] array, int startIndex = 0)
         {
             int index = startIndex;
@@ -93,7 +94,7 @@ namespace Popup.Library
 
     public static class Guard
     {
-        public class Error: Exception
+        public class Error : Exception
         {
             public Error(string message)
             {
@@ -119,14 +120,14 @@ namespace Popup.Library
         {
             if (!Libs.IsInclude(index, array))
             {
-                throw new Error(MakeString(index.ToString(), " is out of range(0 ~ ", array.Length.ToString(), ") - " + caller) );
+                throw new Error(MakeString(index.ToString(), " is out of range(0 ~ ", array.Length.ToString(), ") - " + caller));
             }
         }
 
 
-        public static T MustInclude<T>(int uid, T[] array, string caller) where T: IPopupObject
+        public static T MustInclude<T>(int uid, T[] array, string caller) where T : IPopupObject
         {
-            for(int i = 0; i < array.Length; ++i)
+            for (int i = 0; i < array.Length; ++i)
             {
                 if (array[i].uid.Equals(uid))
                     return array[i];
@@ -160,10 +161,10 @@ namespace Popup.Library
                 throw new Error("Error: include - " + caller);
         }
 
-        public static T MustConvertTo<T> (object item, string caller) where T: class
+        public static T MustConvertTo<T>(object item, string caller) where T : class
         {
             if (item == null) { return null; }
-            if (item is T t)  { return t; }
+            if (item is T t) { return t; }
             throw new Error("Convert Fail - " + caller);
         }
 
@@ -193,6 +194,25 @@ namespace Popup.Library
         public static void Log(string message, Color color = default)
         {
             Debug.Log(string.Format("<color=#{0:X2}{1:X2}{2:X2}>{3}</color>", (byte)(color.r * 255f), (byte)(color.g * 255f), (byte)(color.b * 255f), message));
+        }
+    }
+
+
+
+    public static class Extensions
+    {
+        public static void PositionOnParent(this GameObject myObj, GUIPosition anchor, GameObject parent = null)
+        {
+            parent = parent ?? Manager.Instance.guiGuide.canvas.gameObject;
+            myObj.transform.SetParent(parent.transform);
+            myObj.transform.localPosition = Manager.Instance.guiGuide.Position(myObj, anchor);
+        }
+
+        public static void PositionOnParent(this GameObject myObj, GUIPosition anchor, Vector2 rectSize, GameObject parent = null)
+        {
+            parent = parent ?? Manager.Instance.guiGuide.canvas.gameObject;
+            myObj.transform.SetParent(parent.transform);
+            myObj.transform.localPosition = Manager.Instance.guiGuide.Position(myObj, anchor);
         }
     }
 }
