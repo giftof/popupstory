@@ -1,0 +1,65 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: AtlasItem
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings: []
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 1
+      enableTightPacking: 1
+    secondaryTextureSettings: {}
+    variantMultiplier: 1
+    packables:
+    - {fileID: 102900000, guid: fe696fffead17426dabd7d144746c3ae, type: 3}
+    bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: c38a28314065842cc943189e3631c973, type: 3}
+  - {fileID: 21300000, guid: 28694c91a258f451a93bca2550542d6f, type: 3}
+  - {fileID: 21300000, guid: e1cb26c10adcc4dfbb10d3180eac11bb, type: 3}
+  - {fileID: 21300000, guid: bed7cbd123f214454832f82c305ec8bb, type: 3}
+  - {fileID: 21300000, guid: 843426a61c7524107aa46978f0f6affd, type: 3}
+  - {fileID: 21300000, guid: 2e39fc19d3708457f8c9327b857548ea, type: 3}
+  - {fileID: 21300000, guid: ad227b0a0f3bb455db491e9e22efb80c, type: 3}
+  - {fileID: 21300000, guid: 0546032ae0f594723a834832b7d7f95b, type: 3}
+  - {fileID: 21300000, guid: 55f1930cdd8d247849b5d7ca2dd63daa, type: 3}
+  - {fileID: 21300000, guid: feec094c2dbe44e4a96c0f06177a8559, type: 3}
+  - {fileID: 21300000, guid: 98bb4d5f3a0244baa907cc0b59a01f87, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - inv_trinket+ancestors_coat
+  - inv_supply+shovel
+  - inv_supply+skeleton_key
+  - inv_supply+medicinal_herbs
+  - inv_trinket+amiga
+  - inv_gem+trapezohedron
+  - inv_supply+torch
+  - inv_trinket+amulet_of_superior_asphyxiation
+  - inv_trinket+aliandre
+  - inv_supply+holy_water
+  - inv_gem+sapphire
+  m_RenderDataMap: {}
+  m_Tag: AtlasItem
+  m_IsVariant: 0

@@ -12,7 +12,7 @@ using TMPro;
 
 
 
-public class CustomButtonPrefab : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
+public class CustomButtonPrefab : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDropHandler
 {
     private GameObject textMesh = null;
     private ButtonAction buttonActionDown = null;
@@ -67,4 +67,14 @@ public class CustomButtonPrefab : MonoBehaviour, IPointerDownHandler, IPointerUp
 
     public void TEST_DOWN() => image.sprite = sprites[0];  // test
     public void TEST_UP() => image.sprite = sprites[0]; // test
+
+    public void OnDrop(PointerEventData eventData)
+    {
+        Debug.Log($"OnDrop! {name}, {eventData.selectedObject.name}");
+        if (eventData.selectedObject != null)
+        {
+            eventData.selectedObject.transform.SetParent(transform);
+            eventData.selectedObject.transform.localPosition = Vector3.zero;
+        }
+    }
 }

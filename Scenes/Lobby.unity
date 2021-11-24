@@ -191,7 +191,7 @@ Canvas:
   m_GameObject: {fileID: 25681899}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 1
+  m_RenderMode: 0
   m_Camera: {fileID: 2033423168}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
@@ -598,12 +598,12 @@ PrefabInstance:
     - target: {fileID: 4539860848876328025, guid: b408cdaf85b4781449d04ff30d36f277,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 2
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 4539860848876328025, guid: b408cdaf85b4781449d04ff30d36f277,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 2
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 4539860848876328025, guid: b408cdaf85b4781449d04ff30d36f277,
         type: 3}
@@ -990,12 +990,12 @@ PrefabInstance:
     - target: {fileID: 4539860848876328025, guid: b408cdaf85b4781449d04ff30d36f277,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 2
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 4539860848876328025, guid: b408cdaf85b4781449d04ff30d36f277,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 2
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 4539860848876328025, guid: b408cdaf85b4781449d04ff30d36f277,
         type: 3}

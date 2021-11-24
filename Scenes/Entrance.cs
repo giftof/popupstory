@@ -30,6 +30,7 @@ public class Entrance : MonoBehaviour
         Initialize();
 
         Debug.Log("enter Entrance");
+        TEST_BTN();
         TEST_SET();
     }
 
@@ -43,6 +44,23 @@ public class Entrance : MonoBehaviour
     }
 
 
+
+
+
+    private void TEST_BTN()
+    {
+        toLobby.onClick.AddListener(() =>
+        {
+            Manager.Instance.eventSystem.enabled = false;
+            Manager.Instance.sceneController.Load(SceneType.lobby);
+        });
+
+        toGame.onClick.AddListener(() =>
+        {
+            Manager.Instance.eventSystem.enabled = false;
+            Manager.Instance.sceneController.Load(SceneType.game);
+        });
+    }
 
     private void TEST_SET()
     {
@@ -69,27 +87,16 @@ public class Entrance : MonoBehaviour
 
 
 
-        toLobby.onClick.AddListener(() =>
-        {
-            Manager.Instance.eventSystem.enabled = false;
-            Manager.Instance.sceneController.Load(SceneType.lobby);
-        });
-
-        toGame.onClick.AddListener(() =>
-        {
-            Manager.Instance.eventSystem.enabled = false;
-            Manager.Instance.sceneController.Load(SceneType.game);
-        });
 
         gpgs = gpgs ?? (GameObject)ObjectPool.Instance.Request(Prefab.CustomButton);
         gpgs.SetActive(true);
         gpgs.name = "GPGS";
 Debug.Log(gpgs.GetInstanceID());
         CustomButtonPrefab gpgsButton = gpgs.GetComponent<CustomButtonPrefab>();
-        gpgsButton.transform.SetParent(canvas.transform);
+        //gpgsButton.transform.SetParent(canvas.transform);
         /*gpgsButton.transform.localScale = Vector2.one;*/
-        gpgsButton.transform.GetComponent<RectTransform>().sizeDelta = Vector2.one * 20;
-        gpgs.PositionOnParent(GUIPosition.RightBottom);
+        //gpgsButton.transform.GetComponent<RectTransform>().sizeDelta = Vector2.one * 20;
+        gpgs.PositionOnParent(GUIPosition.RightBottom, Vector2.one * 100);
         //gpgsButton.transform.localPosition = Manager.Instance.guiGuide.Position(gpgs, GUIPosition.RightBottom);
         gpgsButton.SetText("GPGS", Color.red);
 
@@ -99,30 +106,11 @@ Debug.Log(gpgs.GetInstanceID());
         gpgsButton.AddActionUp(() => Debug.Log("(1): Hello Added action UP is... mmm... !!!"));
 
 
-//        GameObject test = (GameObject)ObjectPool.Instance.Request(Prefab.CustomButton);
-//        test.SetActive(true);
-//        test.name = "TEST";
-//Debug.Log(test.GetInstanceID());
-//        CustomButtonPrefab testPrefab = test.GetComponent<CustomButtonPrefab>();
-//        /*testPrefab.transform.SetParent(canvas.transform);*/
-//        /*testPrefab.transform.localScale = Vector2.one;*/
-//        testPrefab.transform.GetComponent<RectTransform>().sizeDelta = Vector2.one * 5;
-//        //testPrefab.transform.localPosition = Manager.Instance.guiGuide.Position(test, GUIPosition.LeftTop, gpgs);
-//        testPrefab.GetComponent<Image>().color = Color.blue;
-
-
         List<int> list = new List<int>();
-        // int index;
-        // int id;
-        // Debug.Log(list.FirstOrDefault(e => 0 < e));
-
         list.FirstOrDefault(e => 0 < e);
 
 
         Debug.Log(list.Select((e, i) => (e, i)).FirstOrDefault(p=> 3 < p.e && 0 < ++p.i));
-        // Debug.Log(list.Select(e => new KeyValuePair<int, int>(e, index = 0)).FirstOrDefault(p => 3 < p.Key));
-        // Debug.Log(list.Select(e => new KeyValuePair<int, int>(e, index = 0)).FirstOrDefault(p => 3 < p.Key));
-        // Debug.Log(list.Select((e, i) => (e, i)).FirstOrDefault(p=> 0 < p.e && 0 < ++p.i));
         
         list.Add(2);
         list.Add(4);
@@ -130,30 +118,5 @@ Debug.Log(gpgs.GetInstanceID());
         
         Debug.Log(list.Select((e, i) => (e, i)).FirstOrDefault(p=> 7 < p.e && 0 < ++p.i));
         Debug.Log(list.Select((e, i) => (e, i)).FirstOrDefault(p=> 3 < p.e && 0 < ++p.i));
-        // Debug.Log(list.Select(e => new KeyValuePair<int, int>(e, index = 0)).FirstOrDefault(p => 3 < p.Key));
-
-        // list.Select((v, i) => new {v, i}).FirstOrDefault(0 < v)?.i;
-
-/*
-        Debug.Log(list.FindIndex(c => 0 < c));
-        id = 8;
-        index = list[list.Count - 1] < id 
-				? list.Count
-				: list.FirstOrDefault(e => id < e);
-        list.Insert(index, id);
-        id = 4;
-        index = list[list.Count - 1] < id 
-				? list.Count
-				: list.FirstOrDefault(e => id < e);
-        list.Insert(index, id);
-        id = 2;
-        index = list[list.Count - 1] < id 
-				? list.Count
-				: list.FirstOrDefault(e => id < e);
-        list.Insert(index, id);
-        Debug.Log(list.FindIndex(c => 9 < c));
-        Debug.Log(list.FindIndex(c => 0 < c));
-        Debug.Log(list.FindIndex(c => 3 < c));
-*/
     }
 }
