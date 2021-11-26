@@ -10,6 +10,7 @@ using Popup.Items;
 public class ItemPrefab : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
 {
     Item item;
+    Vector2 offset;
     [SerializeField] Image image;
 
 
@@ -17,6 +18,7 @@ public class ItemPrefab : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     public void OnBeginDrag(PointerEventData eventData)
     {
         image.raycastTarget = false;
+        offset = (Vector2)transform.position - eventData.position;
         transform.SetAsLastSibling();   // test code
         eventData.selectedObject = gameObject;
         Debug.Log("OnBeginDrag Call");
@@ -24,7 +26,7 @@ public class ItemPrefab : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
 
     public void OnDrag(PointerEventData eventData)
     {
-        transform.position = eventData.position;
+        transform.position = eventData.position + offset;
         //Debug.Log($"OnDrag Call {eventData.position}");
     }
 
