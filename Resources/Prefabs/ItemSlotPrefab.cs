@@ -19,7 +19,7 @@ public class ItemSlotPrefab : MonoBehaviour, IPointerEnterHandler, IDropHandler
 
         if (eventData.selectedObject?.TryGetComponent(out item) ?? false)
         {
-            item.parent = transform;
+            item.lastParent = transform;
             eventData.selectedObject.transform.SetParent(transform);
             eventData.selectedObject.transform.localPosition = Vector3.zero;
         }

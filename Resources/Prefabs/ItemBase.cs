@@ -13,7 +13,7 @@ public abstract class ItemBase : MonoBehaviour, IITemHandler
 {
     Vector2 offset = default;
     [SerializeField] Image image = null;
-    public Transform parent = null;
+    public Transform lastParent = null;
 
     int clickCount = 0;
     float clickTime = 0f;
@@ -44,7 +44,7 @@ public abstract class ItemBase : MonoBehaviour, IITemHandler
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        transform.SetParent(parent);
+        transform.SetParent(lastParent);
         transform.localPosition = Vector3.zero;
     }
 
