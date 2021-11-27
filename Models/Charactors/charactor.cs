@@ -32,7 +32,7 @@ namespace Popup.Charactors
         [JsonProperty]
 		public int SlotId { get; protected set; }
         [JsonProperty]
-        public int Level { get; protected set; }
+        public int level;
         [JsonProperty]
         public int Exp { get; protected set; }
         [JsonProperty]
@@ -53,6 +53,8 @@ namespace Popup.Charactors
         public Spell[] SpellArray { get; protected set; }
         [JsonProperty]
         public Item[] EquipArray { get; protected set; }
+        [JsonProperty]
+        public GameObject Owner { get; set; }
 
 
         public bool IsAlive => 0 < CurHp;
@@ -71,7 +73,7 @@ namespace Popup.Charactors
 
         public void GiveAffect(int spellIndex, params Charactor[] targetArray)
         {
-            Guard.MustInRange(spellIndex, this.SpellArray, "[GiveAffect in charactor]");
+            Guard.MustInRange(spellIndex, this.SpellArray);
 
             foreach (Charactor target in targetArray)
                 target.TakeAffect(this.SpellArray[spellIndex]);
@@ -89,8 +91,8 @@ namespace Popup.Charactors
         void TakeExp(int amount)
         {
             Libs.IncreaseValue(Exp, amount);
-            while (Libs.IsUnder((Level + 1) * (Level + 1), Exp)) { ++Level; }
-            Alignment.ToInclude(Level, (Cfg.minLevel, Cfg.maxLevel));
+            while (Libs.IsUnder((level + 1) * (level + 1), Exp)) { ++level; }
+            Alignment.ToInclude(ref level, (Cfg.minLevel, Cfg.maxLevel));
         }
 
         void LoseExp(int amount) => TakeExp(-amount);

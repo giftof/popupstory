@@ -34,6 +34,8 @@ namespace Popup.Squad
         public Inventory Inventory { get; protected set; }
 		[JsonIgnore]
         public int? ActivateCharactor { get; protected set; }
+        [JsonProperty]
+        public GameObject Owner { get; set; }
 
         public Squad(int uid, int inventorySize = Config.squadInventorySize)
         {

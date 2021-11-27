@@ -7,6 +7,7 @@ using Popup.Defines;
 using Popup.Framework;
 using Newtonsoft.Json;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 
 
@@ -104,75 +105,63 @@ namespace Popup.Library
         }
 
 
-        private static string MakeString(params string[] args)
-        {
-            StringBuilder stringBuilder = new StringBuilder(string.Empty, Config.stringSize);
-
-            foreach (string element in args)
-            {
-                stringBuilder.Append(element);
-            }
-            return stringBuilder.ToString();
-        }
-
-
-        public static void MustInRange<T>(int index, T[] array, string caller)
+        public static void MustInRange<T>(int index, T[] array, [CallerMemberName] string caller = "")
         {
             if (!Libs.IsInclude(index, array))
             {
-                throw new Error(MakeString(index.ToString(), " is out of range(0 ~ ", array.Length.ToString(), ") - " + caller));
+                throw new Error($"{index} is out of range (0~ {array.Length}) - {caller}");
             }
         }
 
 
-        public static T MustInclude<T>(int uid, T[] array, string caller) where T : IPopupObject
+        public static T MustInclude<T>(int uid, T[] array, [CallerMemberName] string caller = "") where T : IPopupObject
         {
             for (int i = 0; i < array.Length; ++i)
             {
                 if (array[i].uid.Equals(uid))
                     return array[i];
             }
-            throw new Error("Error: not include - " + caller);
+            throw new Error($"Error: not include - {caller}");
         }
 
 
-        public static void MustInclude(int index, int maxSize, string caller)
+        public static void MustInclude(int index, int maxSize, [CallerMemberName] string caller = "")
         {
             if (!Libs.IsInclude(index, maxSize))
-                throw new Error("Error: not include - " + caller);
+                throw new Error($"Error: not include - {caller}");
         }
 
 
-        public static void MustInclude(int key, IDictionary dictionary, string caller)
+        public static void MustInclude(int key, IDictionary dictionary, [CallerMemberName] string caller = "")
         {
             if (!dictionary.Contains(key))
-                throw new Error("Error: not include - " + caller);
+                throw new Error($"Error: not include - {caller}");
         }
 
-        public static void MustNotInclude(int index, int maxSize, string caller)
+        public static void MustNotInclude(int index, int maxSize, [CallerMemberName] string caller = "")
         {
             if (Libs.IsInclude(index, maxSize))
-                throw new Error("Error: include - " + caller);
+                throw new Error($"Error: include - {caller}");
         }
 
-        public static void MustNotInclude(object key, IDictionary dictionary, string caller)
+        public static void MustNotInclude(object key, IDictionary dictionary, [CallerMemberName] string caller = "")
         {
             if (dictionary.Contains(key))
-                throw new Error("Error: include - " + caller);
+                throw new Error($"Error: include - {caller}");
         }
 
-        public static T MustConvertTo<T>(object item, string caller) where T : class
+        public static T MustConvertTo<T>(object item, [CallerMemberName] string caller = "") where T : class
         {
             if (item == null) { return null; }
             if (item is T t) { return t; }
-            throw new Error("Convert Fail - " + caller);
+            throw new Error($"Convert Fail - {caller}");
         }
 
 
-        public static void MustNotNull(object obj, string caller)
+        public static void MustNotNull(object obj, [CallerMemberName] string caller = "")
         {
             if (obj == null)
-                throw new Error("This is null - " + caller);
+                throw new Error($"This is null - {caller}");
         }
     }
 
@@ -180,10 +169,10 @@ namespace Popup.Library
 
     public static class Alignment
     {
-        public static void ToInclude(int value, (int, int) range)
+        public static void ToInclude(ref int value, (int min, int max) range)
         {
-            if (value < range.Item1) { value = range.Item1; }
-            if (range.Item2 < value) { value = range.Item2; }
+            if (value < range.min) { value = range.min; }
+            if (range.max < value) { value = range.max; }
         }
     }
 

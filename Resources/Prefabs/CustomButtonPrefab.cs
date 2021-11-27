@@ -12,11 +12,14 @@ using TMPro;
 
 
 
-public class CustomButtonPrefab : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDropHandler
+public class CustomButtonPrefab : MonoBehaviour, IPointerClickHandler
 {
     private GameObject textMesh = null;
+    private ButtonAction buttonClick = null;
+/*
     private ButtonAction buttonActionDown = null;
     private ButtonAction buttonActionUp = null;
+*/
     [SerializeField]
     private Image image;
     [SerializeField]
@@ -42,32 +45,15 @@ public class CustomButtonPrefab : MonoBehaviour, IPointerDownHandler, IPointerUp
         ugui.SetText(message);
     }
 
-    public void AddActionDown(ButtonAction buttonAction) => buttonActionDown += buttonAction;
-    public void AddActionUp(ButtonAction buttonAction) => buttonActionUp += buttonAction;
-    public void RemoveActionDown(ButtonAction buttonAction) => buttonActionDown -= buttonAction;
-    public void RemoveActionUp(ButtonAction buttonAction) => buttonActionUp -= buttonAction;
+    public void AddClickAction(ButtonAction buttonClick) => this.buttonClick += buttonClick;
+    public void RemoveClickAction(ButtonAction buttonClick) => this.buttonClick -= buttonClick;
+    public void ClearClickAction() => this.buttonClick = null;
 
-    public void OnPointerDown(PointerEventData eventData)
+    public void OnPointerClick(PointerEventData eventData)
     {
-        Debug.Log("OnPointerDown");
-        buttonActionDown?.Invoke();
-
-        TEST_DOWN();
+        buttonClick?.Invoke();
     }
-
-    public void OnPointerUp(PointerEventData eventData)
-    {
-        Debug.Log("OnPointerUp");
-        buttonActionUp?.Invoke();
-
-        TEST_UP();
-    }
-
-
-
-    public void TEST_DOWN() => image.sprite = sprites[0];  // test
-    public void TEST_UP() => image.sprite = sprites[0]; // test
-
+/*
     public void OnDrop(PointerEventData eventData)
     {
         Debug.Log($"OnDrop! {name}, {eventData.selectedObject.name}");
@@ -77,4 +63,5 @@ public class CustomButtonPrefab : MonoBehaviour, IPointerDownHandler, IPointerUp
             eventData.selectedObject.transform.localPosition = Vector3.zero;
         }
     }
+*/
 }

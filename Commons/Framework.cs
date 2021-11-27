@@ -5,8 +5,7 @@ using System.Data;
 using Popup.Items;
 using Popup.Charactors;
 using Popup.Defines;
-
-
+using UnityEngine.EventSystems;
 
 namespace Popup.Framework
 {
@@ -23,13 +22,16 @@ namespace Popup.Framework
         int SlotId { get; }
         bool IsExist { get; }
 
-        object  DeepCopy(int? _ = null, int? __ = null);
-        // object  DuplicateNew();
+        object DeepCopy(int? _ = null, int? __ = null);
     }
 
 
+    public interface IOwner
+    {
+        GameObject Owner { get; set; }
+    }
 
-    public interface IItem : IPopupObject
+    public interface IItem : IPopupObject, IOwner
     {
         int UseableCount { get; }
         bool HaveSpace(string name = null);
@@ -40,6 +42,26 @@ namespace Popup.Framework
     }
 
 
+    public interface IITemHandler : IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerDownHandler, IPointerUpHandler, IPointerClickHandler
+    {
+        void Use();
+    }
+
+
+    public interface IToolItemHandler : IITemHandler
+    {
+        /*bool AddStack(ToolItem item);*/
+    }
+
+
+    public interface IEquipItemHandler : IITemHandler
+    {
+    }
+
+    public interface ISpell : IPopupObject, IOwner
+    {
+
+    }
 
     public interface IInventory
 	{
@@ -52,8 +74,7 @@ namespace Popup.Framework
     }
 
 
-
-    public interface ICharactor : IPopupObject
+    public interface ICharactor : IPopupObject, IOwner
     {
         int Size { get; }
         bool IsAlive { get; }

@@ -1,18 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
+using Popup.Items;
+using Popup.Framework;
 
-public class ItemToolPrefab : MonoBehaviour
+
+
+public class ItemToolPrefab : ItemBase
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    ToolItem Item { get; set; } = null;
 
-    // Update is called once per frame
-    void Update()
+    public override void Use() // impl.
     {
-        
+        /*Item.Use();*/
+        Debug.Log("Double Clicked!");
     }
 }

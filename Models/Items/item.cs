@@ -2,6 +2,7 @@
 using Popup.Defines;
 using Popup.Framework;
 using System;
+using UnityEngine;
 using Newtonsoft.Json;
 
 
@@ -23,6 +24,9 @@ namespace Popup.Items
 		public float Volume { get; protected set; }
 		[JsonProperty]
 		public ItemCat Category { get; protected set; }
+		[JsonProperty]
+		public GameObject Owner { get; set; }
+
 
 		protected bool HaveAttribute (ItemCat attribute) => 0 < (Category & attribute);
 

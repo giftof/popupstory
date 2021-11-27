@@ -12,11 +12,13 @@ public class Lobby : MonoBehaviour
 {
     [SerializeField] Button toEntrance;
     [SerializeField] Button toGame;
-    [SerializeField] InventoryPouchPrefab userPouch;
-    [SerializeField] InventoryPouchPrefab shopPouch;
+    [SerializeField] CustomButtonPrefab allieInventoryBtn;
+    [SerializeField] CustomButtonPrefab enemyInventoryBtn;
+    [SerializeField] InventoryPouchPrefab alliePouch;
+    [SerializeField] InventoryPouchPrefab enemyPouch;
 
 
-    // Start is called before the first frame update
+
     void Start()
     {
         Initialize();
@@ -33,6 +35,8 @@ public class Lobby : MonoBehaviour
         _ = FindObjectOfType(typeof(Manager)) ?? Instantiate(Resources.Load<Manager>(Path.manager));
         Manager.Instance.eventSystem.enabled = true;
         Manager.Instance.guiGuide.InitializeCanvas();
+        alliePouch.gameObject.SetActive(false);
+        enemyPouch.gameObject.SetActive(false);
     }
 
 
@@ -51,12 +55,18 @@ public class Lobby : MonoBehaviour
         });
     }
 
+    void ToggleAlliePouch() => alliePouch.gameObject.SetActive(!alliePouch.gameObject.activeSelf);
+    void ToggleEnemyPouch() => enemyPouch.gameObject.SetActive(!enemyPouch.gameObject.activeSelf);
+
     void DEBUG_POUCH()
     {
-        userPouch.gameObject.PositionOnParent(GUIPosition.LeftBottom);
-        shopPouch.gameObject.PositionOnParent(GUIPosition.RightBottom);
-        //userPouch.transform.localPosition = Manager.Instance.guiGuide.Position(userPouch.gameObject, GUIPosition.LeftBottom);
-        //shopPouch.transform.localPosition = Manager.Instance.guiGuide.Position(shopPouch.gameObject, GUIPosition.RightBottom);
-        //GUIGuide.
+        allieInventoryBtn.AddClickAction(() => {
+            ToggleAlliePouch();
+            alliePouch.gameObject.PositionOnParent(GUIPosition.LeftBottom);
+        });
+        enemyInventoryBtn.AddClickAction(() => {
+            ToggleEnemyPouch();
+            enemyPouch.gameObject.PositionOnParent(GUIPosition.RightBottom);
+        });
     }
 }

@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 using Popup.ServerJob;
 
 
-public class Spell : IPopupObject
+public class Spell : IPopupObject, ISpell
 {
 	[JsonProperty]
 	public int uid {get; protected set; }
@@ -24,6 +24,8 @@ public class Spell : IPopupObject
 	public Elements Element {get; protected set; }
 	[JsonProperty]
 	public int Affect { get; protected set; }
+	[JsonProperty]
+	public GameObject Owner { get; set; }
 
 
 

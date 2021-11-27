@@ -100,11 +100,13 @@ Debug.Log(gpgs.GetInstanceID());
         //gpgsButton.transform.localPosition = Manager.Instance.guiGuide.Position(gpgs, GUIPosition.RightBottom);
         gpgsButton.SetText("GPGS", Color.red);
 
+        gpgsButton.AddClickAction(() => Debug.Log("(0): Hello Click action mmm... !!!"));
+/*
         gpgsButton.AddActionDown(() => Debug.Log("(0): Hello Added action DOWN is... mmm... !!!"));
         gpgsButton.AddActionDown(() => Debug.Log("(1): Hello Added action DOWN is... mmm... !!!"));
         gpgsButton.AddActionUp(() => Debug.Log("(0): Hello Added action UP is... mmm... !!!"));
         gpgsButton.AddActionUp(() => Debug.Log("(1): Hello Added action UP is... mmm... !!!"));
-
+*/
 
         List<int> list = new List<int>();
         list.FirstOrDefault(e => 0 < e);
