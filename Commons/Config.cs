@@ -13,9 +13,11 @@ namespace Popup.Configs
         public const int    squadSize           = 4;
         public const int    squadInventorySize  = 16;
         public const int    warehouseSize       = 128;
+        public const int    pouchSize           = 7;
         public const int    showSize            = 32;
         public const int    extraPoolSize       = 5;
         public const float  doubleClickInterval = 1f;
+        public const int    unSlot              = -1;
     }
 
     public static class Path
@@ -26,5 +28,6 @@ namespace Popup.Configs
     public static class OName
     {
         public const string canvas          = "Canvas";
+        public const string pickCanvas      = "Pick Canvas";
     }
 }

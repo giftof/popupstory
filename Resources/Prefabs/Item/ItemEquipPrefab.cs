@@ -10,11 +10,11 @@ using Popup.Framework;
 
 public class ItemEquipPrefab : ItemBase
 {
-    EquipItem Item { get; set; } = null;
-
     public override void Use() // impl.
     {
         /*Item.Use();*/
-        Debug.Log("Double Clicked!");
+        Debug.Log($"Double Clicked! {Item.Name}");
+        EquipItem item = Item as EquipItem;
+        Debug.Log($"{item.Durability}");
     }
 }

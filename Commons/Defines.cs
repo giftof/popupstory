@@ -34,8 +34,9 @@ namespace Popup.Defines
     {
         CustomButton,
         TextMesh,
-        EquipItem,
-        ToolItem,
+        ItemSlot,
+        ItemTool,
+        ItemEquip,
         //Spell,
         //Buff,
         //Charactor,

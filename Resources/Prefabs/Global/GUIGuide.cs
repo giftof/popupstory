@@ -6,7 +6,8 @@ using UnityEngine;
 
 public class GUIGuide : MonoBehaviour
 {
-    public Canvas canvas;
+    public Canvas canvas = null;
+    public Canvas pickCanvas = null;
     //private Vector2 size;
     private GameObject anchor = null;
     private RectTransform targetRect = null;
@@ -17,6 +18,7 @@ public class GUIGuide : MonoBehaviour
     public void InitializeCanvas()
     {
         canvas = GameObject.Find(OName.canvas).GetComponent<Canvas>();
+        pickCanvas = GameObject.Find(OName.pickCanvas)?.GetComponent<Canvas>();
         //size = canvas.GetComponent<RectTransform>().sizeDelta * 0.5f;
     }
 

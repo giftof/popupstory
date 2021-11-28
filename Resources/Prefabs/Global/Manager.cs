@@ -22,7 +22,11 @@ public class Manager : MonoBehaviour
             Destroy(this);
         Instance = this;
         DontDestroyOnLoad(this);
-        Debug.Log("MANAGER DONE");
     }
 
+    public void Initialize()
+    {
+        guiGuide.InitializeCanvas();
+        eventSystem.enabled = true;
+    }
 }

@@ -18,8 +18,7 @@ public abstract class ItemBase : MonoBehaviour, IITemHandler
     int clickCount = 0;
     float clickTime = 0f;
 
-
-
+    public Item Item { get; set; }
     public abstract void Use();
 
     public void OnDrag(PointerEventData eventData) => transform.position = eventData.position + offset;
@@ -38,14 +37,16 @@ public abstract class ItemBase : MonoBehaviour, IITemHandler
     public void OnPointerDown(PointerEventData eventData)
     {
         offset = (Vector2)transform.position - eventData.position;
-        transform.SetParent(Manager.Instance.guiGuide.canvas.transform);
-        transform.SetAsLastSibling();
+        transform.SetParent(Manager.Instance.guiGuide.pickCanvas.transform);
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        transform.SetParent(lastParent);
-        transform.localPosition = Vector3.zero;
+        if (lastParent != null)
+        {
+            transform.SetParent(lastParent);
+            transform.localPosition = Vector3.zero;
+        }
     }
 
     public void OnPointerClick(PointerEventData eventData)

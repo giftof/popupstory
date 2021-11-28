@@ -28,12 +28,10 @@ namespace Popup.Items
 		public GameObject Owner { get; set; }
 
 
-		protected bool HaveAttribute (ItemCat attribute) => 0 < (Category & attribute);
+		public bool HaveAttribute (ItemCat attribute) => 0 < (Category & attribute);
 
 		[JsonIgnore]
 		public abstract bool IsExist { get; }
-		//[JsonIgnore]
-		//public abstract bool HasSpace { get; }
 		[JsonIgnore]
 		public abstract int UseableCount { get; }
 		public abstract bool HaveSpace(string _ = null);
@@ -58,7 +56,6 @@ namespace Popup.Items
 		public Spell Spell(int uid) => Guard.MustInclude(uid, SpellArray, "[GetSpell in EquipItem]");
 
 		public override bool IsExist => 0 < Durability;
-		//public override bool HasSpace => false;
 		public override int UseableCount => Durability;
 		public override bool HaveSpace(string _ = null) => false;
 		public override bool Use() => 0 < Durability--;
@@ -106,7 +103,6 @@ namespace Popup.Items
 		}
 
 		public override bool IsExist => 0 < Amount;
-		//public override bool HasSpace => Amount < MaxAmount;
 		public override int UseableCount => Amount;
 		public override bool HaveSpace(string name = null) => (name == null || this.Name.Equals(name)) && Amount < MaxAmount;
 		public override bool Use() => 0 < Amount--;

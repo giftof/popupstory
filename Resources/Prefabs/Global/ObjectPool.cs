@@ -12,8 +12,8 @@ using Popup.Library;
 
 public class ObjectPool : MonoBehaviour
 {
-    Dictionary<Prefab, Queue<object>> pool;
-    Dictionary<Prefab, Dictionary<int, object>> credit;
+    Dictionary<Prefab, Queue<GameObject>> pool;
+    Dictionary<Prefab, Dictionary<int, GameObject>> credit;
 
     public static ObjectPool Instance = null;
 
@@ -35,11 +35,11 @@ public class ObjectPool : MonoBehaviour
         if (Instance != null)
             Destroy(this);
         Instance = this;
-        pool = new Dictionary<Prefab, Queue<object>>();
+        pool = new Dictionary<Prefab, Queue<GameObject>>();
         BuildContainer();
     }
 
-    private bool Fill(Queue<object> dest, Prefab type, uint amount)
+    private bool Fill(Queue<GameObject> dest, Prefab type, uint amount)
     {
         if (dest.Count < amount)
             MakeExtra(dest, type, amount - (uint)dest.Count);
@@ -47,7 +47,7 @@ public class ObjectPool : MonoBehaviour
         return true;
     }
 
-    private void MakeExtra(Queue<object> source, Prefab type, uint amount)
+    private void MakeExtra(Queue<GameObject> source, Prefab type, uint amount)
     {
         while (0 < amount--)
         {
@@ -77,9 +77,9 @@ public class ObjectPool : MonoBehaviour
     //    return false;
     //}
 
-    private List<object> Pop(Queue<object> source, Prefab type, uint amount)
+    private List<GameObject> Pop(Queue<GameObject> source, Prefab type, uint amount)
     {
-        List<object> temp = new List<object>();
+        List<GameObject> temp = new List<GameObject>();
 
         Fill(source, type, amount);
         while (0 < amount--) temp.Add(source.Dequeue());
@@ -91,7 +91,7 @@ public class ObjectPool : MonoBehaviour
 
     private void ClearContainer()
     {
-        foreach (KeyValuePair<Prefab, Queue<object>> pair in pool)
+        foreach (KeyValuePair<Prefab, Queue<GameObject>> pair in pool)
             pair.Value.Clear();
     }
 
@@ -99,7 +99,7 @@ public class ObjectPool : MonoBehaviour
     {
         foreach (Prefab element in Enum.GetValues(typeof(Prefab)))
         {
-            pool.Add(element, new Queue<object>());
+            pool.Add(element, new Queue<GameObject>());
         }
     }
 
@@ -110,23 +110,23 @@ public class ObjectPool : MonoBehaviour
     {
         ClearContainer();
 
-        foreach (KeyValuePair<Prefab, Queue<object>> pair in pool)
+        foreach (KeyValuePair<Prefab, Queue<GameObject>> pair in pool)
             Fill(pair.Value, pair.Key, Config.extraPoolSize);
     }
 
     //public List<object> Request(ObjectType type, uint amount) => pool.ContainsKey(type) ? Pop(pool[type], type, amount) : null;
     //public object Request(ObjectType type) => pool.ContainsKey(type) ? Pop(pool[type], type, 1)[0] : null;
 
-    public List<object> Request(Prefab type, uint amount)
+    public List<GameObject> Request(Prefab type, uint amount)
     {
         return pool.ContainsKey(type) ? Pop(pool[type], type, amount) : null;
     }
-    public object Request(Prefab type)
+    public GameObject Request(Prefab type)
     {
         return pool.ContainsKey(type) ? Pop(pool[type], type, 1)[0] : null;
     }
 
-    public void Return(Prefab type, object obj)
+    public void Return(Prefab type, GameObject obj)
     {
         if (pool.ContainsKey(type))
         {

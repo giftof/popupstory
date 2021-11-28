@@ -51,6 +51,7 @@ public class CustomButtonPrefab : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
+        Debug.Log("Click");
         buttonClick?.Invoke();
     }
 /*

@@ -204,13 +204,13 @@ namespace Popup.Inventory
         public bool Add(Item item)
         {
             if (Libs.IsExhaust(item)) return false;
-            return item.Category.Equals(ItemCat.tool)
-                ? AddStackable(item)
-                : AddNew(item);
+			return item.HaveAttribute(ItemCat.tool)
+				? AddStackable(item)
+				: AddNew(item);
         }
 
 
-
+		public abstract List<Item> UnSlotedList();
         public abstract void DEBUG_ShowAllItems();
 	}
 
@@ -228,11 +228,16 @@ namespace Popup.Inventory
 		protected override bool AddNew(Item item)
         {
 			Guard.MustNotInclude(item.uid, wareHouse, "[AddNew - in WareHouse]");
+			
 			if (wareHouse.Count < maxSize)
             {
 				wareHouse.Add(item.uid, item);
+
+				DEBUG_ShowAllItems();
 				return true;
             }
+
+			DEBUG_ShowAllItems();
 			return false;
         }
 
@@ -252,8 +257,9 @@ namespace Popup.Inventory
 				ToolItem newItem = (ToolItem)item.DeepCopy(ServerJob.RequestNewUID, null);
 				newItem.AddStack(item);
 				wareHouse.Add(newItem.uid, newItem);
-            }
+			}
 
+			DEBUG_ShowAllItems();
 			return !item.IsExist;
         }
 
@@ -280,7 +286,9 @@ namespace Popup.Inventory
 			return false;
 		}
 
-
+        public override List<Item> UnSlotedList() => (from pair in wareHouse
+                                                      where pair.Value.SlotId.Equals(Config.unSlot)
+                                                      select pair.Value).ToList();
 
 
 
