@@ -13,6 +13,10 @@ namespace Popup.Items
 	public abstract partial class Item : IItem
 	{
 		[JsonProperty]
+		public int NameId { get; protected set; }
+		[JsonProperty]
+		public int Icon { get; protected set; }
+		[JsonProperty]
 		public int uid { get; protected set; }
 		[JsonProperty]
 		public int SlotId { get; set; }
