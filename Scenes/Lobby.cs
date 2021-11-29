@@ -14,10 +14,10 @@ public class Lobby : MonoBehaviour
 {
     [SerializeField] Button toEntrance;
     [SerializeField] Button toGame;
-    [SerializeField] CustomButtonPrefab allieInventoryBtn;
-    [SerializeField] CustomButtonPrefab enemyInventoryBtn;
-    [SerializeField] InventoryPouchPrefab alliePouch;
-    [SerializeField] InventoryPouchPrefab enemyPouch;
+    [SerializeField] CustomButtonPrefab userInventoryBtn;
+    [SerializeField] CustomButtonPrefab otherInventoryBtn;
+    [SerializeField] UserPouchPrefab userPouch;
+    [SerializeField] OtherPouchPrefab otherPouch;
 
 
 
@@ -38,14 +38,14 @@ public class Lobby : MonoBehaviour
         _ = FindObjectOfType(typeof(Manager)) ?? Instantiate(Resources.Load<Manager>(Path.manager));
         Manager.Instance.Initialize();
 
-        alliePouch.gameObject.SetActive(false);
-        enemyPouch.gameObject.SetActive(false);
+        userPouch.gameObject.SetActive(false);
+        otherPouch.gameObject.SetActive(false);
     }
 
 
 
-    void ToggleAlliePouch() => alliePouch.gameObject.SetActive(!alliePouch.gameObject.activeSelf);
-    void ToggleEnemyPouch() => enemyPouch.gameObject.SetActive(!enemyPouch.gameObject.activeSelf);
+    void ToggleAlliePouch() => userPouch.gameObject.SetActive(!userPouch.gameObject.activeSelf);
+    void ToggleEnemyPouch() => otherPouch.gameObject.SetActive(!otherPouch.gameObject.activeSelf);
 
     void DEBUG_BTN()
     {
@@ -63,13 +63,17 @@ public class Lobby : MonoBehaviour
 
     void DEBUG_POUCH()
     {
-        allieInventoryBtn.AddClickAction(() => {
+        userInventoryBtn.AddClickAction(() => {
             ToggleAlliePouch();
-            alliePouch.gameObject.PositionOnParent(GUIPosition.LeftBottom);
+            userPouch.gameObject.PositionOnParent(GUIPosition.LeftBottom);
         });
-        enemyInventoryBtn.AddClickAction(() => {
+        otherInventoryBtn.AddClickAction(() => {
             ToggleEnemyPouch();
-            enemyPouch.gameObject.PositionOnParent(GUIPosition.RightBottom);
+            otherPouch.gameObject.PositionOnParent(GUIPosition.RightBottom);
+        });
+
+        otherPouch.takeAll.AddClickAction(() => {
+            userPouch.Insert(otherPouch.PopAll());
         });
     }
 
@@ -83,7 +87,7 @@ public class Lobby : MonoBehaviour
         Item item2 = Libs.FromJson<ToolItem>(TEST_JSON_ITEM2);
         Item item3 = Libs.FromJson<ToolItem>(TEST_JSON_ITEM3);
 
-        enemyPouch.Initialize(item1, item2, item3);
+        otherPouch.Insert(item1, item2, item3);
         /*enemyPouch.Add(item1, item2, item3);*/
     }
 }

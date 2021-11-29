@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using Popup.Items;
 using Popup.Framework;
-
+using Popup.Defines;
 
 
 public class ItemEquipPrefab : ItemBase
@@ -17,4 +17,8 @@ public class ItemEquipPrefab : ItemBase
         EquipItem item = Item as EquipItem;
         Debug.Log($"{item.Durability}");
     }
+
+    public override void SetAmount(int _) { }
+
+    public override Prefab Type => Prefab.ItemEquip;
 }

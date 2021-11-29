@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4539860848876328025}
   - component: {fileID: -6339993193006813498}
   m_Layer: 5
-  m_Name: InventoryPouchPrefab
+  m_Name: UserPouchPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -3,48 +3,51 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using Popup.Delegate;
+using Popup.Items;
 
 
 
-
-public class ItemSlotPrefab : MonoBehaviour, IPointerEnterHandler, IDropHandler
+public class ItemSlotPrefab : MonoBehaviour, IDropHandler
 {
     [SerializeField] Image image;
     [SerializeField] Sprite[] sprites;
+    public int slotId;
+    public ItemAction insertAction = null;
+    public ItemAction removeAction = null;
 
+
+
+    public void AddInsertAction(ItemAction itemAction) => insertAction += itemAction;
+    public void AddRemoveAction(ItemAction itemAction) => removeAction += itemAction;
 
     public void OnDrop(PointerEventData eventData)
     {
         if (eventData.selectedObject != null && eventData.selectedObject.TryGetComponent(out ItemBase item))
         {
-            SwapHierarchy(item.lastParent);
+            if (0 < transform.childCount)
+            {
+                ItemBase currentItem = transform.GetChild(0).GetComponent<ItemBase>();
+                Move(currentItem, this, item.lastParent.GetComponent<ItemSlotPrefab>());
+                SetParent(currentItem, item.lastParent);
+            }
 
-            eventData.selectedObject.transform.SetParent(transform);
-            eventData.selectedObject.transform.localPosition = Vector3.zero;
-            item.lastParent = transform;
+            Move(item, item.lastParent.GetComponent<ItemSlotPrefab>(), this);
+            SetParent(item, transform);
         }
     }
 
-    private void SwapHierarchy(Transform newParent)
+    private void Move(ItemBase item, ItemSlotPrefab from, ItemSlotPrefab to)
     {
-        if (0 < transform.childCount && transform.GetChild(0).TryGetComponent(out ItemBase item))
-        {
-            item.transform.SetParent(newParent);
-            item.transform.localPosition = Vector3.zero;
-            item.lastParent = newParent;
-        }
+        item.SetSlotId(to.slotId);
+        from.removeAction?.Invoke(item.Item);
+        to.insertAction?.Invoke(item.Item);
     }
 
-
-    public void OnPointerEnter(PointerEventData eventData)
+    private void SetParent(ItemBase dest, Transform parent)
     {
-/*
-        ItemToolPrefab prefab = null;
-
-        if (eventData.selectedObject?.TryGetComponent(out prefab) ?? false)
-        {
-            prefab.parent = transform;
-        }
-*/
+        dest.transform.SetParent(parent);
+        dest.transform.localPosition = Vector3.zero;
+        dest.lastParent = parent;
     }
 }

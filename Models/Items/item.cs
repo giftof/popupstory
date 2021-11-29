@@ -38,6 +38,7 @@ namespace Popup.Items
 		public abstract bool Use();
 		public abstract float TWeight();
 		public abstract float TVolume();
+		/*public abstract ItemCat Attribure => Category;*/
 		public abstract object DeepCopy(int? uid = null, int? amt = null);
 	}
 

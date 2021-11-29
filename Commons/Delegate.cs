@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.Data;
-
+using Popup.Items;
 
 
 namespace Popup.Delegate
@@ -12,6 +12,7 @@ namespace Popup.Delegate
     public delegate T ConvertFromString<T>(IDataReader data);
 
     public delegate void ButtonAction();
+    public delegate void ItemAction(Item item);
     //public class Delegate : MonoBehaviour
     //{
     //    // Start is called before the first frame update

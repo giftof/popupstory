@@ -6,6 +6,7 @@ using UnityEngine.EventSystems;
 using Popup.Items;
 using Popup.Framework;
 using Popup.Configs;
+using Popup.Defines;
 
 
 
@@ -20,6 +21,11 @@ public abstract class ItemBase : MonoBehaviour, IITemHandler
 
     public Item Item { get; set; }
     public abstract void Use();
+    public abstract Prefab Type { get; }
+    public abstract void SetAmount(int amount);
+
+    public int GetSlotId() => Item.SlotId;
+    public int SetSlotId(int slotId) => Item.SlotId = slotId;
 
     public void OnDrag(PointerEventData eventData) => transform.position = eventData.position + offset;
 
