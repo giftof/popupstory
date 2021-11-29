@@ -10,41 +10,27 @@ using Newtonsoft.Json;
 namespace Popup.Items
 {
 	using Cfg = Configs.Config;
-	public abstract class Item : IItem
+	public abstract partial class Item : IItem
 	{
-		[JsonProperty]
-		public string Name { get; protected set; }
 		[JsonProperty]
 		public int uid { get; protected set; }
 		[JsonProperty]
 		public int SlotId { get; set; }
+		[JsonProperty]
+		public GameObject Owner { get; set; }
+		[JsonProperty]
+		public string Name { get; protected set; }
 		[JsonProperty]
 		public float Weight { get; protected set; }
 		[JsonProperty]
 		public float Volume { get; protected set; }
 		[JsonProperty]
 		public ItemCat Category { get; protected set; }
-		[JsonProperty]
-		public GameObject Owner { get; set; }
 
-
-		public bool HaveAttribute (ItemCat attribute) => 0 < (Category & attribute);
-
-		[JsonIgnore]
-		public abstract bool IsExist { get; }
-		[JsonIgnore]
-		public abstract int UseableCount { get; }
-		public abstract bool HaveSpace(string _ = null);
-		public abstract bool Use();
-		public abstract float TWeight();
-		public abstract float TVolume();
-		/*public abstract ItemCat Attribure => Category;*/
-		public abstract object DeepCopy(int? uid = null, int? amt = null);
+		public bool HaveAttribute(ItemCat attribute) => 0 < (Category & attribute);
 	}
 
-
-
-	public class EquipItem : Item
+	public partial class EquipItem : Item
 	{
 		[JsonProperty]
 		public Grade Grade { get; protected set; }
@@ -55,25 +41,9 @@ namespace Popup.Items
 
 		public int SpellAmount => SpellArray == null ? 0 : SpellArray.Length;
 		public Spell Spell(int uid) => Guard.MustInclude(uid, SpellArray, "[GetSpell in EquipItem]");
-
-		public override bool IsExist => 0 < Durability;
-		public override int UseableCount => Durability;
-		public override bool HaveSpace(string _ = null) => false;
-		public override bool Use() => 0 < Durability--;
-		public override float TWeight() => Weight;
-		public override float TVolume() => Volume;
-		public override object DeepCopy(int? uid, int? durability)
-		{
-			EquipItem equipItem = (EquipItem)MemberwiseClone();
-			equipItem.uid = uid ?? 0;
-			equipItem.Durability = durability ?? 0;
-			return equipItem;
-		}
 	}
 
-
-
-	public class ToolItem : Item
+	public partial class ToolItem : Item
 	{
 		[JsonProperty]
 		public int Amount { get; protected set; }
@@ -102,7 +72,44 @@ namespace Popup.Items
 			Increase(enableStack);
 			return item.UseableCount.Equals(0);
 		}
+	}
 
+
+
+
+
+	public abstract partial class Item
+	{
+		[JsonIgnore]
+		public abstract bool IsExist { get; }
+		[JsonIgnore]
+		public abstract int UseableCount { get; }
+		public abstract bool HaveSpace(string _ = null);
+		public abstract bool Use();
+		public abstract float TWeight();
+		public abstract float TVolume();
+		public abstract object DeepCopy(int? uid = null, int? amt = null);
+	}
+
+	public partial class EquipItem
+	{
+		public override bool IsExist => 0 < Durability;
+		public override int UseableCount => Durability;
+		public override bool HaveSpace(string _ = null) => false;
+		public override bool Use() => 0 < Durability--;
+		public override float TWeight() => Weight;
+		public override float TVolume() => Volume;
+		public override object DeepCopy(int? uid, int? durability)
+		{
+			EquipItem equipItem = (EquipItem)MemberwiseClone();
+			equipItem.uid = uid ?? 0;
+			equipItem.Durability = durability ?? 0;
+			return equipItem;
+		}
+	}
+
+	public partial class ToolItem
+    {
 		public override bool IsExist => 0 < Amount;
 		public override int UseableCount => Amount;
 		public override bool HaveSpace(string name = null) => (name == null || this.Name.Equals(name)) && Amount < MaxAmount;

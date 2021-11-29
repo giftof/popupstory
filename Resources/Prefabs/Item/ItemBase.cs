@@ -10,7 +10,7 @@ using Popup.Defines;
 
 
 
-public abstract class ItemBase : MonoBehaviour, IITemHandler
+public abstract partial class ItemBase : MonoBehaviour
 {
     Vector2 offset = default;
     [SerializeField] Image image = null;
@@ -20,13 +20,21 @@ public abstract class ItemBase : MonoBehaviour, IITemHandler
     float clickTime = 0f;
 
     public Item Item { get; set; }
+    public int GetSlotId() => Item.SlotId;
+    public int SetSlotId(int slotId) => Item.SlotId = slotId;
+}
+
+
+public abstract partial class ItemBase
+{
     public abstract void Use();
     public abstract Prefab Type { get; }
     public abstract void SetAmount(int amount);
+}
 
-    public int GetSlotId() => Item.SlotId;
-    public int SetSlotId(int slotId) => Item.SlotId = slotId;
 
+public abstract partial class ItemBase : IITemHandler
+{
     public void OnDrag(PointerEventData eventData) => transform.position = eventData.position + offset;
 
     public void OnBeginDrag(PointerEventData eventData)

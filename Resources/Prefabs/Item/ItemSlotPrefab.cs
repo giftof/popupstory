@@ -8,7 +8,7 @@ using Popup.Items;
 
 
 
-public class ItemSlotPrefab : MonoBehaviour, IDropHandler
+public partial class ItemSlotPrefab : MonoBehaviour
 {
     [SerializeField] Image image;
     [SerializeField] Sprite[] sprites;
@@ -21,23 +21,7 @@ public class ItemSlotPrefab : MonoBehaviour, IDropHandler
     public void AddInsertAction(ItemAction itemAction) => insertAction += itemAction;
     public void AddRemoveAction(ItemAction itemAction) => removeAction += itemAction;
 
-    public void OnDrop(PointerEventData eventData)
-    {
-        if (eventData.selectedObject != null && eventData.selectedObject.TryGetComponent(out ItemBase item))
-        {
-            if (0 < transform.childCount)
-            {
-                ItemBase currentItem = transform.GetChild(0).GetComponent<ItemBase>();
-                Move(currentItem, this, item.lastParent.GetComponent<ItemSlotPrefab>());
-                SetParent(currentItem, item.lastParent);
-            }
-
-            Move(item, item.lastParent.GetComponent<ItemSlotPrefab>(), this);
-            SetParent(item, transform);
-        }
-    }
-
-    private void Move(ItemBase item, ItemSlotPrefab from, ItemSlotPrefab to)
+    private void MoveAction(ItemBase item, ItemSlotPrefab from, ItemSlotPrefab to)
     {
         item.SetSlotId(to.slotId);
         from.removeAction?.Invoke(item.Item);
@@ -49,5 +33,26 @@ public class ItemSlotPrefab : MonoBehaviour, IDropHandler
         dest.transform.SetParent(parent);
         dest.transform.localPosition = Vector3.zero;
         dest.lastParent = parent;
+    }
+}
+
+
+
+public partial class ItemSlotPrefab : IDropHandler
+{
+    public void OnDrop(PointerEventData eventData)
+    {
+        if (eventData.selectedObject != null && eventData.selectedObject.TryGetComponent(out ItemBase item))
+        {
+            if (0 < transform.childCount)
+            {
+                ItemBase currentItem = transform.GetChild(0).GetComponent<ItemBase>();
+                MoveAction(currentItem, this, item.lastParent.GetComponent<ItemSlotPrefab>());
+                SetParent(currentItem, item.lastParent);
+            }
+
+            MoveAction(item, item.lastParent.GetComponent<ItemSlotPrefab>(), this);
+            SetParent(item, transform);
+        }
     }
 }

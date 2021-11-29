@@ -17,7 +17,7 @@ using Popup.Defines;
 namespace Popup.Inventory
 {
 	using ServerJob = ServerJob.ServerJob;
-	public abstract class Inventory : IInventory
+	public abstract partial class Inventory : IInventory
     {
 		protected int maxSize;
 
@@ -34,7 +34,21 @@ namespace Popup.Inventory
 				? AddStackable(item)
 				: AddNew(item);
 		}
+	}
 
+	public partial class WareHouse : Inventory
+	{
+		Dictionary<int, Item> wareHouse;
+
+		public WareHouse(int maxSize) : base(maxSize) { }
+    }
+
+
+
+
+
+	public abstract partial class Inventory
+	{
 		protected abstract void InitializeInventory(int maxSize);
 		protected abstract bool AddStackable(Item item);
 		protected abstract bool AddNew(Item item);
@@ -44,37 +58,13 @@ namespace Popup.Inventory
 		public abstract bool Use(Item item);
 		public abstract void Insert(Item item);
 		public abstract void Remove(Item item);
-		public abstract List<Item> UnSlotedList();
-        public abstract void DEBUG_ShowAllItems();
+		public abstract List<Item> UnslotedList();
 		public abstract Item[] PopAll();
 	}
 
-
-
-	public class WareHouse : Inventory
-	{
-		Dictionary<int, Item> wareHouse;
-
-		public WareHouse(int maxSize) : base(maxSize) { }
-
+	public partial class WareHouse
+    {
 		protected override void InitializeInventory(int _) => wareHouse = new Dictionary<int, Item>();
-		protected override bool HaveSpace() => wareHouse.Count < maxSize;
-
-		protected override bool AddNew(Item item)
-		{
-			Guard.MustNotInclude(item.uid, wareHouse, "[AddNew - in WareHouse]");
-
-			if (wareHouse.Count < maxSize)
-			{
-				wareHouse.Add(item.uid, item);
-
-				DEBUG_ShowAllItems();
-				return true;
-			}
-
-			DEBUG_ShowAllItems();
-			return false;
-		}
 
 		protected override bool AddStackable(Item item)
 		{
@@ -98,14 +88,25 @@ namespace Popup.Inventory
 			return !item.IsExist;
 		}
 
-		public override Dictionary<int, Item> Source => wareHouse;
-
-		public override void Insert(Item item)
+		protected override bool AddNew(Item item)
 		{
-			if (!wareHouse.ContainsKey(item.uid))
+			Guard.MustNotInclude(item.uid, wareHouse, "[AddNew - in WareHouse]");
+
+			if (wareHouse.Count < maxSize)
+			{
 				wareHouse.Add(item.uid, item);
+
+				DEBUG_ShowAllItems();
+				return true;
+			}
+
+			DEBUG_ShowAllItems();
+			return false;
 		}
-		public override void Remove(Item item) => wareHouse.Remove(item.uid);
+
+		protected override bool HaveSpace() => wareHouse.Count < maxSize;
+
+		public override Dictionary<int, Item> Source => wareHouse;
 
 		public override void EraseExhaustedSlot()
 		{
@@ -130,29 +131,48 @@ namespace Popup.Inventory
 			return false;
 		}
 
-		public override List<Item> UnSlotedList() => (from pair in wareHouse
+		public override void Insert(Item item)
+		{
+			if (!wareHouse.ContainsKey(item.uid))
+				wareHouse.Add(item.uid, item);
+		}
+
+		public override void Remove(Item item) => wareHouse.Remove(item.uid);
+
+		public override List<Item> UnslotedList() => (from pair in wareHouse
 													  where pair.Value.SlotId.Equals(Config.unSlot)
 													  select pair.Value).ToList();
 
 		public override Item[] PopAll()
-        {
+		{
 			Item[] array = wareHouse.Values.ToArray();
 			wareHouse.Clear();
 
 			return array;
-        }
+		}
+	}
 
+
+
+
+
+	public abstract partial class Inventory
+	{
+		public abstract void DEBUG_ShowAllItems();
+	}
+
+	public partial class WareHouse
+	{
 		public override void DEBUG_ShowAllItems()
-        {
+		{
 			List<int> keys = wareHouse.Keys.ToList();
 			foreach (int key in keys)
-            {
+			{
 				Item item = wareHouse[key];
 				Debug.Log("UID = " + item.uid + ", name = " + item.Name + ", slotId = " + item.SlotId + ", amt = " + item.UseableCount + ", w = " + item.TWeight() + ", v = " + item.TVolume());
 			}
 		}
-    }
-
+	}
 
 
 	//public class Pouch : Inventory
