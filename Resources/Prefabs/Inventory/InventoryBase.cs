@@ -35,7 +35,6 @@ public abstract partial class InventoryBase : MonoBehaviour
 
     private void OnEnable()
     {
-        Debug.Log("On ENABLE");
         CreateNegativeSlotItemIcon();
     }
 
@@ -45,7 +44,7 @@ public abstract partial class InventoryBase : MonoBehaviour
     {
         close.AddClickAction(() => {
             gameObject.SetActive(false);
-            DEBUG_TEST_SHOW_CONTENTS();
+            //DEBUG_TEST_SHOW_CONTENTS();
         });
     }
 
@@ -79,7 +78,6 @@ public abstract partial class InventoryBase
     {
         foreach (Item item in array)
         {
-            Debug.Log($"add element = {item.Name}");
             item.SlotId = Config.unSlot;
             if (!inventory.Add(item))
                 return;
@@ -121,6 +119,7 @@ public abstract partial class InventoryBase
         itemBase.Item = item;
         itemBase.lastParent = parent;
         itemBase.SetAmount(item.UseableCount);
+        itemBase.SetImage();
     }
 
     private void SetParent(Transform child, Transform parent)

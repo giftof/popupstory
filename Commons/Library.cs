@@ -118,7 +118,7 @@ namespace Popup.Library
         {
             for (int i = 0; i < array.Length; ++i)
             {
-                if (array[i].uid.Equals(uid))
+                if (array[i].Uid.Equals(uid))
                     return array[i];
             }
             throw new Error($"Error: not include - {caller}");

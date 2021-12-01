@@ -12,7 +12,9 @@ using Newtonsoft.Json;
 public class Spell : IPopupObject, ISpell
 {
 	[JsonProperty]
-	public int uid {get; protected set; }
+	public int Uid {get; protected set; }
+	[JsonProperty]
+	public int NameId { get; protected set; }
 	[JsonProperty]
 	public int SlotId { get; protected set; }
 	[JsonProperty]
@@ -33,12 +35,12 @@ public class Spell : IPopupObject, ISpell
 		if (string.IsNullOrEmpty(attribute))
 		{
 			Name 		= "null";
-			uid 		= Manager.Instance.network.REQ_NEW_ID();
+			Uid 		= Manager.Instance.network.REQ_NEW_ID();
 			Effective 	= SpellEffective.none;
 			Element 	= Elements.none;
 		}
 		Name 		= "null";
-		uid 		= Manager.Instance.network.REQ_NEW_ID();
+		Uid 		= Manager.Instance.network.REQ_NEW_ID();
 		Effective 	= SpellEffective.none;
 		Element 	= Elements.none;
 

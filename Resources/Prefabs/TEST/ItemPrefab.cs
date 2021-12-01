@@ -27,7 +27,6 @@ public class ItemPrefab : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     public void OnDrag(PointerEventData eventData)
     {
         transform.position = eventData.position + offset;
-        //Debug.Log($"OnDrag Call {eventData.position}");
     }
 
     public void OnEndDrag(PointerEventData eventData)

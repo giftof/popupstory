@@ -28,8 +28,7 @@ public class Entrance : MonoBehaviour
     void Start()
     {
         Initialize();
-
-        Debug.Log("enter Entrance");
+        
         TEST_BTN();
         TEST_SET();
     }
@@ -65,15 +64,15 @@ public class Entrance : MonoBehaviour
     {
         Squad squad = new Squad(Manager.Instance.network.REQ_NEW_ID());
         Charactor c1 = new Charactor();
-        c1.uid = Manager.Instance.network.REQ_NEW_ID();
+        c1.Uid = Manager.Instance.network.REQ_NEW_ID();
         c1.Name = "c1";
         c1.Size = 1;
         Charactor c2 = new Charactor();
-        c2.uid = Manager.Instance.network.REQ_NEW_ID();
+        c2.Uid = Manager.Instance.network.REQ_NEW_ID();
         c2.Name = "c2";
         c2.Size = 1;
         Charactor c3 = new Charactor();
-        c3.uid = Manager.Instance.network.REQ_NEW_ID();
+        c3.Uid = Manager.Instance.network.REQ_NEW_ID();
         c3.Name = "c3";
         c3.Size = 2;
         squad.AddLast(c1);
@@ -90,26 +89,14 @@ public class Entrance : MonoBehaviour
         gpgs = gpgs ?? (GameObject)ObjectPool.Instance.Request(Prefab.CustomButton);
         gpgs.SetActive(true);
         gpgs.name = "GPGS";
-Debug.Log(gpgs.GetInstanceID());
         CustomButtonPrefab gpgsButton = gpgs.GetComponent<CustomButtonPrefab>();
-        //gpgsButton.transform.SetParent(canvas.transform);
-        /*gpgsButton.transform.localScale = Vector2.one;*/
-        //gpgsButton.transform.GetComponent<RectTransform>().sizeDelta = Vector2.one * 20;
         gpgs.PositionOnParent(GUIPosition.RightBottom, Vector2.one * 100);
-        //gpgsButton.transform.localPosition = Manager.Instance.guiGuide.Position(gpgs, GUIPosition.RightBottom);
         gpgsButton.SetText("GPGS", Color.red);
 
         gpgsButton.AddClickAction(() => Debug.Log("(0): Hello Click action mmm... !!!"));
-/*
-        gpgsButton.AddActionDown(() => Debug.Log("(0): Hello Added action DOWN is... mmm... !!!"));
-        gpgsButton.AddActionDown(() => Debug.Log("(1): Hello Added action DOWN is... mmm... !!!"));
-        gpgsButton.AddActionUp(() => Debug.Log("(0): Hello Added action UP is... mmm... !!!"));
-        gpgsButton.AddActionUp(() => Debug.Log("(1): Hello Added action UP is... mmm... !!!"));
-*/
 
         List<int> list = new List<int>();
         list.FirstOrDefault(e => 0 < e);
-
 
         Debug.Log(list.Select((e, i) => (e, i)).FirstOrDefault(p=> 3 < p.e && 0 < ++p.i));
         

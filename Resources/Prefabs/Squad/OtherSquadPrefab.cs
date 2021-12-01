@@ -14,7 +14,6 @@ public class OtherSquadPrefab : SquadBase
         });
 
         inventoryBase.takeAll.AddClickAction(() => {
-            Debug.Log(TakeAllTarget);
             TakeAllTarget?.Insert(((OtherPouchPrefab)inventoryBase).PopAll());
         });
     }

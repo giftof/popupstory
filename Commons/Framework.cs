@@ -18,7 +18,8 @@ namespace Popup.Framework
 
     public interface IPopupObject
     {
-        int uid { get; }
+        int Uid { get; }
+        int NameId { get; }
         int SlotId { get; }
         bool IsExist { get; }
 

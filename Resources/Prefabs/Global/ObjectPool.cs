@@ -72,8 +72,6 @@ public partial class ObjectPool
 
     private void PrePooling()
     {
-        //ClearContainer();
-
         foreach (KeyValuePair<Prefab, Queue<GameObject>> pair in pool)
             Fill(pair.Value, pair.Key, Config.extraPoolSize);
     }
@@ -98,7 +96,6 @@ public partial class ObjectPool
 
     private bool Fill(Queue<GameObject> dest, Prefab type, uint amount)
     {
-        Debug.Log("Fill");
         if (dest.Count < amount)
             MakeExtra(dest, type, amount - (uint)dest.Count);
 

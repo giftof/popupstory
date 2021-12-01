@@ -66,7 +66,7 @@ public class Game : MonoBehaviour
         EquipItem test = Libs.FromJson<EquipItem>(TEST_JSON_ITEM1);
 
         Debug.Log(test.Name);
-        Debug.Log(test.uid);
+        Debug.Log(test.Uid);
         Debug.Log(test.Durability);
         Debug.Log(test.TWeight());
         Debug.Log(test.TVolume());
@@ -89,7 +89,7 @@ public class Game : MonoBehaviour
         string json;
 
         Debug.Log(test.Name);
-        Debug.Log(test.uid);
+        Debug.Log(test.Uid);
         Debug.Log(test.Durability);
         Debug.Log(test.TWeight());
         Debug.Log(test.TVolume());
@@ -144,7 +144,7 @@ public class Game : MonoBehaviour
         string itemDef1 = $"{{\"uid\":{Manager.Instance.network.REQ_NEW_ID()},\"name\":\"stack1\",\"category\":{(int)ItemCat.tool},\"amount\":12,\"weight\":0.1,\"volume\":0.2}}";
         Item item1 = JsonConvert.DeserializeObject<ToolItem>(itemDef1);
         Debug.Log(item1);
-        Debug.Log(item1.uid);
+        Debug.Log(item1.Uid);
         Debug.Log(item1.Name);
 
 

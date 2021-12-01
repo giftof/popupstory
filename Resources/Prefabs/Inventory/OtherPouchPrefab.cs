@@ -20,12 +20,10 @@ public class OtherPouchPrefab : InventoryBase
 
     public Item[] PopAll()
     {
-        Debug.Log("Pop all");
         foreach (Transform child in frame.transform)
         {
             if (0 < child.childCount)
             {
-                Debug.Log("return event");
                 Transform retrieveObject = child.GetChild(0);
                 Prefab type = retrieveObject.GetComponent<ItemBase>().Type;
                 ObjectPool.Instance.Return(type, retrieveObject.gameObject);

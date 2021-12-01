@@ -22,6 +22,7 @@ public abstract partial class ItemBase : MonoBehaviour
     public Item Item { get; set; }
     public int GetSlotId() => Item.SlotId;
     public int SetSlotId(int slotId) => Item.SlotId = slotId;
+    public void SetImage() => image.sprite = Resources.Load<Sprite>("Images/Item/" + Item.Icon);
 }
 
 

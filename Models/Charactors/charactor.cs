@@ -21,16 +21,18 @@ namespace Popup.Charactors
     public class Charactor : ICharactor
     {
         [JsonProperty]
+        //public int uid { get; protected set; }
+        public int Uid { get; set; }
+        [JsonProperty]
+        public int NameId { get; protected set; }
+        [JsonProperty]
+        public int SlotId { get; protected set; }
+        [JsonProperty]
         //public string Name { get; protected set; }
         public string Name { get; set; }
         [JsonProperty]
-        //public int uid { get; protected set; }
-        public int uid { get; set; }
-        [JsonProperty]
         //public int Size { get; protected set; }
         public int Size { get; set; }
-        [JsonProperty]
-		public int SlotId { get; protected set; }
         [JsonProperty]
         public int level;
         [JsonProperty]

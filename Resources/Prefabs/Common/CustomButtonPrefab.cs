@@ -16,10 +16,6 @@ public class CustomButtonPrefab : MonoBehaviour, IPointerClickHandler
 {
     private GameObject textMesh = null;
     private ButtonAction buttonClick = null;
-/*
-    private ButtonAction buttonActionDown = null;
-    private ButtonAction buttonActionUp = null;
-*/
     [SerializeField]
     private Image image;
     [SerializeField]

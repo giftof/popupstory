@@ -80,26 +80,26 @@ namespace Popup.Inventory
 			{
 				ToolItem newItem = (ToolItem)item.DeepCopy(Manager.Instance.network.REQ_NEW_ID(), null);
 				newItem.AddStack(item);
-				wareHouse.Add(newItem.uid, newItem);
+				wareHouse.Add(newItem.Uid, newItem);
 			}
 
-			DEBUG_ShowAllItems();
+			// DEBUG_ShowAllItems();
 			return !item.IsExist;
 		}
 
 		protected override bool AddNew(Item item)
 		{
-			Guard.MustNotInclude(item.uid, wareHouse, "[AddNew - in WareHouse]");
+			Guard.MustNotInclude(item.Uid, wareHouse, "[AddNew - in WareHouse]");
 
 			if (wareHouse.Count < maxSize)
 			{
-				wareHouse.Add(item.uid, item);
+				wareHouse.Add(item.Uid, item);
 
-				DEBUG_ShowAllItems();
+				// DEBUG_ShowAllItems();
 				return true;
 			}
 
-			DEBUG_ShowAllItems();
+			// DEBUG_ShowAllItems();
 			return false;
 		}
 
@@ -119,12 +119,12 @@ namespace Popup.Inventory
 
 		public override bool Use(Item item)
 		{
-			Item use = wareHouse.FirstOrDefault(e => e.Value.uid.Equals(item.uid)).Value;
+			Item use = wareHouse.FirstOrDefault(e => e.Value.Uid.Equals(item.Uid)).Value;
 
 			if (use?.Use() ?? false)
 			{
 				if (!use.IsExist)
-					wareHouse.Remove(use.uid);
+					wareHouse.Remove(use.Uid);
 				return true;
 			}
 			return false;
@@ -132,11 +132,11 @@ namespace Popup.Inventory
 
 		public override void Insert(Item item)
 		{
-			if (!wareHouse.ContainsKey(item.uid))
-				wareHouse.Add(item.uid, item);
+			if (!wareHouse.ContainsKey(item.Uid))
+				wareHouse.Add(item.Uid, item);
 		}
 
-		public override void Remove(Item item) => wareHouse.Remove(item.uid);
+		public override void Remove(Item item) => wareHouse.Remove(item.Uid);
 
 		public override List<Item> UnslotedList() => (from pair in wareHouse
 													  where pair.Value.SlotId.Equals(Config.unSlot)
@@ -168,7 +168,7 @@ namespace Popup.Inventory
 			foreach (int key in keys)
 			{
 				Item item = wareHouse[key];
-				Debug.Log("UID = " + item.uid + ", name = " + item.Name + ", slotId = " + item.SlotId + ", amt = " + item.UseableCount + ", w = " + item.TWeight() + ", v = " + item.TVolume());
+				Debug.Log("UID = " + item.Uid + ", name = " + item.Name + ", slotId = " + item.SlotId + ", amt = " + item.UseableCount + ", w = " + item.TWeight() + ", v = " + item.TVolume());
 			}
 		}
 	}

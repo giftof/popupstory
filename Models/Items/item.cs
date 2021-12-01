@@ -14,7 +14,9 @@ namespace Popup.Items
 	public abstract partial class Item : IItem
 	{
 		[JsonProperty]
-		public int uid { get; protected set; }
+		public int Uid { get; protected set; }
+		[JsonProperty]
+		public int NameId { get; protected set; }
 		[JsonProperty]
 		public int SlotId { get; set; }
 		[JsonProperty]
@@ -27,6 +29,8 @@ namespace Popup.Items
 		public float Volume { get; protected set; }
 		[JsonProperty]
 		public ItemCat Category { get; protected set; }
+		[JsonProperty]
+		public int Icon { get; set; }
 
 		public bool HaveAttribute(ItemCat attribute) => 0 < (Category & attribute);
 		public bool IsAttribute(ItemCat attribute) => Category.Equals(attribute);
@@ -105,7 +109,7 @@ namespace Popup.Items
 		public override object DeepCopy(int? uid, int? durability)
 		{
 			EquipItem equipItem = (EquipItem)MemberwiseClone();
-			equipItem.uid = uid ?? 0;
+			equipItem.Uid = uid ?? 0;
 			equipItem.Durability = durability ?? 0;
 			return equipItem;
 		}
@@ -122,7 +126,7 @@ namespace Popup.Items
 		public override object DeepCopy(int? uid, int? amount)
 		{
 			ToolItem toolItem = (ToolItem)MemberwiseClone();
-			toolItem.uid = uid ?? 0;
+			toolItem.Uid = uid ?? 0;
 			toolItem.Amount = amount ?? 0;
 			return toolItem;
 		}
@@ -132,6 +136,7 @@ namespace Popup.Items
 
 	public abstract partial class Item
     {
-		public void DEBUG_TEST_SET_UID(int uid) => this.uid = uid;
+		public void DEBUG_TEST_SET_UID(int uid) => Uid = uid;
+		public void DEBUG_TEST_SET_NAMEID(int nameId) => NameId = nameId;
 	}
 }
