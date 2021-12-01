@@ -17,7 +17,7 @@ namespace Popup.Charactors
 {
     using Cfg = Configs.Config;
     //using Ivn = Inventory.Inventory;
-    using ServerJob = ServerJob.ServerJob;
+    //using ServerJob = ServerJob.ServerJob;
     public class Charactor : ICharactor
     {
         [JsonProperty]

@@ -190,6 +190,13 @@ namespace Popup.Library
 
     public static class Extensions
     {
+        public static void PositionOnCanvas(this GameObject myObj, GUIPosition anchor)
+        {
+            Transform parent = myObj.transform.parent;
+            myObj.transform.localPosition = Manager.Instance.guiGuide.Position(myObj, anchor);
+            myObj.transform.SetParent(parent);
+        }
+
         public static void PositionOnParent(this GameObject myObj, GUIPosition anchor, GameObject parent = null)
         {
             parent = parent ?? Manager.Instance.guiGuide.canvas.gameObject;

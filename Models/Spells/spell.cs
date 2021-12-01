@@ -7,7 +7,6 @@ using Popup.Framework;
 using Popup.Charactors;
 using Newtonsoft.Json;
 
-using Popup.ServerJob;
 
 
 public class Spell : IPopupObject, ISpell
@@ -34,12 +33,12 @@ public class Spell : IPopupObject, ISpell
 		if (string.IsNullOrEmpty(attribute))
 		{
 			Name 		= "null";
-			uid 		= ServerJob.RequestNewUID;
+			uid 		= Manager.Instance.network.RequestNewUID();
 			Effective 	= SpellEffective.none;
 			Element 	= Elements.none;
 		}
 		Name 		= "null";
-		uid 		= ServerJob.RequestNewUID;
+		uid 		= Manager.Instance.network.RequestNewUID();
 		Effective 	= SpellEffective.none;
 		Element 	= Elements.none;
 

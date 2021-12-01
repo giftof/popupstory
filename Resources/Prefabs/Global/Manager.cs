@@ -13,6 +13,10 @@ public class Manager : MonoBehaviour
     public EventSystem eventSystem;
     public SceneController sceneController;
     public GUIGuide guiGuide;
+    public Network network;
+    public Server server;
+
+
 
     public static Manager Instance = null;
 

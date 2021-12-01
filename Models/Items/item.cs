@@ -1,6 +1,7 @@
 ﻿using Popup.Library;
 using Popup.Defines;
 using Popup.Framework;
+using Popup.Configs;
 using System;
 using UnityEngine;
 using Newtonsoft.Json;
@@ -9,7 +10,7 @@ using Newtonsoft.Json;
 
 namespace Popup.Items
 {
-	using Cfg = Configs.Config;
+	//using Cfg = Configs.Config;
 	public abstract partial class Item : IItem
 	{
 		[JsonProperty]
@@ -47,25 +48,26 @@ namespace Popup.Items
 	{
 		[JsonProperty]
 		public int Amount { get; protected set; }
-        private int MaxAmount { get; set; } = int.MaxValue;
+        //private int MaxAmount { get; set; } = int.MaxValue;
+		private int MaxAmount { get; set; } = Config.maxStack;
 
 		private	void Decrease(int count) => Amount -= count;
 		private	void Increase(int count) => Amount += count;
 		private int Space => MaxAmount - Amount;
 
-		private void SetMaxAmount()
-		{
-			if (MaxAmount.Equals(int.MaxValue))
-			{
-				MaxAmount = Math.Min(
-					Libs.Round(Cfg.slotWeightCapacity / Weight),
-					Libs.Round(Cfg.slotVolumeCapacity / Volume));
-			}
-		}
+		//private void SetMaxAmount()
+		//{
+		//	if (MaxAmount.Equals(int.MaxValue))
+		//	{
+		//		MaxAmount = Math.Min(
+		//			Libs.Round(Cfg.slotWeightCapacity / Weight),
+		//			Libs.Round(Cfg.slotVolumeCapacity / Volume));
+		//	}
+		//}
 
 		public bool	AddStack(Item item)
 		{
-			SetMaxAmount();
+			//SetMaxAmount();
 
 			int enableStack = Math.Min(((ToolItem)item).Amount, Space);
 			((ToolItem)item).Decrease(enableStack);

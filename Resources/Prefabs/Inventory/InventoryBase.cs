@@ -11,22 +11,35 @@ using Popup.Defines;
 public abstract partial class InventoryBase : MonoBehaviour
 {
     protected Inventory inventory = null;
-    [SerializeField] protected GameObject frame;
+    [SerializeField]
+    protected GameObject frame;
+    [SerializeField]
+    protected int size;
     public CustomButtonPrefab takeAll;
     public CustomButtonPrefab close;
 
 
 
-    public void Initialize(int size) => inventory = inventory ?? new WareHouse(size);
+    void Awake() => inventory = inventory ?? new WareHouse(size);
+
 
     public void Insert(params Item[] array)
     {
-        inventory = inventory ?? new WareHouse(array.Length);
         AddNew(array);
+
+        if (isActiveAndEnabled)
+        {
+            CreateNegativeSlotItemIcon();
+        }
+    }
+
+    private void OnEnable()
+    {
+        Debug.Log("On ENABLE");
         CreateNegativeSlotItemIcon();
     }
 
-
+    protected void MakeInventory() => inventory = inventory ?? new WareHouse(size);
 
     protected void ButtonAction()
     {

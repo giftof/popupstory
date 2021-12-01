@@ -7,8 +7,9 @@ using Popup.Configs;
 using Popup.Library;
 using Popup.Items;
 
-using Popup.ServerJob;
 using Newtonsoft.Json;
+
+
 
 public class Lobby : MonoBehaviour
 {
@@ -18,6 +19,8 @@ public class Lobby : MonoBehaviour
     [SerializeField] CustomButtonPrefab otherInventoryBtn;
     [SerializeField] UserPouchPrefab userPouch;
     [SerializeField] OtherPouchPrefab otherPouch;
+    [SerializeField] UserSquadPrefab userSquad;
+    [SerializeField] OtherSquadPrefab otherSquad;
 
 
 
@@ -27,8 +30,9 @@ public class Lobby : MonoBehaviour
 
         Debug.Log("enter Lobby");
         DEBUG_BTN();
-        DEBUG_POUCH();
+        //DEBUG_POUCH();
         DEBUG_ITEM();
+        DEBUG_SQUAD();
     }
 
 
@@ -61,33 +65,41 @@ public class Lobby : MonoBehaviour
         });
     }
 
-    void DEBUG_POUCH()
+    void DEBUG_SQUAD()
     {
-        userInventoryBtn.AddClickAction(() => {
-            ToggleAlliePouch();
-            userPouch.gameObject.PositionOnParent(GUIPosition.LeftBottom);
-        });
-        otherInventoryBtn.AddClickAction(() => {
-            ToggleEnemyPouch();
-            otherPouch.gameObject.PositionOnParent(GUIPosition.RightBottom);
-        });
-
-        otherPouch.takeAll.AddClickAction(() => {
-            userPouch.Insert(otherPouch.PopAll());
-        });
+        userSquad.InventoryPosition(GUIPosition.LeftBottom);
+        otherSquad.InventoryPosition(GUIPosition.RightBottom);
+        otherSquad.TakeAllTarget = userSquad.Inventory;
     }
+
+    //void DEBUG_POUCH()
+    //{
+    //    userInventoryBtn.AddClickAction(() => {
+    //        ToggleAlliePouch();
+    //        userPouch.gameObject.PositionOnParent(GUIPosition.LeftBottom);
+    //    });
+    //    otherInventoryBtn.AddClickAction(() => {
+    //        ToggleEnemyPouch();
+    //        otherPouch.gameObject.PositionOnParent(GUIPosition.RightBottom);
+    //    });
+
+    //    otherPouch.takeAll.AddClickAction(() => {
+    //        userPouch.Insert(otherPouch.PopAll());
+    //    });
+    //}
 
     void DEBUG_ITEM()
     {
-        string TEST_JSON_ITEM1 = $"{{\"uid\":{ServerJob.RequestNewUID},\"name\":\"glass sword\",\"category\":{(int)ItemCat.equip},\"weight\":1.2,\"volume\":3.4,\"amount\":1,\"grade\":4,\"durability\":50,\"magicIdArray\":[1,2,3,4,5]}}";
-        string TEST_JSON_ITEM2 = $"{{\"uid\":{ServerJob.RequestNewUID},\"name\":\"stack1\",\"category\":{(int)ItemCat.tool},\"amount\":12,\"weight\":0.1,\"volume\":0.2}}";
-        string TEST_JSON_ITEM3 = $"{{\"uid\":{ServerJob.RequestNewUID},\"name\":\"stack2\",\"category\":{(int)ItemCat.tool},\"amount\":5,\"weight\":0.5,\"volume\":0.1}}";
+        string TEST_JSON_ITEM1 = $"{{\"uid\":{Manager.Instance.network.RequestNewUID()},\"name\":\"glass sword\",\"category\":{(int)ItemCat.equip},\"weight\":1.2,\"volume\":3.4,\"amount\":1,\"grade\":4,\"durability\":50,\"magicIdArray\":[1,2,3,4,5]}}";
+        string TEST_JSON_ITEM2 = $"{{\"uid\":{Manager.Instance.network.RequestNewUID()},\"name\":\"stack1\",\"category\":{(int)ItemCat.tool},\"amount\":12,\"weight\":0.1,\"volume\":0.2}}";
+        string TEST_JSON_ITEM3 = $"{{\"uid\":{Manager.Instance.network.RequestNewUID()},\"name\":\"stack2\",\"category\":{(int)ItemCat.tool},\"amount\":5,\"weight\":0.5,\"volume\":0.1}}";
 
         Item item1 = Libs.FromJson<EquipItem>(TEST_JSON_ITEM1);
         Item item2 = Libs.FromJson<ToolItem>(TEST_JSON_ITEM2);
         Item item3 = Libs.FromJson<ToolItem>(TEST_JSON_ITEM3);
 
-        otherPouch.Insert(item1, item2, item3);
+        otherSquad.Insert(item1, item2, item3);
+        //otherPouch.Insert(item1, item2, item3);
         /*enemyPouch.Add(item1, item2, item3);*/
     }
 }

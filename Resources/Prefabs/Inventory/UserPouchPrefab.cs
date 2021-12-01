@@ -12,8 +12,9 @@ public class UserPouchPrefab : InventoryBase
 {
     void Start()
     {
-        Initialize(Config.pouchSize);
+        MakeInventory();
         MakeSlot();
         ButtonAction();
+        gameObject.SetActive(false);
     }
 }

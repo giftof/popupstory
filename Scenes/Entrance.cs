@@ -12,7 +12,7 @@ using Popup.Library;
 using Popup.Items;
 using Popup.Squad;
 using Popup.Charactors;
-using Popup.ServerJob;
+
 
 
 public class Entrance : MonoBehaviour
@@ -63,17 +63,17 @@ public class Entrance : MonoBehaviour
 
     private void TEST_SET()
     {
-        Squad squad = new Squad(ServerJob.RequestNewUID);
+        Squad squad = new Squad(Manager.Instance.network.RequestNewUID());
         Charactor c1 = new Charactor();
-        c1.uid = ServerJob.RequestNewUID;
+        c1.uid = Manager.Instance.network.RequestNewUID();
         c1.Name = "c1";
         c1.Size = 1;
         Charactor c2 = new Charactor();
-        c2.uid = ServerJob.RequestNewUID;
+        c2.uid = Manager.Instance.network.RequestNewUID();
         c2.Name = "c2";
         c2.Size = 1;
         Charactor c3 = new Charactor();
-        c3.uid = ServerJob.RequestNewUID;
+        c3.uid = Manager.Instance.network.RequestNewUID();
         c3.Name = "c3";
         c3.Size = 2;
         squad.AddLast(c1);

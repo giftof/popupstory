@@ -16,7 +16,6 @@ using Popup.Defines;
 
 namespace Popup.Inventory
 {
-	using ServerJob = ServerJob.ServerJob;
 	public abstract partial class Inventory : IInventory
     {
 		protected int maxSize;
@@ -79,7 +78,7 @@ namespace Popup.Inventory
 
 			while (item.IsExist && HaveSpace())
 			{
-				ToolItem newItem = (ToolItem)item.DeepCopy(ServerJob.RequestNewUID, null);
+				ToolItem newItem = (ToolItem)item.DeepCopy(Manager.Instance.network.RequestNewUID(), null);
 				newItem.AddStack(item);
 				wareHouse.Add(newItem.uid, newItem);
 			}

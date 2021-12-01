@@ -14,11 +14,11 @@ namespace Popup.Squad
 {
     using Charactor = Charactors.Charactor;
     using Inventory = Inventory.Inventory;
-    using Config   = Configs.Config;
+    using Config    = Configs.Config;
     using Item      = Items.Item;
-    using ServerJob = ServerJob.ServerJob;
+    // using ServerJob = ServerJob.ServerJob;
 
-    public class Squad: IInventory, IPopupObject
+    public partial class Squad: IInventory, IPopupObject
     {
 		[JsonProperty]
         public string Name { get; protected set; }
@@ -63,7 +63,7 @@ namespace Popup.Squad
         public void SetName(string name) => Name = name;
         public bool Use(Item item) => Inventory.Use(item);
         public bool Add(Item item) => Inventory.Add(item);
-        
+
         public bool AddLast(Charactor charactor)
         {
             if (charactor == null || Config.squadSize < OccupiedSize + charactor.Size) return false;
@@ -142,15 +142,12 @@ namespace Popup.Squad
 
             return step;
         }
+    }
 
 
 
-
-
-
-
-
-
+    public partial class Squad
+    {
         public void DEBUG_TEST()
         {
             var list = from pair in Charactors
@@ -163,6 +160,5 @@ namespace Popup.Squad
                 Debug.Log($"name = {c.Name}, uid = {c.uid}, slotId = {c.SlotId}");
             }
         }
-
     }
 }
