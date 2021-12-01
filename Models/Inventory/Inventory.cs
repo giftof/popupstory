@@ -78,7 +78,7 @@ namespace Popup.Inventory
 
 			while (item.IsExist && HaveSpace())
 			{
-				ToolItem newItem = (ToolItem)item.DeepCopy(Manager.Instance.network.RequestNewUID(), null);
+				ToolItem newItem = (ToolItem)item.DeepCopy(Manager.Instance.network.REQ_NEW_ID(), null);
 				newItem.AddStack(item);
 				wareHouse.Add(newItem.uid, newItem);
 			}

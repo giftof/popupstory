@@ -33,12 +33,12 @@ public class Spell : IPopupObject, ISpell
 		if (string.IsNullOrEmpty(attribute))
 		{
 			Name 		= "null";
-			uid 		= Manager.Instance.network.RequestNewUID();
+			uid 		= Manager.Instance.network.REQ_NEW_ID();
 			Effective 	= SpellEffective.none;
 			Element 	= Elements.none;
 		}
 		Name 		= "null";
-		uid 		= Manager.Instance.network.RequestNewUID();
+		uid 		= Manager.Instance.network.REQ_NEW_ID();
 		Effective 	= SpellEffective.none;
 		Element 	= Elements.none;
 

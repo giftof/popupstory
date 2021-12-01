@@ -13,6 +13,7 @@ namespace Popup.Delegate
 
     public delegate void ButtonAction();
     public delegate void ItemAction(Item item);
+    public delegate T[] NET_REQ<T>(params int[] id) where T : Item;
     //public class Delegate : MonoBehaviour
     //{
     //    // Start is called before the first frame update

@@ -63,17 +63,17 @@ public class Entrance : MonoBehaviour
 
     private void TEST_SET()
     {
-        Squad squad = new Squad(Manager.Instance.network.RequestNewUID());
+        Squad squad = new Squad(Manager.Instance.network.REQ_NEW_ID());
         Charactor c1 = new Charactor();
-        c1.uid = Manager.Instance.network.RequestNewUID();
+        c1.uid = Manager.Instance.network.REQ_NEW_ID();
         c1.Name = "c1";
         c1.Size = 1;
         Charactor c2 = new Charactor();
-        c2.uid = Manager.Instance.network.RequestNewUID();
+        c2.uid = Manager.Instance.network.REQ_NEW_ID();
         c2.Name = "c2";
         c2.Size = 1;
         Charactor c3 = new Charactor();
-        c3.uid = Manager.Instance.network.RequestNewUID();
+        c3.uid = Manager.Instance.network.REQ_NEW_ID();
         c3.Name = "c3";
         c3.Size = 2;
         squad.AddLast(c1);

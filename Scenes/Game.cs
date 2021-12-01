@@ -141,14 +141,14 @@ public class Game : MonoBehaviour
         // Inventory inventory1 = new Inventory(null, Configs.squadInventorySize);
         Inventory inventory1 = new WareHouse(Config.squadInventorySize);
 
-        string itemDef1 = $"{{\"uid\":{Manager.Instance.network.RequestNewUID()},\"name\":\"stack1\",\"category\":{(int)ItemCat.tool},\"amount\":12,\"weight\":0.1,\"volume\":0.2}}";
+        string itemDef1 = $"{{\"uid\":{Manager.Instance.network.REQ_NEW_ID()},\"name\":\"stack1\",\"category\":{(int)ItemCat.tool},\"amount\":12,\"weight\":0.1,\"volume\":0.2}}";
         Item item1 = JsonConvert.DeserializeObject<ToolItem>(itemDef1);
         Debug.Log(item1);
         Debug.Log(item1.uid);
         Debug.Log(item1.Name);
 
 
-        string itemDef2 = $"{{\"uid\":{Manager.Instance.network.RequestNewUID()},\"name\":\"stack2\",\"category\":{(int)ItemCat.tool},\"amount\":5,\"weight\":0.5,\"volume\":0.1}}";
+        string itemDef2 = $"{{\"uid\":{Manager.Instance.network.REQ_NEW_ID()},\"name\":\"stack2\",\"category\":{(int)ItemCat.tool},\"amount\":5,\"weight\":0.5,\"volume\":0.1}}";
         Item item2 = JsonConvert.DeserializeObject<ToolItem>(itemDef2);
 
         // Item item3 = new ToolItem(ServerJob.RequestNewUID);
@@ -186,7 +186,7 @@ public class Game : MonoBehaviour
         // item7.SetWeight(1f);
         // item7.SetVolume(5f);
 
-        string itemDef8 = $"{{\"uid\":{Manager.Instance.network.RequestNewUID()},\"name\":\"boots1\",\"category\":{(int)ItemCat.equip},\"durability\":50,\"weight\":0.2,\"volume\":1}}";
+        string itemDef8 = $"{{\"uid\":{Manager.Instance.network.REQ_NEW_ID()},\"name\":\"boots1\",\"category\":{(int)ItemCat.equip},\"durability\":50,\"weight\":0.2,\"volume\":1}}";
         Item item8 = JsonConvert.DeserializeObject<EquipItem>(itemDef8);
 
         // Item item9 = new EquipItem(ServerJob.RequestNewUID);

@@ -29,6 +29,7 @@ namespace Popup.Items
 		public ItemCat Category { get; protected set; }
 
 		public bool HaveAttribute(ItemCat attribute) => 0 < (Category & attribute);
+		public bool IsAttribute(ItemCat attribute) => Category.Equals(attribute);
 	}
 
 	public partial class EquipItem : Item
@@ -125,5 +126,12 @@ namespace Popup.Items
 			toolItem.Amount = amount ?? 0;
 			return toolItem;
 		}
+	}
+
+
+
+	public abstract partial class Item
+    {
+		public void DEBUG_TEST_SET_UID(int uid) => this.uid = uid;
 	}
 }

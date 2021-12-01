@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 
 
 
-public class Server : MonoBehaviour
+public partial class Server : MonoBehaviour
 {
     int UID = 0;
     string objectsPath = "Assets/Resources/Prefabs/Global/FAKE_SERVER/objects.json";
@@ -27,14 +27,7 @@ public class Server : MonoBehaviour
     {
         string source = ReadFile(objectsPath);
         item = JsonConvert.DeserializeObject<Dictionary<int, object>>(source);
-
-        foreach (var pair in item)
-        {
-            Debug.Log($"key = {pair.Key}, value = {pair.Value}");
-        }
     }
-
-
 
     string ReadFile(string path)
     {
@@ -50,6 +43,22 @@ public class Server : MonoBehaviour
 
         return stringBuilder.ToString();
     }
+}
 
+public partial class Server
+{
     public int RequestNewUID => UID++;
+
+    public string[] RequestNewItem(params int[] itemIdArray)
+    {
+        List<string> list = new List<string>();
+
+        foreach(int itemId in itemIdArray)
+        {
+            if (item.ContainsKey(itemId))
+                list.Add(item[itemId].ToString());
+        }
+
+        return list.ToArray();
+    }
 }
