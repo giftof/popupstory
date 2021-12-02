@@ -1,0 +1,44 @@
+{
+    "0": {
+        "nameId": 0,
+        "name": "glass sword",
+        "category": 1,
+        "weight": 1.2,
+        "volume": 3.4,
+        "amount": 1,
+        "grade": 4,
+        "durability": 50,
+        "magicIdArray": [ 1, 2, 3, 4, 5 ],
+        "icon": 0
+    },
+    "1": {
+        "nameId": 1,
+        "name": "leather armor",
+        "category": 1,
+        "weight": 0.4,
+        "volume": 0.8,
+        "amount": 1,
+        "grade": 4,
+        "durability": 50,
+        "magicIdArray": [ 100 ],
+        "icon": 1
+    },
+    "1000": {
+        "nameId": 1000,
+        "name": "torch",
+        "category": 2,
+        "amount": 5,
+        "weight": 0.1,
+        "volume": 0.2,
+        "icon": 1000
+    },
+    "1001": {
+        "nameId": 1001,
+        "name": "shovel",
+        "category": 2,
+        "amount": 5,
+        "weight": 0.5,
+        "volume": 0.1,
+        "icon": 1001
+    }
+}

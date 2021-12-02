@@ -3,4 +3,5 @@ ExternalDependencyManager/
 Firebase/
 GooglePlayGames/
 Plugins/
-StreamingAssets/
+StreamingAssets/google-services-desktop.json
+
