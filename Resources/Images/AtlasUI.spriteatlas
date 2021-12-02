@@ -42,6 +42,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: b95cb3a886fd4a34d8bf36868a4a7ba5, type: 3}
   - {fileID: 21300000, guid: eb8761591371887439187b8c2cc7b9ba, type: 3}
   - {fileID: 21300000, guid: 915bbc2a6a67cae48ad1c1c831bf4d3c, type: 3}
+  - {fileID: 21300000, guid: 6e8f3b1e77b02489e925f593bf36472b, type: 3}
   - {fileID: 21300000, guid: a970e74f1ea32b4449b562f9c8bd973c, type: 3}
   m_PackedSpriteNamesToIndex:
   - use_inventory_active
@@ -49,6 +50,7 @@ SpriteAtlas:
   - event_scroll_loot_left_edge
   - event_scroll_loot_right_edge
   - event_scroll_loot_overflow
+  - white square
   - event_scroll_loot_mid_section
   m_RenderDataMap: {}
   m_Tag: AtlasUI

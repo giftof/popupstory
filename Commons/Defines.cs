@@ -14,21 +14,21 @@ namespace Popup.Defines
         RightTop,
     }
 
-    public enum Anchor
-    {
-        RightTop,
-        RightCenter,
-        RightBottom,
-        LeftTop,
-        LeftCenter,
-        LeftBottom,
-        TopLeft,
-        TopCenter,
-        TopRight,
-        BottomLeft,
-        BottomCenter,
-        BottomRight,
-    }
+    //public enum Anchor
+    //{
+    //    RightTop,
+    //    RightCenter,
+    //    RightBottom,
+    //    LeftTop,
+    //    LeftCenter,
+    //    LeftBottom,
+    //    TopLeft,
+    //    TopCenter,
+    //    TopRight,
+    //    BottomLeft,
+    //    BottomCenter,
+    //    BottomRight,
+    //}
 
     public enum Prefab
     {
@@ -71,20 +71,20 @@ namespace Popup.Defines
         tool        = 0x0002,
     }
 
-    public enum EquipSlot
-    {
-        none,
-        head,
-        chest,
-        leggings,
-        boots,
-        gloves,
-        amulet,
-        leftRing,
-        rightRing,
-        leftHand,
-        rightHand,
-    }
+    //public enum EquipSlot
+    //{
+    //    none,
+    //    head,
+    //    chest,
+    //    leggings,
+    //    boots,
+    //    gloves,
+    //    amulet,
+    //    leftRing,
+    //    rightRing,
+    //    leftHand,
+    //    rightHand,
+    //}
 
     public enum Grade
     {

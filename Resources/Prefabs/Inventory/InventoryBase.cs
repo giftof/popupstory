@@ -72,6 +72,8 @@ public abstract partial class InventoryBase : MonoBehaviour
 
 
 
+
+
 public abstract partial class InventoryBase
 {
     private void AddNew(params Item[] array)
