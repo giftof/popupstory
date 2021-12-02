@@ -18,11 +18,11 @@ namespace Popup.Inventory
 {
 	public abstract partial class Inventory : IInventory
     {
-		protected int maxSize;
+		public uint MaxSize { get; protected set; }
 
-		public Inventory(int maxSize)
+		public Inventory(uint maxSize)
         {
-			this.maxSize = maxSize;
+			MaxSize = maxSize;
 			InitializeInventory(maxSize);
         }
 
@@ -39,7 +39,7 @@ namespace Popup.Inventory
 	{
 		Dictionary<int, Item> wareHouse;
 
-		public WareHouse(int maxSize) : base(maxSize) { }
+		public WareHouse(uint maxSize) : base(maxSize) { }
     }
 
 
@@ -48,7 +48,7 @@ namespace Popup.Inventory
 
 	public abstract partial class Inventory
 	{
-		protected abstract void InitializeInventory(int maxSize);
+		protected abstract void InitializeInventory(uint maxSize);
 		protected abstract bool AddStackable(Item item);
 		protected abstract bool AddNew(Item item);
 		protected abstract bool HaveSpace();
@@ -63,7 +63,7 @@ namespace Popup.Inventory
 
 	public partial class WareHouse
     {
-		protected override void InitializeInventory(int _) => wareHouse = new Dictionary<int, Item>();
+		protected override void InitializeInventory(uint _) => wareHouse = new Dictionary<int, Item>();
 
 		protected override bool AddStackable(Item item)
 		{
@@ -91,7 +91,7 @@ namespace Popup.Inventory
 		{
 			Guard.MustNotInclude(item.Uid, wareHouse, "[AddNew - in WareHouse]");
 
-			if (wareHouse.Count < maxSize)
+			if (wareHouse.Count < MaxSize)
 			{
 				wareHouse.Add(item.Uid, item);
 
@@ -103,7 +103,7 @@ namespace Popup.Inventory
 			return false;
 		}
 
-		protected override bool HaveSpace() => wareHouse.Count < maxSize;
+		protected override bool HaveSpace() => wareHouse.Count < MaxSize;
 
 		public override Dictionary<int, Item> Source => wareHouse;
 

@@ -35,23 +35,17 @@ public partial class Server : MonoBehaviour
     {
         string path = Path.Combine(Application.streamingAssetsPath, fileName);
 
-        Debug.Log($"path = {path}");
         if (Application.platform.Equals(RuntimePlatform.Android))
         {
-            Debug.Log($"set webREQ");
             UnityWebRequest reader = UnityWebRequest.Get(path);
-            //UnityWebRequest reader = new UnityWebRequest(path);
 
-            Debug.Log($"send req");
             reader.SendWebRequest();
+            while (!reader.isDone) ;
+            //{
+            //    Debug.Log("DOWNLOADING...");
+            //}
 
-            Debug.Log($"wait until done");
-            while (!reader.isDone)
-            {
-                Debug.Log("DOWNLOADING...");
-            }
-
-            Debug.Log($"reader error = {reader?.error}, reader result = {reader?.result}, reader = {reader?.downloadHandler}, reader = {reader?.downloadHandler?.text}");
+            //Debug.Log($"reader error = {reader?.error}, reader result = {reader?.result}, reader = {reader?.downloadHandler}, reader = {reader?.downloadHandler?.text}");
             return string.IsNullOrEmpty(reader.error) ? reader.downloadHandler.text : null;
         }
         else

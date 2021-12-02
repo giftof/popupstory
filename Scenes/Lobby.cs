@@ -16,10 +16,10 @@ public class Lobby : MonoBehaviour
 {
     [SerializeField] Button toEntrance;
     [SerializeField] Button toGame;
-    [SerializeField] CustomButtonPrefab userInventoryBtn;
-    [SerializeField] CustomButtonPrefab otherInventoryBtn;
-    [SerializeField] UserPouchPrefab userPouch;
-    [SerializeField] OtherPouchPrefab otherPouch;
+    //[SerializeField] CustomButtonPrefab userInventoryBtn;
+    //[SerializeField] CustomButtonPrefab otherInventoryBtn;
+    //[SerializeField] UserPouchPrefab userPouch;
+    //[SerializeField] OtherPouchPrefab otherPouch;
     [SerializeField] UserSquadPrefab userSquad;
     [SerializeField] OtherSquadPrefab otherSquad;
 
@@ -43,14 +43,14 @@ public class Lobby : MonoBehaviour
         _ = FindObjectOfType(typeof(Manager)) ?? Instantiate(Resources.Load<Manager>(Path.manager));
         Manager.Instance.Initialize();
 
-        userPouch.gameObject.SetActive(false);
-        otherPouch.gameObject.SetActive(false);
+        //userPouch.gameObject.SetActive(false);
+        //otherPouch.gameObject.SetActive(false);
     }
 
 
 
-    void ToggleAlliePouch() => userPouch.gameObject.SetActive(!userPouch.gameObject.activeSelf);
-    void ToggleEnemyPouch() => otherPouch.gameObject.SetActive(!otherPouch.gameObject.activeSelf);
+    //void ToggleAlliePouch() => userPouch.gameObject.SetActive(!userPouch.gameObject.activeSelf);
+    //void ToggleEnemyPouch() => otherPouch.gameObject.SetActive(!otherPouch.gameObject.activeSelf);
 
     void DEBUG_BTN()
     {

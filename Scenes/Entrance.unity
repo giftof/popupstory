@@ -222,6 +222,7 @@ MonoBehaviour:
   toLobby: {fileID: 1243407992}
   toGame: {fileID: 140176322}
   canvas: {fileID: 703162709}
+  progressBar: {fileID: 0}
 --- !u!1 &140176320
 GameObject:
   m_ObjectHideFlags: 0

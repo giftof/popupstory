@@ -39,7 +39,7 @@ namespace Popup.Squad
         [JsonProperty]
         public GameObject Owner { get; set; }
 
-        public Squad(int uid, int inventorySize = Config.squadInventorySize)
+        public Squad(int uid, uint inventorySize = Config.squadInventorySize)
         {
             this.Uid = uid;
             OccupiedSize = 0;

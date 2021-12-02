@@ -10,6 +10,12 @@ using Popup.Defines;
 
 public class OtherPouchPrefab : InventoryBase
 {
+    void Awake()
+    {
+        size = Config.pouchSize;
+        inventory = inventory ?? new WareHouse(size);
+    }
+
     void Start()
     {
         MakeInventory();

@@ -14,13 +14,13 @@ public abstract partial class InventoryBase : MonoBehaviour
     [SerializeField]
     protected GameObject frame;
     [SerializeField]
-    protected int size;
+    protected uint size;
     public CustomButtonPrefab takeAll;
     public CustomButtonPrefab close;
 
 
 
-    void Awake() => inventory = inventory ?? new WareHouse(size);
+    //void Awake() => inventory = inventory ?? new WareHouse(size);
 
 
     public void Insert(params Item[] array)
@@ -52,7 +52,8 @@ public abstract partial class InventoryBase : MonoBehaviour
     {
         int slotId = 0;
 
-        foreach (GameObject slot in ObjectPool.Instance.Request(Popup.Defines.Prefab.ItemSlot, Config.pouchSize))
+        foreach (GameObject slot in ObjectPool.Instance.Request(Prefab.ItemSlot, size))
+        //foreach (GameObject slot in ObjectPool.Instance.Request(Prefab.ItemSlot, Config.pouchSize))
         {
             slot.SetActive(true);
             slot.transform.SetParent(frame.transform);
