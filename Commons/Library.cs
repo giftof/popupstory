@@ -40,7 +40,7 @@ namespace Popup.Library
         // public static string	ToJson<T>       (T       source                )    => JsonUtility.ToJson(source);
         public static int Round(float value) => (int)Math.Round(value);
         public static bool IsEnablePair(bool _lock, bool _key) => !_lock || (_lock && _key);
-
+        public static float TimeDuration(float source) => source / Setting.multiple;
 
         //public static int[] TextToIntArray(string text, int falseValue = -1)
         //{

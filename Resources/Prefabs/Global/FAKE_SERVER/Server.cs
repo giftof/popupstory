@@ -2,50 +2,123 @@ using System.IO;
 using System.Text;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Networking;
 using Newtonsoft.Json;
-
-
+using System.Runtime.CompilerServices;
+using System;
 
 public partial class Server : MonoBehaviour
 {
-    int UID = 0;
-    string objectsPath = "Assets/Resources/Prefabs/Global/FAKE_SERVER/objects.json";
+    static int UID = 0;
 
     Dictionary<int, object> item  = new Dictionary<int, object>();
     Dictionary<int, object> buff  = new Dictionary<int, object>();
     Dictionary<int, object> spell = new Dictionary<int, object>();
 
+    //NullReferenceException: Object reference not set to an instance of an object.
 
 
-    void Awake()
+    void Start()
     {
-        MakeItemDictionary();
+        MakeItemDictionary(ReadFile("objects.json"));
     }
 
-    void MakeItemDictionary()
+    void MakeItemDictionary(string source)
     {
-        string source = ReadFile(objectsPath);
+        Debug.Log($"source = {source}");
         item = JsonConvert.DeserializeObject<Dictionary<int, object>>(source);
     }
 
-    string ReadFile(string path)
+    string ReadFile(string fileName)
     {
-        StreamReader streamReader = new StreamReader(path);
-        StringBuilder stringBuilder = new StringBuilder(string.Empty);
+        string path = Path.Combine(Application.streamingAssetsPath, fileName);
 
-        while (!streamReader.EndOfStream)
-            stringBuilder.Append(streamReader.ReadLine());
+        Debug.Log($"path = {path}");
+        if (Application.platform.Equals(RuntimePlatform.Android))
+        {
+            Debug.Log($"set webREQ");
+            UnityWebRequest reader = UnityWebRequest.Get(path);
+            //UnityWebRequest reader = new UnityWebRequest(path);
 
-        streamReader.Close();
+            Debug.Log($"send req");
+            reader.SendWebRequest();
 
-        Debug.Log(stringBuilder);
+            Debug.Log($"wait until done");
+            while (!reader.isDone)
+            {
+                Debug.Log("DOWNLOADING...");
+            }
 
-        return stringBuilder.ToString();
+            Debug.Log($"reader error = {reader?.error}, reader result = {reader?.result}, reader = {reader?.downloadHandler}, reader = {reader?.downloadHandler?.text}");
+            return string.IsNullOrEmpty(reader.error) ? reader.downloadHandler.text : null;
+        }
+        else
+        {
+            StreamReader streamReader = new StreamReader(path);
+            StringBuilder stringBuilder = new StringBuilder(string.Empty);
+
+            while (!streamReader.EndOfStream)
+                stringBuilder.Append(streamReader.ReadLine());
+
+            streamReader.Close();
+
+            Debug.Log(stringBuilder);
+
+            return stringBuilder.ToString();
+        }
     }
 }
 
-public partial class Server
+
+
+
+//public class UnityWebRequestAwaiter : INotifyCompletion
+//{
+//    private UnityWebRequestAsyncOperation asyncOp;
+//    private Action continuation;
+
+//    public UnityWebRequestAwaiter(UnityWebRequestAsyncOperation asyncOp)
+//    {
+//        this.asyncOp = asyncOp;
+//        asyncOp.completed += OnRequestCompleted;
+//    }
+
+//    public bool IsCompleted { get { return asyncOp.isDone; } }
+
+//    public void GetResult() { }
+
+//    public void OnCompleted(Action continuation)
+//    {
+//        this.continuation = continuation;
+//    }
+
+//    private void OnRequestCompleted(AsyncOperation obj)
+//    {
+//        continuation();
+//    }
+//}
+
+//public static class ExtensionMethods
+//{
+//    public static UnityWebRequestAwaiter GetAwaiter(this UnityWebRequestAsyncOperation asyncOp)
+//    {
+//        return new UnityWebRequestAwaiter(asyncOp);
+//    }
+//}
+
+
+
+
+
+
+
+
+
+
+
+public partial class Server // TEST
 {
     public int RequestNewUID => UID++;
 

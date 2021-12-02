@@ -24,6 +24,8 @@ public class Entrance : MonoBehaviour
     private GameObject gpgs = null;
 
 
+    public ProgressBar progressBar;
+
 
     void Start()
     {
@@ -31,6 +33,7 @@ public class Entrance : MonoBehaviour
         
         TEST_BTN();
         TEST_SET();
+        TEST_PROGBAR();
     }
 
 
@@ -43,6 +46,10 @@ public class Entrance : MonoBehaviour
 
 
 
+    private void TEST_PROGBAR()
+    {
+        progressBar.BeginSize = new Vector2(500, 100);
+    }
 
 
     private void TEST_BTN()

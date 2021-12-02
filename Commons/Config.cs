@@ -23,6 +23,11 @@ namespace Popup.Configs
         public const int    unSlot              = -1;
     }
 
+    public static class Setting
+    {
+        public static float multiple            = 1f;
+    }
+
     public static class Path
     {
         public const string manager         = "Prefabs/Global/Manager";

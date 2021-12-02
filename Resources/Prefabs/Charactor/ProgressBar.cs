@@ -2,12 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Popup.Configs;
+using Popup.Library;
+using DG.Tweening;
 
 
 
 
 
-public class ProgressBar : MonoBehaviour
+public partial class ProgressBar : MonoBehaviour
 {
     [SerializeField]
     Image bottom;
@@ -24,39 +27,41 @@ public class ProgressBar : MonoBehaviour
 
 
 
-    public Vector2 Size
+    public Vector2 BeginSize
     {
         get { return bottomRect.sizeDelta; }
-        set {
+        set
+        {
             bottomRect.sizeDelta = value;
             coverRect.sizeDelta = value;
             barRect.sizeDelta = value;
         }
     }
 
-    public void Rate(float rate)
+    public void Rate(float rate, float duration = 1f)
     {
-        if (cover.fillAmount < rate)
-        {
+        Image animate = cover.fillAmount < rate ? cover : bar;
+        Image instant = animate == bar ? cover : bar;
 
-        }
-        else
-        {
-
-        }
+        animate.DOKill();
+        instant.DOKill();
+        
+        instant.fillAmount = rate;
+        //animate.DOFillAmount(rate, duration).SetId(GetInstanceID()).SetSpeedBased();
+        animate.DOFillAmount(rate, Libs.TimeDuration(duration)).SetId(GetInstanceID()).SetEase(Ease.OutCubic);
     }
+}
 
-    IEnumerator AnimateBar(Image animate, Image instant, float to, float duration)
+public partial class ProgressBar    // TEST
+{
+    public CustomButtonPrefab button;
+
+    private void Start()
     {
-        float beginTime = Time.time;
-        float beginRate = animate.fillAmount;
-
-        instant.fillAmount = to;
-
-        while (true)
-        {
-            yield return null;
-            animate.fillAmount = to;
-        }
+        button.AddClickAction(() => {
+            float random = Random.Range(0f, 1f);
+            Debug.Log($"current bar = {bar.fillAmount}, current cover = {cover.fillAmount}, random = {random}");
+            Rate(random);
+        });
     }
 }
