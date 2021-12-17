@@ -13,31 +13,16 @@ public partial class ObjectPool : MonoBehaviour {
     private Dictionary<Prefab, Queue<GameObject>> pool;
     [SerializeField]
     private List<GameObject> prefabList;
-    //private string[] prefabPath = {
-    //    "Prefabs/Common/CustomButtonPrefab",
-    //    "Prefabs/Common/TextMeshPrefab",
-    //    "Prefabs/Inventory/ItemSlotPrefab",
-    //    "Prefabs/Item/ItemToolPrefab",
-    //    "Prefabs/Item/ItemEquipPrefab"
-    //};
 
-    //  CustomButton,
-    //  TextMesh,
-    //  ItemSlot,
-    //  ItemTool,
-    //  ItemEquip,
-
-    //  //Spell,
-    //  //Buff,
-    //  //Charactor,
-    //  //Inventory,
-    //  //Squad,
 
 
     void Awake() {
-        if (Instance != null)
+        if (Instance != null) {
             Destroy(this);
+            return;
+        }
         Instance = this;
+
         BuildPrefabList();
         BuildContainer();
     }
@@ -47,6 +32,30 @@ public partial class ObjectPool : MonoBehaviour {
             return Instantiate(prefabList[(int)type], Vector3.zero, Quaternion.identity);
         }
         return pool[type].Dequeue();
+    }
+
+    public GameObject Get(Prefab type, Transform parent) {
+        GameObject obj = Get(type);
+
+        obj.SetActive(true);
+        obj.transform.SetParent(parent);
+
+        return obj;
+    }
+
+    public GameObject Get(Prefab type, Transform parent, Vector3 localPosition) {
+        GameObject obj = Get(type, parent);
+        obj.transform.localPosition = localPosition;
+
+        return obj;
+    }
+
+    public GameObject Get(Prefab type, Transform parent, Vector3 localPosition, Vector2 sizeDelta)
+    {
+        GameObject obj = Get(type, parent, localPosition);
+        obj.GetComponent<RectTransform>().sizeDelta = sizeDelta;
+
+        return obj;
     }
 
     public void Release(Prefab type, GameObject obj) {
@@ -65,20 +74,15 @@ public partial class ObjectPool {
         prefabList = new List<GameObject>();
 
         foreach (string name in Enum.GetNames(typeof(Prefab))) {
-            Debug.Log($"{Path.prefab}{name}");
             prefabList.Add(Resources.Load<GameObject>($"{Path.prefab}{name}"));
         }
-
-        //foreach (string path in prefabPath) {
-        //    prefabList.Add(Resources.Load<GameObject>(path));
-        //}
     }
 
     private void BuildContainer() {
         pool = new Dictionary<Prefab, Queue<GameObject>>();
 
-        foreach (Prefab element in Enum.GetValues(typeof(Prefab))) {
-            pool.Add(element, new Queue<GameObject>());
+        foreach (Prefab value in Enum.GetValues(typeof(Prefab))) {
+            pool.Add(value, new Queue<GameObject>());
         }
     }
 }
