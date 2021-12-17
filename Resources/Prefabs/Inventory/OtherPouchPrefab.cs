@@ -32,7 +32,7 @@ public class OtherPouchPrefab : InventoryBase
             {
                 Transform retrieveObject = child.GetChild(0);
                 Prefab type = retrieveObject.GetComponent<ItemBase>().Type;
-                ObjectPool.Instance.Return(type, retrieveObject.gameObject);
+                ObjectPool.Instance.Release(type, retrieveObject.gameObject);
             }
         }
 

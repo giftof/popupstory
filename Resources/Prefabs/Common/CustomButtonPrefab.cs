@@ -30,7 +30,7 @@ public class CustomButtonPrefab : MonoBehaviour, IPointerClickHandler
         TextMeshProUGUI ugui;
         if (textMesh == null)
         {
-            textMesh = (GameObject)ObjectPool.Instance.Request(Prefab.TextMesh);
+            textMesh = (GameObject)ObjectPool.Instance.Get(Prefab.TextMesh);
             textMesh.SetActive(true);
             textMesh.transform.SetParent(transform);
             textMesh.transform.localPosition = Vector3.zero;

@@ -16,20 +16,8 @@ using System;
 namespace Popup.Charactors
 {
     using Cfg = Configs.Config;
-    //using Ivn = Inventory.Inventory;
-    //using ServerJob = ServerJob.ServerJob;
-    public class Charactor : ICharactor
+    public partial class Charactor : PopupObject
     {
-        [JsonProperty]
-        //public int uid { get; protected set; }
-        public int Uid { get; set; }
-        [JsonProperty]
-        public int NameId { get; protected set; }
-        [JsonProperty]
-        public int SlotId { get; protected set; }
-        [JsonProperty]
-        //public string Name { get; protected set; }
-        public string Name { get; set; }
         [JsonProperty]
         //public int Size { get; protected set; }
         public int Size { get; set; }
@@ -55,8 +43,6 @@ namespace Popup.Charactors
         public Spell[] SpellArray { get; protected set; }
         [JsonProperty]
         public Item[] EquipArray { get; protected set; }
-        [JsonProperty]
-        public GameObject Owner { get; set; }
 
 
         public bool IsAlive => 0 < CurHp;
@@ -64,8 +50,8 @@ namespace Popup.Charactors
         public bool IsOccupied => true;
 
 
-    	public bool IsExist => IsOccupied; // impl.
-        public object DeepCopy(int? uid = null, int? notDefinedCount = null) => MemberwiseClone(); // impl.
+    	public override bool IsExist => IsOccupied; // impl.
+        public override object DeepCopy(int? uid = null, int? notDefinedCount = null) => MemberwiseClone(); // impl.
 
         public void TakeAffect(params Spell[] spell)
         {
@@ -81,14 +67,7 @@ namespace Popup.Charactors
                 target.TakeAffect(this.SpellArray[spellIndex]);
         }
 
-        public void SetSlotId(int slotId) => SlotId = slotId;
         public void ShiftPosition(int offset) => SlotId += offset;
-
-        void ChangeName(string newName)
-        {
-            // check is name changeable
-            Name = newName;
-        }
 
         void TakeExp(int amount)
         {

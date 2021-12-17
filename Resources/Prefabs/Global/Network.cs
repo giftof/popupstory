@@ -18,7 +18,7 @@ public class Network : MonoBehaviour
         foreach (string element in array)
         {
             T item = JsonConvert.DeserializeObject<T>(element);
-            item.DEBUG_TEST_SET_UID(REQ_NEW_ID());
+            item.SetUID = REQ_NEW_ID();
             list.Add(item);
         }
 

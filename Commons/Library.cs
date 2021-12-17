@@ -68,8 +68,8 @@ namespace Popup.Library
         // public static T FindMatchElement<T>(int uid, T[] array) where T: IPopupObject => array.FirstOrDefault(e=> e.uid == uid);
         // public static T FindSpace<T>(int uid, T[] array) where T: IItem => array.FirstOrDefault(e => e.HasSpace);
 
-        public static bool IsExist<T>(T obj) where T : IPopupObject => obj?.IsExist ?? false;
-        public static bool IsExhaust<T>(T obj) where T : IPopupObject => obj != null && !obj.IsExist;
+        public static bool IsExist<T>(T obj) where T : PopupObject => obj?.IsExist ?? false;
+        public static bool IsExhaust<T>(T obj) where T : PopupObject => obj != null && !obj.IsExist;
         public static int FindEmptyIndex<T>(T[] array, int startIndex = 0)
         {
             int index = startIndex;
@@ -114,7 +114,7 @@ namespace Popup.Library
         }
 
 
-        public static T MustInclude<T>(int uid, T[] array, [CallerMemberName] string caller = "") where T : IPopupObject
+        public static T MustInclude<T>(int uid, T[] array, [CallerMemberName] string caller = "") where T : PopupObject
         {
             for (int i = 0; i < array.Length; ++i)
             {

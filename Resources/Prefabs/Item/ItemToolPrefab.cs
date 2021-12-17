@@ -16,10 +16,7 @@ public class ItemToolPrefab : ItemBase
 
     public override void Use() // impl.
     {
-        /*Item.Use();*/
-        Debug.Log($"Double Clicked! {Item.Name}");
         ToolItem item = Item as ToolItem;
-        Debug.Log($"{item.Amount}");
     }
 
     public override void SetAmount(int amount) => this.amount.text = amount.ToString();

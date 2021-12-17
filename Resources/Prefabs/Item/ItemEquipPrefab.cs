@@ -12,10 +12,7 @@ public class ItemEquipPrefab : ItemBase
 {
     public override void Use() // impl.
     {
-        /*Item.Use();*/
-        Debug.Log($"Double Clicked! {Item.Name}");
         EquipItem item = Item as EquipItem;
-        Debug.Log($"{item.Durability}");
     }
 
     public override void SetAmount(int _) { }

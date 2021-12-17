@@ -16,10 +16,6 @@ public class Lobby : MonoBehaviour
 {
     [SerializeField] Button toEntrance;
     [SerializeField] Button toGame;
-    //[SerializeField] CustomButtonPrefab userInventoryBtn;
-    //[SerializeField] CustomButtonPrefab otherInventoryBtn;
-    //[SerializeField] UserPouchPrefab userPouch;
-    //[SerializeField] OtherPouchPrefab otherPouch;
     [SerializeField] UserSquadPrefab userSquad;
     [SerializeField] OtherSquadPrefab otherSquad;
 

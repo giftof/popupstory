@@ -18,16 +18,8 @@ namespace Popup.Squad
     using Item      = Items.Item;
     // using ServerJob = ServerJob.ServerJob;
 
-    public partial class Squad: IInventory, IPopupObject
+    public partial class Squad : PopupObject /*, IInventory*/
     {
-		[JsonProperty]
-        public int Uid { get; protected set; }
-        [JsonProperty]
-        public int NameId { get; protected set; }
-        [JsonProperty]
-		public int SlotId { get; protected set; }
-        [JsonProperty]
-        public string Name { get; protected set; }
         [JsonProperty]
         public Dictionary<int, Charactor> Charactors { get; protected set; }
         [JsonIgnore]
@@ -36,8 +28,6 @@ namespace Popup.Squad
         public Inventory Inventory { get; protected set; }
 		[JsonIgnore]
         public int? ActivateCharactor { get; protected set; }
-        [JsonProperty]
-        public GameObject Owner { get; set; }
 
         public Squad(int uid, uint inventorySize = Config.squadInventorySize)
         {
@@ -50,9 +40,9 @@ namespace Popup.Squad
 
         public int GetUID() => Uid;
 
-        public bool IsExist => 0 < Charactors.Count;
+        public override bool IsExist => 0 < Charactors.Count;
         public bool IsAlive => !Charactors.FirstOrDefault(p => p.Value.IsAlive).Equals(null);
-        public object DeepCopy(int? uid = null, int? _ = null)
+        public override object DeepCopy(int? uid = null, int? _ = null)
         {
             Inventory.EraseExhaustedSlot();
 
@@ -62,7 +52,6 @@ namespace Popup.Squad
             return squad;
         }
 
-        public void SetName(string name) => Name = name;
         public bool Use(Item item) => Inventory.Use(item);
         public bool Add(Item item) => Inventory.Add(item);
 
@@ -71,7 +60,7 @@ namespace Popup.Squad
             if (charactor == null || Config.squadSize < OccupiedSize + charactor.Size) return false;
             int lastSlotId = IsExist ? Charactors.Max(p => p.Value.SlotId) + 1 : 0;
 
-            charactor.SetSlotId(lastSlotId);
+            charactor.SetSlotId = lastSlotId;
             Charactors.Add(charactor.Uid, charactor);
             OccupiedSize += charactor.Size;
 
@@ -85,7 +74,7 @@ namespace Popup.Squad
             foreach (KeyValuePair<int, Charactor> pair in Charactors)
                 pair.Value.ShiftPosition(1);
 
-            charactor.SetSlotId(0);
+            charactor.SetSlotId = 0;
             Charactors.Add(charactor.Uid, charactor);
             OccupiedSize += charactor.Size;
 

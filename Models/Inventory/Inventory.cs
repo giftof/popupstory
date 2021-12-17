@@ -16,7 +16,7 @@ using Popup.Defines;
 
 namespace Popup.Inventory
 {
-	public abstract partial class Inventory : IInventory
+	public abstract partial class Inventory /*: IInventory*/
     {
 		public uint MaxSize { get; protected set; }
 

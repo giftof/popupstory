@@ -71,16 +71,16 @@ public class Entrance : MonoBehaviour
     {
         Squad squad = new Squad(Manager.Instance.network.REQ_NEW_ID());
         Charactor c1 = new Charactor();
-        c1.Uid = Manager.Instance.network.REQ_NEW_ID();
-        c1.Name = "c1";
+        c1.SetUID = Manager.Instance.network.REQ_NEW_ID();
+        c1.SetName = "c1";
         c1.Size = 1;
         Charactor c2 = new Charactor();
-        c2.Uid = Manager.Instance.network.REQ_NEW_ID();
-        c2.Name = "c2";
+        c2.SetUID = Manager.Instance.network.REQ_NEW_ID();
+        c2.SetName = "c2";
         c2.Size = 1;
         Charactor c3 = new Charactor();
-        c3.Uid = Manager.Instance.network.REQ_NEW_ID();
-        c3.Name = "c3";
+        c3.SetUID = Manager.Instance.network.REQ_NEW_ID();
+        c3.SetName = "c3";
         c3.Size = 2;
         squad.AddLast(c1);
         squad.AddLast(c2);
@@ -93,7 +93,7 @@ public class Entrance : MonoBehaviour
 
 
 
-        gpgs = gpgs ?? (GameObject)ObjectPool.Instance.Request(Prefab.CustomButton);
+        gpgs = gpgs ?? (GameObject)ObjectPool.Instance.Get(Prefab.CustomButton);
         gpgs.SetActive(true);
         gpgs.name = "GPGS";
         CustomButtonPrefab gpgsButton = gpgs.GetComponent<CustomButtonPrefab>();

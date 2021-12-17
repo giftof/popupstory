@@ -9,24 +9,14 @@ using Newtonsoft.Json;
 
 
 
-public class Spell : IPopupObject, ISpell
+public class Spell : PopupObject
 {
-	[JsonProperty]
-	public int Uid {get; protected set; }
-	[JsonProperty]
-	public int NameId { get; protected set; }
-	[JsonProperty]
-	public int SlotId { get; protected set; }
-	[JsonProperty]
-	public string Name { get; protected set; }
 	[JsonProperty]
 	public SpellEffective Effective {get; protected set; }
 	[JsonProperty]
 	public Elements Element {get; protected set; }
 	[JsonProperty]
 	public int Affect { get; protected set; }
-	[JsonProperty]
-	public GameObject Owner { get; set; }
 
 
 
@@ -66,9 +56,9 @@ public class Spell : IPopupObject, ISpell
         }
     }
 
-	public bool IsExist => false; // impl.
+	public override bool IsExist => false; // impl.
 
-	public object DeepCopy(int? uid = null, int? charge = null) => MemberwiseClone(); // impl.
+	public override object DeepCopy(int? uid = null, int? charge = null) => MemberwiseClone(); // impl.
 	// public object DuplicateNew() => ((Spell)Duplicate()).uid = ServerJob.RequestNewUID;
 }
 

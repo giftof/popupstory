@@ -50,29 +50,20 @@ public abstract partial class InventoryBase : MonoBehaviour
 
     protected void MakeSlot()
     {
-        int slotId = 0;
-
-        foreach (GameObject slot in ObjectPool.Instance.Request(Prefab.ItemSlot, size))
-        //foreach (GameObject slot in ObjectPool.Instance.Request(Prefab.ItemSlot, Config.pouchSize))
+        for (int i = 0; i < size; i++)
         {
+            GameObject slot = ObjectPool.Instance.Get(Prefab.ItemSlot);
             slot.SetActive(true);
             slot.transform.SetParent(frame.transform);
             slot.transform.localScale = Vector3.one;
 
             ItemSlotPrefab prefab = slot.GetComponent<ItemSlotPrefab>();
-            prefab.slotId = slotId++;
-            prefab.AddInsertAction((Item item) => {
-                inventory.Insert(item);
-            });
-            prefab.AddRemoveAction((Item item) => {
-                inventory.Remove(item);
-            });
+            prefab.slotId = i;
+            prefab.AddInsertAction(item => inventory.Insert(item));
+            prefab.AddRemoveAction(item => inventory.Remove(item));
         }
     }
 }
-
-
-
 
 
 public abstract partial class InventoryBase
@@ -81,7 +72,7 @@ public abstract partial class InventoryBase
     {
         foreach (Item item in array)
         {
-            item.SlotId = Config.unSlot;
+            item.SetSlotId = Config.unSlot;
             if (!inventory.Add(item))
                 return;
         }
@@ -105,9 +96,9 @@ public abstract partial class InventoryBase
             beginIndex = EmptySlotIndex(beginIndex);
 
             Transform parent = frame.transform.GetChild(beginIndex);
-            item.SlotId = beginIndex;
+            item.SetSlotId = beginIndex;
 
-            GameObject obj = ObjectPool.Instance.Request(Type(item));
+            GameObject obj = ObjectPool.Instance.Get(Type(item));
             obj.SetActive(true);
 
             SetParent(obj.transform, parent);
