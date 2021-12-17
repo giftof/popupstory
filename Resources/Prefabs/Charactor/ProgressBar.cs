@@ -54,7 +54,7 @@ public partial class ProgressBar : MonoBehaviour
 
 public partial class ProgressBar    // TEST
 {
-    public CustomButtonPrefab button;
+    public PCustomButton button;
 
     private void Start()
     {

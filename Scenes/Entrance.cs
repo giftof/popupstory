@@ -96,7 +96,7 @@ public class Entrance : MonoBehaviour
         gpgs = gpgs ?? (GameObject)ObjectPool.Instance.Get(Prefab.CustomButton);
         gpgs.SetActive(true);
         gpgs.name = "GPGS";
-        CustomButtonPrefab gpgsButton = gpgs.GetComponent<CustomButtonPrefab>();
+        PCustomButton gpgsButton = gpgs.GetComponent<PCustomButton>();
         gpgs.PositionOnParent(GUIPosition.RightBottom, Vector2.one * 100);
         gpgsButton.SetText("GPGS", Color.red);
 

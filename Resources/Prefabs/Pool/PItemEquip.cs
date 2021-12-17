@@ -8,7 +8,7 @@ using Popup.Framework;
 using Popup.Defines;
 
 
-public class ItemEquipPrefab : ItemBase
+public class PItemEquip : PItemBase
 {
     public override void Use() // impl.
     {

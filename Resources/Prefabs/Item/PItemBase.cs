@@ -10,8 +10,7 @@ using Popup.Defines;
 
 
 
-public abstract partial class ItemBase : MonoBehaviour
-{
+public abstract partial class PItemBase : MonoBehaviour {
     Vector2 offset = default;
     [SerializeField] Image image = null;
     public Transform lastParent = null;
@@ -22,57 +21,55 @@ public abstract partial class ItemBase : MonoBehaviour
     public Item Item { get; set; }
     public int GetSlotId() => Item.SlotId;
     public int SetSlotId(int slotId) => Item.SetSlotId = slotId;
-    public void SetImage() => image.sprite = Resources.Load<Sprite>("Images/Item/" + Item.Icon);
+    public void SetIconImage() => StartCoroutine(LoadSprite(Item.Icon));
+
+    IEnumerator LoadSprite(int iconImageId) {
+        Sprite sprite = Resources.Load<Sprite>($"{Path.icon}{iconImageId}");
+        yield return sprite;
+        image.sprite = sprite;
+    }
 }
 
 
-public abstract partial class ItemBase
-{
+
+public abstract partial class PItemBase {
     public abstract void Use();
     public abstract Prefab Type { get; }
     public abstract void SetAmount(int amount);
 }
 
 
-public abstract partial class ItemBase : IITemHandler
-{
+
+public abstract partial class PItemBase : IITemHandler {
     public void OnDrag(PointerEventData eventData) => transform.position = eventData.position + offset;
 
-    public void OnBeginDrag(PointerEventData eventData)
-    {
+    public void OnBeginDrag(PointerEventData eventData) {
         eventData.selectedObject = gameObject;
         image.raycastTarget = false;
     }
 
-    public void OnEndDrag(PointerEventData eventData)
-    {
+    public void OnEndDrag(PointerEventData eventData) {
         image.raycastTarget = true;
     }
 
-    public void OnPointerDown(PointerEventData eventData)
-    {
+    public void OnPointerDown(PointerEventData eventData) {
         offset = (Vector2)transform.position - eventData.position;
         transform.SetParent(Manager.Instance.guiGuide.pickCanvas.transform);
     }
 
-    public void OnPointerUp(PointerEventData eventData)
-    {
-        if (lastParent != null)
-        {
+    public void OnPointerUp(PointerEventData eventData) {
+        if (lastParent != null) {
             transform.SetParent(lastParent);
             transform.localPosition = Vector3.zero;
         }
     }
 
-    public void OnPointerClick(PointerEventData eventData)
-    {
-        if (0 < clickCount && eventData.clickTime - clickTime < Config.doubleClickInterval)
-        {
+    public void OnPointerClick(PointerEventData eventData) {
+        if (0 < clickCount && eventData.clickTime - clickTime < Config.doubleClickInterval) {
             clickCount = 0;
             Use();
         }
-        else
-        {
+        else {
             clickCount = 1;
             clickTime = eventData.clickTime;
         }

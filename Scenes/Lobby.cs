@@ -91,6 +91,11 @@ public class Lobby : MonoBehaviour
 
         yield return array = req(id);
 
+        foreach (var obj in array)
+        {
+            Debug.Log($"read obj = {Libs.ToJson(obj)}");
+        }
+
         otherSquad.Insert(array);
     }
 

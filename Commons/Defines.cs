@@ -14,22 +14,6 @@ namespace Popup.Defines
         RightTop,
     }
 
-    //public enum Anchor
-    //{
-    //    RightTop,
-    //    RightCenter,
-    //    RightBottom,
-    //    LeftTop,
-    //    LeftCenter,
-    //    LeftBottom,
-    //    TopLeft,
-    //    TopCenter,
-    //    TopRight,
-    //    BottomLeft,
-    //    BottomCenter,
-    //    BottomRight,
-    //}
-
     public enum Prefab
     {
         CustomButton,

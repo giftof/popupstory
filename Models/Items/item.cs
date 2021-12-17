@@ -21,7 +21,6 @@ namespace Popup.Items
 
 		public bool HaveAttribute(ItemCat attribute) => 0 < (Category & attribute);
 		public bool IsAttribute(ItemCat attribute) => Category.Equals(attribute);
-		
 	}
 
 	public abstract partial class Item {
@@ -37,12 +36,10 @@ namespace Popup.Items
 
 	public partial class EquipItem : Item
     {
-        [JsonProperty]
-		public Grade Grade { get; protected set; }
-		[JsonProperty]
-		public Spell[] SpellArray { get; protected set; }
 		[JsonProperty]
 		public int Durability { get; protected set; }
+		[JsonProperty]
+		public Spell[] SpellArray { get; protected set; }
 
 		public int SpellAmount => SpellArray == null ? 0 : SpellArray.Length;
         public Spell Spell(int uid) => Guard.MustInclude(uid, SpellArray, "[GetSpell in EquipItem]");

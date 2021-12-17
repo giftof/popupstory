@@ -172,33 +172,4 @@ namespace Popup.Inventory
 			}
 		}
 	}
-
-
-	//public class Pouch : Inventory
-	//{
-	//    Item[] pouch;
-
-	//    public Pouch(int maxSize) : base(maxSize) { }
-
-	//    protected override void InitializeInventory(int maxSize) => pouch = new Item[maxSize];
-	//    protected override bool AddStackable(Item item) => false;
-	//    protected override bool AddNew(Item item) => false;
-
-	//    private int FirstEmptySlot() => pouch.Select((e, i) => (e, i)).FirstOrDefault(t => t.e == null || ++t.i < 0).i;
-	//}
-
-
-
-	//public class BackPack : Inventory
-	//{
-	//    Item[] backPack;
-
-	//    public BackPack(int maxSize) : base(maxSize) { }
-
-	//    protected override void InitializeInventory(int maxSize) => backPack = new Item[maxSize];
-	//    protected override bool AddStackable(Item item) => false;
-	//    protected override bool AddNew(Item item) => false;
-
-	//    private int FirstEmptySlot() => backPack.Select((e, i) => (e, i)).FirstOrDefault(t => t.e == null || ++t.i < 0).i;
-	//}
 }

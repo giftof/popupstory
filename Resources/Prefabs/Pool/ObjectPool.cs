@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Popup.Defines;
+using Popup.Configs;
 
 
 
@@ -10,14 +11,15 @@ public partial class ObjectPool : MonoBehaviour {
     public static ObjectPool Instance = null;
 
     private Dictionary<Prefab, Queue<GameObject>> pool;
+    [SerializeField]
     private List<GameObject> prefabList;
-    private string[] prefabPath = {
-        "Prefabs/Common/CustomButtonPrefab",
-        "Prefabs/Common/TextMeshPrefab",
-        "Prefabs/Inventory/ItemSlotPrefab",
-        "Prefabs/Item/ItemToolPrefab",
-        "Prefabs/Item/ItemEquipPrefab"
-    };
+    //private string[] prefabPath = {
+    //    "Prefabs/Common/CustomButtonPrefab",
+    //    "Prefabs/Common/TextMeshPrefab",
+    //    "Prefabs/Inventory/ItemSlotPrefab",
+    //    "Prefabs/Item/ItemToolPrefab",
+    //    "Prefabs/Item/ItemEquipPrefab"
+    //};
 
     //  CustomButton,
     //  TextMesh,
@@ -62,9 +64,14 @@ public partial class ObjectPool {
     private void BuildPrefabList() {
         prefabList = new List<GameObject>();
 
-        foreach (string path in prefabPath) {
-            prefabList.Add(Resources.Load<GameObject>(path));
+        foreach (string name in Enum.GetNames(typeof(Prefab))) {
+            Debug.Log($"{Path.prefab}{name}");
+            prefabList.Add(Resources.Load<GameObject>($"{Path.prefab}{name}"));
         }
+
+        //foreach (string path in prefabPath) {
+        //    prefabList.Add(Resources.Load<GameObject>(path));
+        //}
     }
 
     private void BuildContainer() {

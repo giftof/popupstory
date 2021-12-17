@@ -31,6 +31,8 @@ namespace Popup.Configs
     public static class Path
     {
         public const string manager         = "Prefabs/Global/Manager";
+        public const string prefab          = "Prefabs/pool/P";
+        public const string icon            = "Images/Item/";
     }
 
     public static class OName

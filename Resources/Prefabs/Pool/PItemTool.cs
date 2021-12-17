@@ -10,8 +10,7 @@ using TMPro;
 
 
 
-public class ItemToolPrefab : ItemBase
-{
+public class PItemTool : PItemBase {
     [SerializeField] TextMeshProUGUI amount;
 
     public override void Use() // impl.

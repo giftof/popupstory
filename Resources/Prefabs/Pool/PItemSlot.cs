@@ -8,7 +8,7 @@ using Popup.Items;
 
 
 
-public partial class ItemSlotPrefab : MonoBehaviour
+public partial class PItemSlot : MonoBehaviour
 {
     [SerializeField] Image image;
     [SerializeField] Sprite[] sprites;
@@ -21,14 +21,14 @@ public partial class ItemSlotPrefab : MonoBehaviour
     public void AddInsertAction(ItemAction itemAction) => insertAction += itemAction;
     public void AddRemoveAction(ItemAction itemAction) => removeAction += itemAction;
 
-    private void MoveAction(ItemBase item, ItemSlotPrefab from, ItemSlotPrefab to)
+    private void MoveAction(PItemBase item, PItemSlot from, PItemSlot to)
     {
         item.SetSlotId(to.slotId);
         from.removeAction?.Invoke(item.Item);
         to.insertAction?.Invoke(item.Item);
     }
 
-    private void SetParent(ItemBase dest, Transform parent)
+    private void SetParent(PItemBase dest, Transform parent)
     {
         dest.transform.SetParent(parent);
         dest.transform.localPosition = Vector3.zero;
@@ -38,20 +38,20 @@ public partial class ItemSlotPrefab : MonoBehaviour
 
 
 
-public partial class ItemSlotPrefab : IDropHandler
+public partial class PItemSlot : IDropHandler
 {
     public void OnDrop(PointerEventData eventData)
     {
-        if (eventData.selectedObject != null && eventData.selectedObject.TryGetComponent(out ItemBase item))
+        if (eventData.selectedObject != null && eventData.selectedObject.TryGetComponent(out PItemBase item))
         {
             if (0 < transform.childCount)
             {
-                ItemBase currentItem = transform.GetChild(0).GetComponent<ItemBase>();
-                MoveAction(currentItem, this, item.lastParent.GetComponent<ItemSlotPrefab>());
+                PItemBase currentItem = transform.GetChild(0).GetComponent<PItemBase>();
+                MoveAction(currentItem, this, item.lastParent.GetComponent<PItemSlot>());
                 SetParent(currentItem, item.lastParent);
             }
 
-            MoveAction(item, item.lastParent.GetComponent<ItemSlotPrefab>(), this);
+            MoveAction(item, item.lastParent.GetComponent<PItemSlot>(), this);
             SetParent(item, transform);
         }
     }

@@ -11,7 +11,7 @@ using Popup.Defines;
 public abstract partial class SquadBase : MonoBehaviour
 {
     [SerializeField]
-    protected CustomButtonPrefab inventoryBtn;
+    protected PCustomButton inventoryBtn;
     [SerializeField]
     protected InventoryBase inventoryBase;
 
@@ -21,7 +21,7 @@ public abstract partial class SquadBase : MonoBehaviour
         SetButtonAction();
     }
 
-    public void Insert(params ItemBase[] itemBaseArray)
+    public void Insert(params PItemBase[] itemBaseArray)
     {
         inventoryBase.Insert(itemBaseArray.Select(e => e.Item).ToArray());
     }

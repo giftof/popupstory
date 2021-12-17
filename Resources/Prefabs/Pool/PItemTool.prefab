@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7767470746897325773}
   - component: {fileID: 80771917260998126}
   m_Layer: 0
-  m_Name: ItemToolPrefab
+  m_Name: PItemTool
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

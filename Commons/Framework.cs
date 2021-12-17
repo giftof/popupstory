@@ -22,6 +22,8 @@ namespace Popup.Framework
         public GameObject Owner { get; protected set; }
         [JsonProperty]
         public string Name { get; protected set; }
+        [JsonProperty]
+        public Grade Grade { get; protected set; }
 
         [JsonIgnore]
         public abstract bool IsExist { get; }
