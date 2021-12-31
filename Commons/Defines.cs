@@ -19,8 +19,8 @@ namespace Popup.Defines
         CustomButton,
         TextMesh,
         ItemSlot,
-        ItemTool,
-        ItemEquip,
+        StackableItem,
+        SolidItem,
         //Spell,
         //Buff,
         //Charactor,
@@ -52,7 +52,7 @@ namespace Popup.Defines
     public enum ItemCat
     {
         equip       = 0x0001,
-        tool        = 0x0002,
+        stackable        = 0x0002,
     }
 
     //public enum EquipSlot

@@ -65,21 +65,18 @@ namespace Popup.Framework
     //}
 
 
-    public interface IITemHandler : IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerDownHandler, IPointerUpHandler, IPointerClickHandler
-    {
-        void Use();
-    }
+    public interface IITemHandler : IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerDownHandler, IPointerUpHandler, IPointerClickHandler {}
 
 
-    public interface IToolItemHandler : IITemHandler
-    {
-        /*bool AddStack(ToolItem item);*/
-    }
+    //public interface IToolItemHandler : IITemHandler
+    //{
+    //    /*bool AddStack(ToolItem item);*/
+    //}
 
 
-    public interface IEquipItemHandler : IITemHandler
-    {
-    }
+    //public interface IEquipItemHandler : IITemHandler
+    //{
+    //}
 
     //public interface ISpell : IPopupObject, IOwner
     //{

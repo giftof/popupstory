@@ -29,8 +29,8 @@ namespace Popup.Inventory
 		public bool Add(Item item)
 		{
 			if (Libs.IsExhaust(item)) return false;
-			return item.HaveAttribute(ItemCat.tool)
-				? AddStackable(item)
+			return item.HaveAttribute(ItemCat.stackable)
+				? AddStackable(item as StackableItem)
 				: AddNew(item);
 		}
 	}
@@ -49,7 +49,7 @@ namespace Popup.Inventory
 	public abstract partial class Inventory
 	{
 		protected abstract void InitializeInventory(uint maxSize);
-		protected abstract bool AddStackable(Item item);
+		protected abstract bool AddStackable(StackableItem item);
 		protected abstract bool AddNew(Item item);
 		protected abstract bool HaveSpace();
 		public abstract Dictionary<int, Item> Source { get; }
@@ -65,7 +65,7 @@ namespace Popup.Inventory
     {
 		protected override void InitializeInventory(uint _) => wareHouse = new Dictionary<int, Item>();
 
-		protected override bool AddStackable(Item item)
+		protected override bool AddStackable(StackableItem item)
 		{
 			var stackableList = wareHouse
 								.Where(e => e.Value.Category.Equals(item.Category) && e.Value.HaveSpace(item.Name))
@@ -73,12 +73,12 @@ namespace Popup.Inventory
 
 			foreach (var pair in stackableList)
 			{
-				if (((ToolItem)pair.Value).AddStack(item)) return true;
+				if (((StackableItem)pair.Value).AddStack(item)) return true;
 			}
 
 			while (item.IsExist && HaveSpace())
 			{
-				ToolItem newItem = (ToolItem)item.DeepCopy(Manager.Instance.network.REQ_NEW_ID(), null);
+				StackableItem newItem = (StackableItem)item.DeepCopy(Manager.Instance.network.REQ_NEW_ID(), null);
 				newItem.AddStack(item);
 				wareHouse.Add(newItem.Uid, newItem);
 			}

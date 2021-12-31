@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using Popup.Delegate;
 using Popup.Defines;
@@ -18,6 +17,7 @@ public class PCustomButton : MonoBehaviour, IPointerClickHandler
     public void RemoveClickAction(ButtonAction buttonClick) => this.buttonClick -= buttonClick;
     public void ClearClickAction() => buttonClick = null;
     public void OnPointerClick(PointerEventData eventData) => buttonClick?.Invoke();
+
     public void SetText(string message, Color color = default) {
         TextMeshProUGUI ugui;
 

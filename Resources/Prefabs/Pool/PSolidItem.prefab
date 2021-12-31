@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4627805152016613160}
   - component: {fileID: 3779809989660296040}
   m_Layer: 0
-  m_Name: PItemEquip
+  m_Name: PSolidItem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

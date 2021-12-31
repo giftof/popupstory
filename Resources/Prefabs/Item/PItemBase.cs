@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System;
 using Popup.Items;
 using Popup.Framework;
 using Popup.Configs;
@@ -11,16 +12,15 @@ using Popup.Defines;
 
 
 public abstract partial class PItemBase : MonoBehaviour {
-    Vector2 offset = default;
     [SerializeField] Image image = null;
     public Transform lastParent = null;
+    private Action useAction = null;
+    private Vector2 offset = default;
 
     int clickCount = 0;
     float clickTime = 0f;
 
     public Item Item { get; set; }
-    public int GetSlotId() => Item.SlotId;
-    public int SetSlotId(int slotId) => Item.SetSlotId = slotId;
     public void SetIconImage() => StartCoroutine(LoadSprite(Item.Icon));
 
     IEnumerator LoadSprite(int iconImageId) {
@@ -28,14 +28,17 @@ public abstract partial class PItemBase : MonoBehaviour {
         yield return sprite;
         image.sprite = sprite;
     }
+
+    public void SetUseAction(Action action) => useAction = action;
+    public void AddUseAction(Action action) => useAction += action;
 }
 
 
 
 public abstract partial class PItemBase {
-    public abstract void Use();
     public abstract Prefab Type { get; }
-    public abstract void SetAmount(int amount);
+    //public abstract void SetAmount(int amount);
+    public abstract void SetAmount();
 }
 
 
@@ -67,7 +70,7 @@ public abstract partial class PItemBase : IITemHandler {
     public void OnPointerClick(PointerEventData eventData) {
         if (0 < clickCount && eventData.clickTime - clickTime < Config.doubleClickInterval) {
             clickCount = 0;
-            Use();
+            useAction.Invoke();
         }
         else {
             clickCount = 1;

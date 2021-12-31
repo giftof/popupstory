@@ -8,8 +8,8 @@ using Popup.Defines;
 
 
 
-public abstract partial class InventoryBase : MonoBehaviour
-{
+public abstract partial class InventoryBase : MonoBehaviour {
+
     protected Inventory inventory = null;
     [SerializeField]
     protected GameObject frame;
@@ -18,45 +18,30 @@ public abstract partial class InventoryBase : MonoBehaviour
     public PCustomButton takeAll;
     public PCustomButton close;
 
-
-
-    //void Awake() => inventory = inventory ?? new WareHouse(size);
-
-
-    public void Insert(params Item[] array)
-    {
+    public void Insert(params Item[] array) {
         AddNew(array);
 
-        if (isActiveAndEnabled)
-        {
-            CreateNegativeSlotItemIcon();
+        if (isActiveAndEnabled) {
+            CreateUndefinedSlot();
         }
     }
 
-    private void OnEnable()
-    {
-        CreateNegativeSlotItemIcon();
+    private void OnEnable() {
+        CreateUndefinedSlot();
     }
 
     protected void MakeInventory() => inventory = inventory ?? new WareHouse(size);
 
-    protected void ButtonAction()
-    {
+    protected void ButtonAction() {
         close.AddClickAction(() => {
             gameObject.SetActive(false);
             //DEBUG_TEST_SHOW_CONTENTS();
         });
     }
 
-    protected void MakeSlot()
-    {
-        for (int i = 0; i < size; i++)
-        {
-            GameObject slot = ObjectPool.Instance.Get(Prefab.ItemSlot);
-            slot.SetActive(true);
-            slot.transform.SetParent(frame.transform);
-            slot.transform.localScale = Vector3.one;
-
+    protected void MakeSlot() {
+        for (int i = 0; i < size; i++) {
+            GameObject slot = ObjectPool.Instance.Get(Prefab.ItemSlot, frame.transform);
             PItemSlot prefab = slot.GetComponent<PItemSlot>();
             prefab.slotId = i;
             prefab.AddInsertAction(item => inventory.Insert(item));
@@ -66,67 +51,51 @@ public abstract partial class InventoryBase : MonoBehaviour
 }
 
 
-public abstract partial class InventoryBase
-{
-    private void AddNew(params Item[] array)
-    {
-        foreach (Item item in array)
-        {
+public abstract partial class InventoryBase {
+
+    private void AddNew(params Item[] array) {
+        foreach (Item item in array) {
             item.SetSlotId = Config.unSlot;
             if (!inventory.Add(item))
                 return;
         }
     }
 
-    private int EmptySlotIndex(int startIndex)
-    {
+    private int EmptySlotIndex(int startIndex) {
         while (0 < frame.transform.GetChild(startIndex).childCount)
-        {
             ++startIndex;
-        }
         return startIndex;
     }
 
-    private void CreateNegativeSlotItemIcon()
-    {
+    private void CreateUndefinedSlot() {
         int beginIndex = 0;
 
-        foreach (Item item in inventory.UnslotedList())
-        {
+        foreach (Item item in inventory.UnslotedList()) {
             beginIndex = EmptySlotIndex(beginIndex);
 
             Transform parent = frame.transform.GetChild(beginIndex);
             item.SetSlotId = beginIndex;
 
-            GameObject obj = ObjectPool.Instance.Get(Type(item));
-            obj.SetActive(true);
-
-            SetParent(obj.transform, parent);
+            GameObject obj = ObjectPool.Instance.Get(Type(item), parent);
             SetPrefabData(obj.GetComponent<PItemBase>(), item, parent);
         }
     }
 
-    private Prefab Type(Item item) => item.HaveAttribute(ItemCat.tool) ? Prefab.ItemTool : Prefab.ItemEquip;
+    private Prefab Type(Item item) => item.HaveAttribute(ItemCat.stackable) ? Prefab.StackableItem : Prefab.SolidItem;
 
-    private void SetPrefabData(PItemBase itemBase, Item item, Transform parent)
-    {
+    private void SetPrefabData(PItemBase itemBase, Item item, Transform parent) {
         itemBase.Item = item;
         itemBase.lastParent = parent;
-        itemBase.SetAmount(item.UseableCount);
-        itemBase.SetIconImage();
-    }
-
-    private void SetParent(Transform child, Transform parent)
-    {
-        child.SetParent(parent);
-        child.localScale = Vector3.one;
-        child.localPosition = Vector3.zero;
+        //itemBase.SetAmount(item.UseableCount);
+        item.updateUseableConut = itemBase.SetAmount;
+        item.updateIcon = itemBase.SetIconImage;
+        item.reload();
     }
 }
 
 
 
-public abstract partial class InventoryBase
-{
+public abstract partial class InventoryBase {
+
     public void DEBUG_TEST_SHOW_CONTENTS() => inventory.DEBUG_ShowAllItems();
 }

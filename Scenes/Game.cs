@@ -141,15 +141,15 @@ public class Game : MonoBehaviour
         // Inventory inventory1 = new Inventory(null, Configs.squadInventorySize);
         Inventory inventory1 = new WareHouse(Config.squadInventorySize);
 
-        string itemDef1 = $"{{\"uid\":{Manager.Instance.network.REQ_NEW_ID()},\"name\":\"stack1\",\"category\":{(int)ItemCat.tool},\"amount\":12,\"weight\":0.1,\"volume\":0.2}}";
-        Item item1 = JsonConvert.DeserializeObject<ToolItem>(itemDef1);
+        string itemDef1 = $"{{\"uid\":{Manager.Instance.network.REQ_NEW_ID()},\"name\":\"stack1\",\"category\":{(int)ItemCat.stackable},\"amount\":12,\"weight\":0.1,\"volume\":0.2}}";
+        Item item1 = JsonConvert.DeserializeObject<StackableItem>(itemDef1);
         Debug.Log(item1);
         Debug.Log(item1.Uid);
         Debug.Log(item1.Name);
 
 
-        string itemDef2 = $"{{\"uid\":{Manager.Instance.network.REQ_NEW_ID()},\"name\":\"stack2\",\"category\":{(int)ItemCat.tool},\"amount\":5,\"weight\":0.5,\"volume\":0.1}}";
-        Item item2 = JsonConvert.DeserializeObject<ToolItem>(itemDef2);
+        string itemDef2 = $"{{\"uid\":{Manager.Instance.network.REQ_NEW_ID()},\"name\":\"stack2\",\"category\":{(int)ItemCat.stackable},\"amount\":5,\"weight\":0.5,\"volume\":0.1}}";
+        Item item2 = JsonConvert.DeserializeObject<StackableItem>(itemDef2);
 
         // Item item3 = new ToolItem(ServerJob.RequestNewUID);
         // item3.SetName("stack1");
