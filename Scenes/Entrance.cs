@@ -34,6 +34,7 @@ public class Entrance : MonoBehaviour
         TEST_BTN();
         TEST_SET();
         //TEST_PROGBAR();
+        
     }
 
 

@@ -21,6 +21,8 @@ public abstract partial class SquadBase : MonoBehaviour
 
     public void Insert(params Item[] itemArray) => inventoryBase.Insert(itemArray);
 
+    public void Remove(PItemBase item) => inventoryBase.Remove(item);
+
     public void InventoryPosition(GUIPosition position) => inventoryBase.gameObject.PositionOnCanvas(position);
 
     public InventoryBase Inventory => inventoryBase;

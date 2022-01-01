@@ -11,16 +11,27 @@ using Popup.Defines;
 
 
 
-public abstract partial class PItemBase : MonoBehaviour {
+public abstract class PItemBase : MonoBehaviour, IITemHandler {
+
     [SerializeField] Image image = null;
     public Transform lastParent = null;
     private Action useAction = null;
     private Vector2 offset = default;
 
-    int clickCount = 0;
-    float clickTime = 0f;
-
     public Item Item { get; set; }
+
+    public void SetUseAction(Action action) => useAction = action;
+    public void AddUseAction(Action action) => useAction += action;
+    public void RemoveUseAction(Action action) => useAction -= action;
+    public abstract Prefab Type { get; }
+
+
+
+    /********************************/
+    /* Delegate Action              */
+    /********************************/
+
+    public abstract void SetAmount();
     public void SetIconImage() => StartCoroutine(LoadSprite(Item.Icon));
 
     IEnumerator LoadSprite(int iconImageId) {
@@ -28,22 +39,14 @@ public abstract partial class PItemBase : MonoBehaviour {
         yield return sprite;
         image.sprite = sprite;
     }
-
-    public void SetUseAction(Action action) => useAction = action;
-    public void AddUseAction(Action action) => useAction += action;
-}
+    public void ReleaseObject() => ObjectPool.Instance.Release(Type, gameObject);
 
 
 
-public abstract partial class PItemBase {
-    public abstract Prefab Type { get; }
-    //public abstract void SetAmount(int amount);
-    public abstract void SetAmount();
-}
+    /********************************/
+    /* IItemHandler                 */
+    /********************************/
 
-
-
-public abstract partial class PItemBase : IITemHandler {
     public void OnDrag(PointerEventData eventData) => transform.position = eventData.position + offset;
 
     public void OnBeginDrag(PointerEventData eventData) {
@@ -66,6 +69,9 @@ public abstract partial class PItemBase : IITemHandler {
             transform.localPosition = Vector3.zero;
         }
     }
+
+    int clickCount = 0;
+    float clickTime = 0f;
 
     public void OnPointerClick(PointerEventData eventData) {
         if (0 < clickCount && eventData.clickTime - clickTime < Config.doubleClickInterval) {

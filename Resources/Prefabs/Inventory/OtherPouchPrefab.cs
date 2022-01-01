@@ -10,22 +10,19 @@ using Popup.Defines;
 
 public class OtherPouchPrefab : InventoryBase
 {
-    void Awake()
-    {
+    void Awake() {
         size = Config.pouchSize;
         inventory = inventory ?? new WareHouse(size);
     }
 
-    void Start()
-    {
+    void Start() {
         MakeInventory();
         MakeSlot();
         ButtonAction();
         gameObject.SetActive(false);
     }
 
-    public Item[] PopAll()
-    {
+    public Item[] TakeAll() {
         foreach (Transform child in frame.transform)
         {
             if (0 < child.childCount)
@@ -36,7 +33,7 @@ public class OtherPouchPrefab : InventoryBase
             }
         }
 
-        return inventory.PopAll();
+        return inventory.TakeAll();
     }
 
 }

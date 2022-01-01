@@ -10,7 +10,6 @@ using Popup.Defines;
 
 public class PSolidItem : PItemBase
 {
-    //public override void SetAmount(int _) { }
     public override void SetAmount() { }
     public override Prefab Type => Prefab.SolidItem;
 }

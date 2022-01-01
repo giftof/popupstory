@@ -24,6 +24,6 @@ public class PCustomButton : MonoBehaviour, IPointerClickHandler
         textMesh = textMesh ?? ObjectPool.Instance.Get(Prefab.TextMesh, transform, Vector3.zero, Vector2.one * 20);
         ugui = textMesh.GetComponent<TextMeshProUGUI>();
         ugui.color = color;
-        ugui.SetText(message);
+        ugui.text = message;
     }
 }

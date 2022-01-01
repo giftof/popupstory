@@ -2,23 +2,23 @@
 using Popup.Defines;
 using Popup.Framework;
 using Popup.Configs;
-using Popup.Delegate;
 using System;
-using UnityEngine;
 using Newtonsoft.Json;
 
 
 
 namespace Popup.Items
 {
-	public abstract partial class Item : PopupObject {
-		//public delegate void UpdateIcon(int num);
-		//public UpdateIcon _updateIcon;
+	public abstract class Item : PopupObject {
 		[JsonIgnore]
 		public Action updateIcon;
 		[JsonIgnore]
 		public Action updateUseableConut;
+		[JsonIgnore]
+		public Action removeEmptySlot;
 
+		[JsonProperty]
+		public int ItemId { get; protected set; }
 		[JsonProperty]
 		public float Weight { get; protected set; }
 		[JsonProperty]
@@ -39,13 +39,17 @@ namespace Popup.Items
 		public bool HaveAttribute(ItemCat attribute) => 0 < (Category & attribute);
 		public bool IsAttribute(ItemCat attribute) => Category.Equals(attribute);
 
-		public void reload() {
+		public void Reload() {
 			updateIcon?.Invoke();
 			updateUseableConut?.Invoke();
 		}
-	}
 
-	public abstract partial class Item {
+
+
+		/********************************/
+		/* Abstract funcs              	*/
+		/********************************/
+
         [JsonIgnore]
         public abstract int UseableCount { get; }
         public abstract bool HaveSpace(string _ = null);
@@ -56,7 +60,7 @@ namespace Popup.Items
 	
 
 
-	public partial class EquipItem : Item
+	public class EquipItem : Item
     {
 		[JsonProperty]
 		public int Durability { get; protected set; }
@@ -65,10 +69,13 @@ namespace Popup.Items
 
 		public int SpellAmount => SpellArray == null ? 0 : SpellArray.Length;
         public Spell Spell(int uid) => Guard.MustInclude(uid, SpellArray, "[GetSpell in EquipItem]");
-	}
 
-	public partial class EquipItem
-	{
+
+
+		/********************************/
+		/* Implement Abstract funcs		*/
+		/********************************/
+
 		public override bool IsExist => 0 < Durability;
 		public override object DeepCopy(int? uid, int? durability) {
 			EquipItem equipItem = (EquipItem)MemberwiseClone();
@@ -80,8 +87,11 @@ namespace Popup.Items
 		public override int UseableCount => Durability;
 		public override bool HaveSpace(string _ = null) => false;
 		public override bool Use() {
-			Durability--;
+			--Durability;
 			updateUseableConut?.Invoke();
+			if (UseableCount <= 0)
+				removeEmptySlot?.Invoke();
+			
 			return 0 < Durability;
 		}
 		public override float TWeight() => Weight;
@@ -90,7 +100,7 @@ namespace Popup.Items
 
 
 
-	public partial class StackableItem : Item
+	public class StackableItem : Item
 	{
 		[JsonProperty]
 		public int Amount { get; protected set; }
@@ -102,6 +112,8 @@ namespace Popup.Items
 
 			Amount -= decrease;
 			updateUseableConut?.Invoke();
+			if (UseableCount <= 0)
+				removeEmptySlot?.Invoke();
 
 			return decrease;
 		}
@@ -113,24 +125,19 @@ namespace Popup.Items
 
 			return increase;
 		}
-		//private void Decrease(int count) => Amount -= count;
-		//private void Increase(int count) => Amount += count;
 		private int Space => MaxAmount - Amount;
 
 		public bool AddStack(StackableItem item) {
 			Increase(item.Decrease(Space));
 			return item.Amount.Equals(0);
-			//int enableStack = Math.Min(item.Amount, Space);
-
-			//item.Decrease(enableStack);
-			//Increase(enableStack);
-
-			//return item.Amount.Equals(0);
 		}
-	}
 
-	public partial class StackableItem
-    {
+
+
+		/********************************/
+		/* Implement Abstract funcs		*/
+		/********************************/
+
 		public override bool IsExist => 0 < Amount;
 		public override object DeepCopy(int? uid, int? amount) {
 			StackableItem toolItem = (StackableItem)MemberwiseClone();
@@ -141,7 +148,10 @@ namespace Popup.Items
 
 		public override int UseableCount => Amount;
 		public override bool HaveSpace(string name = null) => (name == null || this.Name.Equals(name)) && Amount < MaxAmount;
-		public override bool Use() => 0 < Amount--;
+		public override bool Use() {
+			Decrease(1);
+			return 0 < Amount;
+		}
 		public override float TWeight() => Amount * Weight;
 		public override float TVolume() => Amount * Volume;
 	}

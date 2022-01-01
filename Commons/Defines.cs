@@ -52,7 +52,7 @@ namespace Popup.Defines
     public enum ItemCat
     {
         equip       = 0x0001,
-        stackable        = 0x0002,
+        stackable   = 0x0002,
     }
 
     //public enum EquipSlot

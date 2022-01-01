@@ -18,26 +18,17 @@ public abstract partial class InventoryBase : MonoBehaviour {
     public PCustomButton takeAll;
     public PCustomButton close;
 
-    public void Insert(params Item[] array) {
-        AddNew(array);
 
-        if (isActiveAndEnabled) {
-            CreateUndefinedSlot();
-        }
-    }
 
-    private void OnEnable() {
-        CreateUndefinedSlot();
-    }
+	/********************************/
+	/* Behaviours funcs             */
+	/********************************/
+
+    private void OnEnable() => CreateUndefinedSlot();
 
     protected void MakeInventory() => inventory = inventory ?? new WareHouse(size);
 
-    protected void ButtonAction() {
-        close.AddClickAction(() => {
-            gameObject.SetActive(false);
-            //DEBUG_TEST_SHOW_CONTENTS();
-        });
-    }
+    protected void ButtonAction() => close.AddClickAction(() => gameObject.SetActive(false));
 
     protected void MakeSlot() {
         for (int i = 0; i < size; i++) {
@@ -48,17 +39,52 @@ public abstract partial class InventoryBase : MonoBehaviour {
             prefab.AddRemoveAction(item => inventory.Remove(item));
         }
     }
-}
 
+    public int nextIndex = 0;
+    public PItemBase Next() {
+        
+        while (true) {
+            if (0 < frame.transform.GetChild(nextIndex++).childCount) {
+                return frame.transform.GetChild(nextIndex - 1).GetChild(0).GetComponent<PItemBase>();
+            }
+            if (nextIndex == size)
+                break;
+        }
+        nextIndex = 0;
+        return null;
+    }
 
-public abstract partial class InventoryBase {
+    public PItemBase First() {
+        for (int i = 0; i < frame.transform.childCount; ++i) {
+            if (0 < frame.transform.GetChild(i).childCount) {
+                return frame.transform.GetChild(i).GetChild(0).GetComponent<PItemBase>();
+            }
+        }
+        return null;
+    }
 
-    private void AddNew(params Item[] array) {
+    public void Remove(PItemBase item) {
+        inventory.Remove(item.Item);
+        ObjectPool.Instance.Release(item.Type, item.gameObject);
+    }
+
+    public bool Insert(params Item[] array) {
+        bool success = AddNew(array);
+
+        if (isActiveAndEnabled) {
+            CreateUndefinedSlot();
+        }
+
+        return success;
+    }
+
+    private bool AddNew(params Item[] array) {
         foreach (Item item in array) {
             item.SetSlotId = Config.unSlot;
             if (!inventory.Add(item))
-                return;
+                return false;
         }
+        return true;
     }
 
     private int EmptySlotIndex(int startIndex) {
@@ -86,16 +112,17 @@ public abstract partial class InventoryBase {
     private void SetPrefabData(PItemBase itemBase, Item item, Transform parent) {
         itemBase.Item = item;
         itemBase.lastParent = parent;
-        //itemBase.SetAmount(item.UseableCount);
         item.updateUseableConut = itemBase.SetAmount;
         item.updateIcon = itemBase.SetIconImage;
-        item.reload();
+        item.removeEmptySlot = itemBase.ReleaseObject;
+        item.Reload();
     }
-}
 
 
 
-public abstract partial class InventoryBase {
+	/********************************/
+	/* TEST funcs              	    */
+	/********************************/
 
     public void DEBUG_TEST_SHOW_CONTENTS() => inventory.DEBUG_ShowAllItems();
 }

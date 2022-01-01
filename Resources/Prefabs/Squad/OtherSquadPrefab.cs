@@ -1,20 +1,28 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Popup.Items;
 
-public class OtherSquadPrefab : SquadBase
-{
-    //public override void LinkInventory(InventoryBase inventory) => Inventory = (OtherPouchPrefab)inventory;
+public class OtherSquadPrefab : SquadBase {
     public InventoryBase TakeAllTarget { get; set; } = null;
 
-    protected override void SetButtonAction()
-    {
-        inventoryBtn.AddClickAction(() => {
-            ToggleInventory();
-        });
-
+    protected override void SetButtonAction() {
+        inventoryBtn.AddClickAction( () => ToggleInventory() );
+        
         inventoryBase.takeAll.AddClickAction(() => {
-            TakeAllTarget?.Insert(((OtherPouchPrefab)inventoryBase).PopAll());
+            
+            while (true) {
+                PItemBase next = inventoryBase.Next();
+
+                Debug.LogError($"next = {next?.Item.Name}");
+
+                if (next != null && TakeAllTarget != null) {
+                    if (TakeAllTarget.Insert(next.Item))
+                        Remove(next);
+                }
+                else
+                    return;
+            }
         });
     }
 }
