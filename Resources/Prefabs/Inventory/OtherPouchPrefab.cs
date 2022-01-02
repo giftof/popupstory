@@ -8,25 +8,25 @@ using Popup.Defines;
 
 
 
-public class OtherPouchPrefab : InventoryBase
-{
+public class OtherPouchPrefab : PInventoryBase {
+
     void Awake() {
-        size = Config.pouchSize;
-        inventory = inventory ?? new WareHouse(size);
+        if (inventory == null || slotArray == null) {
+            inventorySize = Config.pouchSize;
+            inventory = new WareHouse(inventorySize);
+            slotArray = new PItemSlot[inventorySize];
+        }
     }
 
     void Start() {
-        MakeInventory();
         MakeSlot();
         ButtonAction();
         gameObject.SetActive(false);
     }
 
     public Item[] TakeAll() {
-        foreach (Transform child in frame.transform)
-        {
-            if (0 < child.childCount)
-            {
+        foreach (Transform child in frame.transform) {
+            if (0 < child.childCount) {
                 Transform retrieveObject = child.GetChild(0);
                 Prefab type = retrieveObject.GetComponent<PItemBase>().Type;
                 ObjectPool.Instance.Release(type, retrieveObject.gameObject);
@@ -35,5 +35,4 @@ public class OtherPouchPrefab : InventoryBase
 
         return inventory.TakeAll();
     }
-
 }

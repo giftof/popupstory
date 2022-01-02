@@ -11,7 +11,7 @@ using Popup.Defines;
 public abstract partial class SquadBase : MonoBehaviour
 {
     [SerializeField] protected PCustomButton inventoryBtn;
-    [SerializeField] protected InventoryBase inventoryBase;
+    [SerializeField] protected PInventoryBase inventoryBase;
 
     private void Start() => SetButtonAction();
 
@@ -25,7 +25,7 @@ public abstract partial class SquadBase : MonoBehaviour
 
     public void InventoryPosition(GUIPosition position) => inventoryBase.gameObject.PositionOnCanvas(position);
 
-    public InventoryBase Inventory => inventoryBase;
+    public PInventoryBase Inventory => inventoryBase;
 }
 
 

@@ -12,9 +12,8 @@ namespace Popup.Delegate
     public delegate T ConvertFromString<T>(IDataReader data);
 
     public delegate void ButtonAction();
-    public delegate void ItemAction(Item item);
     public delegate T[] NET_REQ<T>(params int[] id) where T : Item;
 
-
+    public delegate void ActionWithItem(Item item);
     public delegate void ActionWithInt(int value);
 }

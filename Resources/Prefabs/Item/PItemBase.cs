@@ -14,7 +14,15 @@ using Popup.Defines;
 public abstract class PItemBase : MonoBehaviour, IITemHandler {
 
     [SerializeField] Image image = null;
-    public Transform lastParent = null;
+    private PItemSlot m_lastParentSlot;
+    public PItemSlot lastParentSlot {
+        get => m_lastParentSlot;
+        set {
+            m_lastParentSlot = value;
+            transform.SetParent(m_lastParentSlot.transform);
+            transform.localPosition = Vector3.zero;
+        }
+    }
     private Action useAction = null;
     private Vector2 offset = default;
 
@@ -64,8 +72,8 @@ public abstract class PItemBase : MonoBehaviour, IITemHandler {
     }
 
     public void OnPointerUp(PointerEventData eventData) {
-        if (lastParent != null) {
-            transform.SetParent(lastParent);
+        if (lastParentSlot != null) {
+            transform.SetParent(lastParentSlot.transform);
             transform.localPosition = Vector3.zero;
         }
     }

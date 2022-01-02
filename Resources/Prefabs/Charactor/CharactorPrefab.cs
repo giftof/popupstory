@@ -11,7 +11,7 @@ using Popup.Inventory;
 
 public class CharactorPrefab : MonoBehaviour
 {
-    InventoryBase inventory;
+    PInventoryBase inventory;
 
 
     // Start is called before the first frame update

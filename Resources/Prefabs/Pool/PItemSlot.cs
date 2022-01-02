@@ -8,43 +8,60 @@ using Popup.Items;
 
 
 
-public partial class PItemSlot : MonoBehaviour
-{
+public partial class PItemSlot : MonoBehaviour, IDropHandler {
     public int slotId;
-    public ItemAction insert = null;
-    public ItemAction remove = null;
+    public ActionWithItem InsertDelegate = null;
+    public ActionWithItem RemoveDelegate = null;
+    public PItemBase CurrentItem { get; set; } = null;
 
 
 
-    public void AddInsertAction(ItemAction itemAction) => insert += itemAction;
-    public void AddRemoveAction(ItemAction itemAction) => remove += itemAction;
+    /********************************/
+    /* Behaviours funcs             */
+    /********************************/
 
-    private void MoveAction(PItemBase item, PItemSlot from, PItemSlot to) {
-        item.Item.SetSlotId = to.slotId;
-        from.remove?.Invoke(item.Item);
-        to.insert?.Invoke(item.Item);
+    public void SetInsertData(ActionWithItem itemAction) => InsertDelegate = itemAction;
+    public void AddInsertData(ActionWithItem itemAction) => InsertDelegate += itemAction;
+    public void SetRemoveData(ActionWithItem itemAction) => RemoveDelegate = itemAction;
+    public void AddRemoveData(ActionWithItem itemAction) => RemoveDelegate += itemAction;
+    public void PutItem(PItemBase item) {
+        SetData(item, null, this);
+        SetTransform(item, this);
     }
 
-    private void SetParent(PItemBase dest, Transform parent) {
-        dest.transform.SetParent(parent);
-        dest.transform.localPosition = Vector3.zero;
-        dest.lastParent = parent;
-    }
-}
 
+    /********************************/
+    /* Implement Interface          */
+    /********************************/
 
-
-public partial class PItemSlot : IDropHandler {
     public void OnDrop(PointerEventData eventData) {
-        if (eventData.selectedObject != null && eventData.selectedObject.TryGetComponent(out PItemBase item)) {
-            if (0 < transform.childCount) {
-                PItemBase currentItem = transform.GetChild(0).GetComponent<PItemBase>();
-                MoveAction(currentItem, this, item.lastParent.GetComponent<PItemSlot>());
-                SetParent(currentItem, item.lastParent);
-            }
+        if (eventData.selectedObject == null)
+            return;
 
-            MoveAction(item, item.lastParent.GetComponent<PItemSlot>(), this);
-            SetParent(item, transform);
+        if (eventData.selectedObject.TryGetComponent(out PItemBase selectedItem)) {
+
+            Debug.Log(CurrentItem);
+            Debug.Log(selectedItem);
+
+            SetData(CurrentItem, this, selectedItem.lastParentSlot);
+            SetTransform(CurrentItem, selectedItem.lastParentSlot);
+
+            SetData(selectedItem, selectedItem.lastParentSlot, this);
+            SetTransform(selectedItem, this);
         }
+    }
+
+    private void SetData(PItemBase item, PItemSlot from, PItemSlot to) {
+        if (item == null)
+            return;
+        item.Item.SetSlotId = to.slotId;
+        from?.RemoveDelegate?.Invoke(item.Item);
+        to?.InsertDelegate?.Invoke(item.Item);
+    }
+
+    private void SetTransform(PItemBase dest, PItemSlot slot) {
+        if (dest != null)
+            dest.lastParentSlot = slot;
+        slot.CurrentItem = dest;
     }
 }

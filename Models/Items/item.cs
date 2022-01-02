@@ -52,7 +52,7 @@ namespace Popup.Items
 
         [JsonIgnore]
         public abstract int UseableCount { get; }
-        public abstract bool HaveSpace(string _ = null);
+        public abstract bool HaveSpace(int? _ = null);
         public abstract bool Use();
 		public abstract float TWeight();
 		public abstract float TVolume();
@@ -60,7 +60,7 @@ namespace Popup.Items
 	
 
 
-	public class EquipItem : Item
+	public class SolidItem : Item
     {
 		[JsonProperty]
 		public int Durability { get; protected set; }
@@ -78,14 +78,14 @@ namespace Popup.Items
 
 		public override bool IsExist => 0 < Durability;
 		public override object DeepCopy(int? uid, int? durability) {
-			EquipItem equipItem = (EquipItem)MemberwiseClone();
+			SolidItem equipItem = (SolidItem)MemberwiseClone();
 			equipItem.Uid = uid ?? 0;
 			equipItem.Durability = durability ?? 0;
 			return equipItem;
 		}
 
 		public override int UseableCount => Durability;
-		public override bool HaveSpace(string _ = null) => false;
+		public override bool HaveSpace(int? _ = null) => false;
 		public override bool Use() {
 			--Durability;
 			updateUseableConut?.Invoke();
@@ -147,7 +147,7 @@ namespace Popup.Items
 		}
 
 		public override int UseableCount => Amount;
-		public override bool HaveSpace(string name = null) => (name == null || this.Name.Equals(name)) && Amount < MaxAmount;
+		public override bool HaveSpace(int? nameId = null) => (nameId == null || this.NameId.Equals(nameId)) && Amount < MaxAmount;
 		public override bool Use() {
 			Decrease(1);
 			return 0 < Amount;

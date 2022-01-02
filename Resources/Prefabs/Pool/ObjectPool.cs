@@ -10,15 +10,18 @@ public partial class ObjectPool : MonoBehaviour {
 
     public static ObjectPool Instance = null;
     private readonly Dictionary<Prefab, Queue<GameObject>> pool = new Dictionary<Prefab, Queue<GameObject>>();
-    private readonly List<GameObject> prefabList = new List<GameObject>();
+    [SerializeField] private readonly List<GameObject> prefabList = new List<GameObject>();
+    //private readonly List<GameObject> prefabList = new List<GameObject>();
 
     void Awake() {
         if (Instance != null)
             Destroy(this);
         else {
             Instance = this;
-            foreach (string name in Enum.GetNames(typeof(Prefab)))
+            foreach (string name in Enum.GetNames(typeof(Prefab))) {
                 prefabList.Add(Resources.Load<GameObject>($"{Path.prefab}{name}"));
+                Debug.Log($"{Path.prefab}{name}");
+            }
             foreach (Prefab value in Enum.GetValues(typeof(Prefab)))
                 pool.Add(value, new Queue<GameObject>());
         }
@@ -38,8 +41,8 @@ public partial class ObjectPool : MonoBehaviour {
 
 
 /* get variation */
-public partial class ObjectPool
-{
+public partial class ObjectPool {
+
     public GameObject Get(Prefab type, Transform parent) {
         GameObject obj = Get(type);
         obj.SetActive(true);

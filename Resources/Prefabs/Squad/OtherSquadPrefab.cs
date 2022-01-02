@@ -4,7 +4,7 @@ using UnityEngine;
 using Popup.Items;
 
 public class OtherSquadPrefab : SquadBase {
-    public InventoryBase TakeAllTarget { get; set; } = null;
+    public PInventoryBase TakeAllTarget { get; set; } = null;
 
     protected override void SetButtonAction() {
         inventoryBtn.AddClickAction( () => ToggleInventory() );

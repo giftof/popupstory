@@ -8,17 +8,17 @@ using Popup.Defines;
 
 
 
-public class UserPouchPrefab : InventoryBase
-{
-    void Awake()
-    {
-        size = Config.pouchSize;
-        inventory = inventory ?? new WareHouse(size);
+public class UserPouchPrefab : PInventoryBase {
+
+    void Awake() {
+        if (inventory == null || slotArray == null) {
+            inventorySize = Config.pouchSize;
+            inventory = new WareHouse(inventorySize);
+            slotArray = new PItemSlot[inventorySize];
+        }
     }
 
-    void Start()
-    {
-        MakeInventory();
+    void Start() {
         MakeSlot();
         ButtonAction();
         gameObject.SetActive(false);

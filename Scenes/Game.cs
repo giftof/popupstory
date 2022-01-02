@@ -63,7 +63,7 @@ public class Game : MonoBehaviour
     void DEBUG_LINQ()
     {
         string TEST_JSON_ITEM1 = "{\"name\":\"glass sword\",\"uid\":88,\"weight\":1.2,\"volume\":3.4,\"amount\":1,\"grade\":4,\"category\":63,\"magicIdArray\":[1,2,3,4,5]}";
-        EquipItem test = Libs.FromJson<EquipItem>(TEST_JSON_ITEM1);
+        SolidItem test = Libs.FromJson<SolidItem>(TEST_JSON_ITEM1);
 
         Debug.Log(test.Name);
         Debug.Log(test.Uid);
@@ -85,7 +85,7 @@ public class Game : MonoBehaviour
     void DEBUG_Convert()
     {
         string TEST_JSON_ITEM1 = "{\"name\":\"glass sword\",\"uid\":88,\"weight\":1.2,\"volume\":3.4,\"amount\":1,\"grade\":4,\"category\":63,\"magicIdArray\":[1,2,3,4,5]}";
-        EquipItem test = Libs.FromJson<EquipItem>(TEST_JSON_ITEM1);
+        SolidItem test = Libs.FromJson<SolidItem>(TEST_JSON_ITEM1);
         string json;
 
         Debug.Log(test.Name);
@@ -187,7 +187,7 @@ public class Game : MonoBehaviour
         // item7.SetVolume(5f);
 
         string itemDef8 = $"{{\"uid\":{Manager.Instance.network.REQ_NEW_ID()},\"name\":\"boots1\",\"category\":{(int)ItemCat.equip},\"durability\":50,\"weight\":0.2,\"volume\":1}}";
-        Item item8 = JsonConvert.DeserializeObject<EquipItem>(itemDef8);
+        Item item8 = JsonConvert.DeserializeObject<SolidItem>(itemDef8);
 
         // Item item9 = new EquipItem(ServerJob.RequestNewUID);
         // item9.SetName("gloves1");
