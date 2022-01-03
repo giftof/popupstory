@@ -5,6 +5,7 @@ using Popup.Items;
 using Popup.Inventory;
 using Popup.Configs;
 using Popup.Defines;
+using Popup.Delegate;
 
 
 
@@ -38,7 +39,7 @@ public abstract class PInventoryBase : MonoBehaviour {
     /* Initialize funcs             */
     /********************************/
 
-    protected void ButtonAction() => close.AddClickAction(() => gameObject.SetActive(false));
+    // protected void ButtonAction() => close.AddClickAction(() => gameObject.SetActive(false));
 
     protected void MakeSlot() {
         for (int i = 0; i < inventorySize; i++) {
@@ -50,87 +51,89 @@ public abstract class PInventoryBase : MonoBehaviour {
         }
     }
 
+    protected void Initialize(uint size) {
+        inventorySize = size;
+        inventory = new WareHouse(size);
+        slotArray = new PItemSlot[size];
+    }
+
 
 
     /********************************/
     /* Behaviours funcs             */
     /********************************/
 
-    private void OnEnable() => CreateUndefinedSlot();
-
-    public int nextIndex = 0;
-    public PItemBase Next() {
-        
-        while (true) {
-            if (0 < frame.transform.GetChild(nextIndex++).childCount) {
-                return frame.transform.GetChild(nextIndex - 1).GetChild(0).GetComponent<PItemBase>();
-            }
-            if (nextIndex == inventorySize)
-                break;
+    private PItemSlot FindSlot(PItemBase itemBase) {
+        foreach (PItemSlot slot in slotArray) {
+            if (itemBase == slot.CurrentItem)
+                return slot;
         }
-        nextIndex = 0;
         return null;
     }
 
-    public void Remove(PItemBase item) {
-        inventory.Remove(item.Item);
-        ObjectPool.Instance.Release(item.Type, item.gameObject);
-    }
+    public bool Use(Item item) => inventory.Use(item);
 
-    public bool Insert(params Item[] array) {
-        bool success = AddNew(array);
-
-        if (isActiveAndEnabled)
-            CreateUndefinedSlot();
-
-        return success;
-    }
-
-    private bool AddNew(params Item[] array) {
-        foreach (Item item in array) {
-            item.SetSlotId = Config.unSlot;
-            if (!inventory.Add(item))
-                return false;
+    private int nextIndex = -1;
+    public PItemBase Next() {
+        while (true) {
+            if (++nextIndex == inventorySize)
+                break;
+            if (slotArray[nextIndex].CurrentItem != null)
+                return slotArray[nextIndex].CurrentItem;
         }
-        return true;
+        nextIndex = -1;
+        return null;
     }
 
-    private int EmptySlotIndex(int startIndex) {
+    public void Remove(PItemBase[] itemArray) {
+        foreach(PItemBase item in itemArray)
+            Remove(item);
+    }
 
+    public void Remove(PItemBase item) {
+Debug.Log($"Requested remove item = {item.Item?.Uid}, slot = {item.Item.SlotId}");
+// Debug.Log($"is contain?: {inventory.HaveItem(item.Item)}");
+        if (inventory.HaveItem(item.Item.Uid)) {
+            inventory.Remove(item.Item);
+            FindSlot(item)?.RemoveItem();
+        }
+    }
+
+    public bool Insert(Item item) {
+        if (item.HaveAttribute(ItemCat.stackable)) {
+            inventory.AddStackable(item as StackableItem);
+            if (!item.IsExist)
+                return true;
+        }
+
+        while (inventory.HaveSpace()) {
+            (Item added, Item remain) = inventory.AddNew(item);
+
+            if (added != null) {
+                PItemSlot itemSlot = slotArray[EmptySlotIndex()];
+                PItemBase itemBase = ObjectPool.Instance.Get(Type(added), itemSlot.transform).GetComponent<PItemBase>();
+                itemBase.Item = added;
+                itemBase.Item.SetSlotId = itemSlot.slotId;
+                itemBase.lastParentSlot = itemSlot;
+            }
+            else
+                return false;
+            if (remain == null)
+                return true;
+        }
+        return false;
+    }
+
+    public void Insert(params Item[] array) {
+        foreach (Item item in array)
+            Insert(item);
+    }
+
+    private int EmptySlotIndex(int startIndex = 0) {
         while (slotArray[startIndex].CurrentItem != null)
             ++startIndex;
         return startIndex;
     }
-
-    private void CreateUndefinedSlot() {
-        int emptyIndex = 0;
-
-        foreach (Item item in inventory.UnslotedList()) {
-            emptyIndex = EmptySlotIndex(emptyIndex);
-
-            PItemSlot parent = slotArray[emptyIndex];
-            PItemBase itemBase = ObjectPool.Instance.Get(Type(item), parent.transform).GetComponent<PItemBase>();
-
-            itemBase.Item = item;
-            itemBase.lastParentSlot = parent;
-
-            item.SetSlotId = emptyIndex;
-            item.updateUseableConut = itemBase.SetAmount;
-            item.updateIcon = itemBase.SetIconImage;
-            item.removeEmptySlot = itemBase.ReleaseObject;
-            item.Reload();
-
-        }
-    }
-
-    //private void SetPrefabData(PItemBase itemBase, Item item, PItemSlot parent) {
-    //    itemBase.Item = item;
-    //    itemBase.lastParentSlot = parent;
-    //    item.updateUseableConut = itemBase.SetAmount;
-    //    item.updateIcon = itemBase.SetIconImage;
-    //    item.removeEmptySlot = itemBase.ReleaseObject;
-    //    item.Reload();
-    //}
 
 
 

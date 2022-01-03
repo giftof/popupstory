@@ -51,7 +51,7 @@ namespace Popup.Charactors
 
 
     	public override bool IsExist => IsOccupied; // impl.
-        public override object DeepCopy(int? uid = null, int? notDefinedCount = null) => MemberwiseClone(); // impl.
+        public override object DeepCopy(int? uid = null) => MemberwiseClone(); // impl.
 
         public void TakeAffect(params Spell[] spell)
         {

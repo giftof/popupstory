@@ -10,8 +10,17 @@ using Popup.Configs;
 using Popup.Defines;
 
 
+// using UniRx;
+// using UniRx.Triggers;
+
 
 public abstract class PItemBase : MonoBehaviour, IITemHandler {
+
+    void Start() {
+        // var clickStream = this.UpdateAsObservable().Where(_ => Input.GetMouseButtonDown(0));
+        // clickStream.Buffer(clickStream.Throttle(TimeSpan.FromSeconds(Config.doubleClickInterval))).Where(x => x.Count >= 2).Subscribe(x => Debug.Log($"x = {x.ToString()}, this is Double Click"));
+
+    }
 
     [SerializeField] Image image = null;
     private PItemSlot m_lastParentSlot;
@@ -21,12 +30,23 @@ public abstract class PItemBase : MonoBehaviour, IITemHandler {
             m_lastParentSlot = value;
             transform.SetParent(m_lastParentSlot.transform);
             transform.localPosition = Vector3.zero;
+            m_lastParentSlot.CurrentItem = this;
         }
     }
     private Action useAction = null;
     private Vector2 offset = default;
 
-    public Item Item { get; set; }
+    private Item m_item;
+    public Item Item { 
+        get => m_item;
+        set {
+            m_item = value;
+            m_item.updateUseableConut = SetAmount;
+            m_item.updateIcon = SetIconImage;
+            m_item.removeEmptySlot = ReleaseObject;
+            m_item.Reload();
+        }
+    }
 
     public void SetUseAction(Action action) => useAction = action;
     public void AddUseAction(Action action) => useAction += action;
@@ -40,13 +60,7 @@ public abstract class PItemBase : MonoBehaviour, IITemHandler {
     /********************************/
 
     public abstract void SetAmount();
-    public void SetIconImage() => StartCoroutine(LoadSprite(Item.Icon));
-
-    IEnumerator LoadSprite(int iconImageId) {
-        Sprite sprite = Resources.Load<Sprite>($"{Path.icon}{iconImageId}");
-        yield return sprite;
-        image.sprite = sprite;
-    }
+    public void SetIconImage() => image.sprite = Resources.Load<Sprite>($"{Path.icon}{m_item.Icon}");
     public void ReleaseObject() => ObjectPool.Instance.Release(Type, gameObject);
 
 
@@ -80,7 +94,6 @@ public abstract class PItemBase : MonoBehaviour, IITemHandler {
 
     int clickCount = 0;
     float clickTime = 0f;
-
     public void OnPointerClick(PointerEventData eventData) {
         if (0 < clickCount && eventData.clickTime - clickTime < Config.doubleClickInterval) {
             clickCount = 0;

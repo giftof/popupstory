@@ -24,8 +24,8 @@ namespace Popup.Squad
         public Dictionary<int, Charactor> Charactors { get; protected set; }
         [JsonIgnore]
         private int OccupiedSize { get; set; }
-        [JsonProperty]
-        public Inventory Inventory { get; protected set; }
+        [SerializeField]
+        private PPouch pouch;
 		[JsonIgnore]
         public int? ActivateCharactor { get; protected set; }
 
@@ -34,7 +34,6 @@ namespace Popup.Squad
             this.Uid = uid;
             OccupiedSize = 0;
             Charactors = new Dictionary<int, Charactor>();
-            Inventory = new WareHouse(inventorySize);
         }
 
 
@@ -42,18 +41,16 @@ namespace Popup.Squad
 
         public override bool IsExist => 0 < Charactors.Count;
         public bool IsAlive => !Charactors.FirstOrDefault(p => p.Value.IsAlive).Equals(null);
-        public override object DeepCopy(int? uid = null, int? _ = null)
+        public override object DeepCopy(int? uid = null)
         {
-            Inventory.EraseExhaustedSlot();
-
             Squad squad = (Squad)MemberwiseClone();
             squad.Uid = uid ?? squad.Uid;
 
             return squad;
         }
 
-        public bool Use(Item item) => Inventory.Use(item);
-        public bool Add(Item item) => Inventory.Add(item);
+        public bool Use(Item item) => pouch.Use(item);
+        public bool Add(Item item) => pouch.Insert(item);
 
         public bool AddLast(Charactor charactor)
         {

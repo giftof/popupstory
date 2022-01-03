@@ -51,7 +51,7 @@ namespace Popup.Defines
 
     public enum ItemCat
     {
-        equip       = 0x0001,
+        solid       = 0x0001,
         stackable   = 0x0002,
     }
 

@@ -14,6 +14,7 @@ namespace Popup.Delegate
     public delegate void ButtonAction();
     public delegate T[] NET_REQ<T>(params int[] id) where T : Item;
 
+    public delegate void ActionWithItemBase(PItemBase itemBase);
     public delegate void ActionWithItem(Item item);
     public delegate void ActionWithInt(int value);
 }

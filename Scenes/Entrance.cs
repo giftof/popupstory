@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
@@ -26,17 +27,17 @@ public class Entrance : MonoBehaviour
 
     //public ProgressBar progressBar;
 
-
     void Start()
     {
+        // var clickStream = this.UpdateAsObservable().Where(_ => Input.GetMouseButtonDown(0));
+        // clickStream.Buffer(clickStream.Throttle(TimeSpan.FromSeconds(Config.doubleClickInterval))).Where(x => x.Count >= 2).Subscribe(x => Debug.Log($"x = {x.ToString()}, this is Double Click"));
+
         Initialize();
         
         TEST_BTN();
         TEST_SET();
         //TEST_PROGBAR();
-        
     }
-
 
 
     private void Initialize()

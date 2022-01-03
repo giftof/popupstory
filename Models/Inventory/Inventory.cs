@@ -6,7 +6,6 @@ using System.Linq;
 using Popup.Configs;
 using Popup.Items;
 using Popup.Library;
-using Popup.Delegate;
 using Popup.Framework;
 using Popup.Defines;
 
@@ -18,7 +17,7 @@ namespace Popup.Inventory {
 
 	public abstract class Inventory /*: IInventory*/ {
 
-		public Dictionary<int, Item> inventory = new Dictionary<int, Item>();
+		protected Dictionary<int, Item> inventory = new Dictionary<int, Item>();
 		public uint MaxSize { get; protected set; }
 
 		public Inventory(uint maxSize) => MaxSize = maxSize;
@@ -29,16 +28,10 @@ namespace Popup.Inventory {
 		/* Behaviours funcs             */
 		/********************************/
 
-		public bool Add(Item item) {
-			if (Libs.IsExhaust(item))
-				return false;
+		public bool HaveItem(int key) => inventory.ContainsKey(key);
+		public bool HaveItem(Item item) => inventory[item.Uid] != null;
 
-			return item.HaveAttribute(ItemCat.stackable)
-				? AddStackable(item as StackableItem)
-				: AddNew(item);
-		}
-
-		private bool AddStackable(StackableItem item) {
+		public bool AddStackable(StackableItem item) {
 			var list = inventory
 				.Where(e => e.Value.NameId.Equals(item.NameId))
 				.Select(e => (StackableItem)e.Value)
@@ -47,28 +40,29 @@ namespace Popup.Inventory {
 			foreach (var element in list)
 				if (element.AddStack(item)) return true;
 
-			while (item.IsExist && HaveSpace()) {
-				StackableItem newItem = (StackableItem)item.DeepCopy(Manager.Instance.network.REQ_NEW_ID(), null);
-				newItem.AddStack(item);
-				inventory.Add(newItem.Uid, newItem);
-			}
-			return !item.IsExist;
-		}
-
-		private bool AddNew(Item item) {
-			Guard.MustNotInclude(item.Uid, inventory, "[AddNew - in WareHouse]");
-
-			if (inventory.Count < MaxSize) {
-				inventory.Add(item.Uid, item);
-				return true;
-			}
-
 			return false;
 		}
 
+		public (Item added, Item remain) AddNew(Item item) {
+			Guard.MustNotInclude(item.Uid, inventory, "[AddNew - in WareHouse]");
 
+			if (inventory.Count < MaxSize) {
 
-		private bool HaveSpace() => inventory.Count < MaxSize;
+				if (item.HaveAttribute(ItemCat.stackable)) {
+					StackableItem newStack = (StackableItem)item.DeepCopy(Manager.Instance.network.REQ_NEW_ID());
+					newStack.AddStack(item as StackableItem);
+					AddDictionary(newStack);
+					return (newStack, (0 < item.UseableCount ? item : null));
+				}
+				else {
+					AddDictionary(item);
+					return (item, null);
+				}
+			}
+			return (null, item);
+		}
+
+		public bool HaveSpace() => inventory.Count < MaxSize;
 
 		public void EraseExhaustedSlot() {
 			var empty = inventory.Where(e => !e.Value.IsExist).Select(e => e.Value).ToArray();
@@ -87,13 +81,13 @@ namespace Popup.Inventory {
 			return false;
 		}
 
-		//public void Insert(Item item) {
-		//	if (item == null)
-		//		return;
+		public void Insert(Item item) {
+			if (item == null)
+				return;
 
-		//	if (!inventory.ContainsKey(item.Uid))
-		//		inventory.Add(item.Uid, item);
-		//}
+			if (!inventory.ContainsKey(item.Uid)) 
+				AddDictionary(item);
+		}
 
 		public void Remove(Item item) {
 			if (item == null)
@@ -102,12 +96,6 @@ namespace Popup.Inventory {
 			inventory.Remove(item.Uid);
 		}
 
-		//public Item[] TakeAll() {
-		//	Item[] array = inventory.Values.ToArray();
-		//	inventory.Clear();
-		//	return array;
-		//}
-
 		public List<Item> UnslotedList() {
 			return inventory
 				.Where(pair => pair.Value.SlotId.Equals(Config.unSlot))
@@ -115,7 +103,12 @@ namespace Popup.Inventory {
 				.ToList();
 		}
 
+		private void AddDictionary(Item item) {
+			inventory.Add(item.Uid, item);
+			item.removeEmptyItem = RemoveElement;
+		}
 
+		private void RemoveElement(Item item) => inventory.Remove(item.Uid);
 
 		/********************************/
 		/* Abstract funcs              	*/
@@ -157,6 +150,7 @@ namespace Popup.Inventory {
 				Item item = inventory[key];
 				Debug.Log("UID = " + item.Uid + ", name = " + item.Name + ", slotId = " + item.SlotId + ", amt = " + item.UseableCount + ", w = " + item.TWeight() + ", v = " + item.TVolume());
 			}
+			Debug.Log("-------------------------------------------------");
 		}
 	}
 }

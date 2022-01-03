@@ -5,6 +5,7 @@ using System.Data;
 using Popup.Items;
 using Popup.Charactors;
 using Popup.Defines;
+using Popup.Delegate;
 using UnityEngine.EventSystems;
 using Newtonsoft.Json;
 
@@ -27,7 +28,7 @@ namespace Popup.Framework
 
         [JsonIgnore]
         public abstract bool IsExist { get; }
-        public abstract object DeepCopy(int? _ = null, int? __ = null);
+        public abstract object DeepCopy(int? _ = null);
 
         public int SetSlotId { set { SlotId = value; } }
         public int SetUID { set { Uid = value; } }
@@ -67,6 +68,11 @@ namespace Popup.Framework
 
     public interface IITemHandler : IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerDownHandler, IPointerUpHandler, IPointerClickHandler {}
 
+    // public interface IObserved {
+    //     void Notify();
+    //     void AddDelegate<T>(T action);
+    //     void RemoveDelegate<T>(T action);
+    // }
 
     //public interface IToolItemHandler : IITemHandler
     //{

@@ -28,7 +28,10 @@ public partial class PItemSlot : MonoBehaviour, IDropHandler {
         SetData(item, null, this);
         SetTransform(item, this);
     }
-
+    public void RemoveItem() {
+        ObjectPool.Instance.Release(CurrentItem.Type, CurrentItem.gameObject);
+        CurrentItem = null;
+    }
 
     /********************************/
     /* Implement Interface          */
@@ -39,19 +42,14 @@ public partial class PItemSlot : MonoBehaviour, IDropHandler {
             return;
 
         if (eventData.selectedObject.TryGetComponent(out PItemBase selectedItem)) {
-
-            Debug.Log(CurrentItem);
-            Debug.Log(selectedItem);
-
             SetData(CurrentItem, this, selectedItem.lastParentSlot);
             SetTransform(CurrentItem, selectedItem.lastParentSlot);
-
             SetData(selectedItem, selectedItem.lastParentSlot, this);
             SetTransform(selectedItem, this);
         }
     }
 
-    private void SetData(PItemBase item, PItemSlot from, PItemSlot to) {
+    public void SetData(PItemBase item, PItemSlot from, PItemSlot to) {
         if (item == null)
             return;
         item.Item.SetSlotId = to.slotId;
@@ -59,7 +57,7 @@ public partial class PItemSlot : MonoBehaviour, IDropHandler {
         to?.InsertDelegate?.Invoke(item.Item);
     }
 
-    private void SetTransform(PItemBase dest, PItemSlot slot) {
+    public void SetTransform(PItemBase dest, PItemSlot slot) {
         if (dest != null)
             dest.lastParentSlot = slot;
         slot.CurrentItem = dest;

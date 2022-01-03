@@ -1,21 +1,18 @@
-﻿using Popup.Library;
+using Popup.Library;
 using Popup.Defines;
 using Popup.Framework;
 using Popup.Configs;
+using Popup.Delegate;
 using System;
 using Newtonsoft.Json;
+using System.Collections;
+using System.Collections.Generic;
 
 
 
 namespace Popup.Items
 {
-	public abstract class Item : PopupObject {
-		[JsonIgnore]
-		public Action updateIcon;
-		[JsonIgnore]
-		public Action updateUseableConut;
-		[JsonIgnore]
-		public Action removeEmptySlot;
+	public abstract class Item : PopupObject, IObservable<out T> {
 
 		[JsonProperty]
 		public int ItemId { get; protected set; }
@@ -56,6 +53,29 @@ namespace Popup.Items
         public abstract bool Use();
 		public abstract float TWeight();
 		public abstract float TVolume();
+
+
+
+		public IDisposable Subscribe(IObserver<T> observer)
+		{
+			throw new NotImplementedException();
+		}
+
+
+
+
+		/********************************/
+		/* Define Delegate				*/
+		/********************************/
+
+		[JsonIgnore]
+		public Action updateIcon;
+		[JsonIgnore]
+		public Action updateUseableConut;
+		[JsonIgnore]
+		public Action removeEmptySlot;
+		[JsonIgnore]
+		public ActionWithItem removeEmptyItem;
 	}
 	
 
@@ -77,10 +97,10 @@ namespace Popup.Items
 		/********************************/
 
 		public override bool IsExist => 0 < Durability;
-		public override object DeepCopy(int? uid, int? durability) {
+		public override object DeepCopy(int? uid) {
 			SolidItem equipItem = (SolidItem)MemberwiseClone();
 			equipItem.Uid = uid ?? 0;
-			equipItem.Durability = durability ?? 0;
+			equipItem.Durability = 0;
 			return equipItem;
 		}
 
@@ -89,8 +109,10 @@ namespace Popup.Items
 		public override bool Use() {
 			--Durability;
 			updateUseableConut?.Invoke();
-			if (UseableCount <= 0)
+			if (UseableCount <= 0) {
 				removeEmptySlot?.Invoke();
+				removeEmptyItem?.Invoke(this);
+			}
 			
 			return 0 < Durability;
 		}
@@ -112,8 +134,10 @@ namespace Popup.Items
 
 			Amount -= decrease;
 			updateUseableConut?.Invoke();
-			if (UseableCount <= 0)
+			if (UseableCount <= 0) {
 				removeEmptySlot?.Invoke();
+				removeEmptyItem?.Invoke(this);
+			}
 
 			return decrease;
 		}
@@ -139,10 +163,10 @@ namespace Popup.Items
 		/********************************/
 
 		public override bool IsExist => 0 < Amount;
-		public override object DeepCopy(int? uid, int? amount) {
+		public override object DeepCopy(int? uid) {
 			StackableItem toolItem = (StackableItem)MemberwiseClone();
 			toolItem.Uid = uid ?? 0;
-			toolItem.Amount = amount ?? 0;
+			toolItem.Amount = 0;
 			return toolItem;
 		}
 

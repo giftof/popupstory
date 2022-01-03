@@ -186,7 +186,7 @@ public class Game : MonoBehaviour
         // item7.SetWeight(1f);
         // item7.SetVolume(5f);
 
-        string itemDef8 = $"{{\"uid\":{Manager.Instance.network.REQ_NEW_ID()},\"name\":\"boots1\",\"category\":{(int)ItemCat.equip},\"durability\":50,\"weight\":0.2,\"volume\":1}}";
+        string itemDef8 = $"{{\"uid\":{Manager.Instance.network.REQ_NEW_ID()},\"name\":\"boots1\",\"category\":{(int)ItemCat.solid},\"durability\":50,\"weight\":0.2,\"volume\":1}}";
         Item item8 = JsonConvert.DeserializeObject<SolidItem>(itemDef8);
 
         // Item item9 = new EquipItem(ServerJob.RequestNewUID);
@@ -205,14 +205,18 @@ public class Game : MonoBehaviour
 
         //inventory.DEBUG_ShowAllItems();
 
-        Debug.Log("add item1 = " + inventory1.Add(item1));
-        Debug.Log("add item2 = " + inventory1.Add(item2));
+        inventory1.Insert(item1);
+        inventory1.Insert(item2);
+        inventory1.Insert(item8);
+
+        // Debug.Log("add item1 = " + inventory1.Add(item1));
+        // Debug.Log("add item2 = " + inventory1.Add(item2));
         // Debug.Log("add item3 = " + inventory.AddItem(item3));
         // Debug.Log("add item4 = " + inventory.AddItem(item4));
         // Debug.Log("add item5 = " + inventory.AddItem(item5));
         // Debug.Log("add item6 = " + inventory.AddItem(item6));
         // Debug.Log("add item7 = " + inventory.AddItem(item7));
-        Debug.Log("add item8 = " + inventory1.Add(item8));
+        // Debug.Log("add item8 = " + inventory1.Add(item8));
         //Debug.Log("add item9 = " + inventory.AddItem(item9));
         // Debug.Log("add item1 = " + inventory.AddItem(item1));
         // Debug.Log("add item2 = " + inventory.AddItem(item2));
