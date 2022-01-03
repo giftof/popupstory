@@ -2,17 +2,15 @@ using Popup.Library;
 using Popup.Defines;
 using Popup.Framework;
 using Popup.Configs;
-using Popup.Delegate;
 using System;
+using System.Linq;
 using Newtonsoft.Json;
-using System.Collections;
 using System.Collections.Generic;
 
 
 
-namespace Popup.Items
-{
-	public abstract class Item : PopupObject, IObservable<out T> {
+namespace Popup.Items {
+	public abstract class Item : PopupObject, IPopupObserved {
 
 		[JsonProperty]
 		public int ItemId { get; protected set; }
@@ -27,19 +25,20 @@ namespace Popup.Items
 			get => m_icon;
 			set {
 				m_icon = value;
-				updateIcon?.Invoke();
+				Notify();
 			}
 		}
 		[JsonIgnore]
 		private int m_icon;
 
+
+
+		/********************************/
+		/* Define Behaviours			*/
+		/********************************/
+
 		public bool HaveAttribute(ItemCat attribute) => 0 < (Category & attribute);
 		public bool IsAttribute(ItemCat attribute) => Category.Equals(attribute);
-
-		public void Reload() {
-			updateIcon?.Invoke();
-			updateUseableConut?.Invoke();
-		}
 
 
 
@@ -50,42 +49,38 @@ namespace Popup.Items
         [JsonIgnore]
         public abstract int UseableCount { get; }
         public abstract bool HaveSpace(int? _ = null);
-        public abstract bool Use();
+        public abstract void Use();
 		public abstract float TWeight();
 		public abstract float TVolume();
 
 
 
-		public IDisposable Subscribe(IObserver<T> observer)
-		{
-			throw new NotImplementedException();
+		/********************************/
+		/* Implement Observed			*/
+		/********************************/
+
+		private readonly List<Action> monitorList = new List<Action>();
+        public void AddDelegate(Action action) => monitorList.Add(action);
+        public void RemoveDelegate(Action action) => monitorList.Remove(monitorList.FirstOrDefault(e => e.Equals(action)));
+		public void Notify() {
+			foreach (Action func in monitorList)
+				func?.Invoke();
 		}
-
-
-
-
-		/********************************/
-		/* Define Delegate				*/
-		/********************************/
-
-		[JsonIgnore]
-		public Action updateIcon;
-		[JsonIgnore]
-		public Action updateUseableConut;
-		[JsonIgnore]
-		public Action removeEmptySlot;
-		[JsonIgnore]
-		public ActionWithItem removeEmptyItem;
 	}
 	
 
 
-	public class SolidItem : Item
-    {
+	public class SolidItem : Item {
 		[JsonProperty]
 		public int Durability { get; protected set; }
 		[JsonProperty]
 		public Spell[] SpellArray { get; protected set; }
+
+
+
+		/********************************/
+		/* Define Behaviours			*/
+		/********************************/
 
 		public int SpellAmount => SpellArray == null ? 0 : SpellArray.Length;
         public Spell Spell(int uid) => Guard.MustInclude(uid, SpellArray, "[GetSpell in EquipItem]");
@@ -106,15 +101,9 @@ namespace Popup.Items
 
 		public override int UseableCount => Durability;
 		public override bool HaveSpace(int? _ = null) => false;
-		public override bool Use() {
+		public override void Use() {
 			--Durability;
-			updateUseableConut?.Invoke();
-			if (UseableCount <= 0) {
-				removeEmptySlot?.Invoke();
-				removeEmptyItem?.Invoke(this);
-			}
-			
-			return 0 < Durability;
+			Notify();
 		}
 		public override float TWeight() => Weight;
 		public override float TVolume() => Volume;
@@ -122,31 +111,30 @@ namespace Popup.Items
 
 
 
-	public class StackableItem : Item
-	{
+	public class StackableItem : Item {
 		[JsonProperty]
 		public int Amount { get; protected set; }
 		[JsonIgnore]
 		private int MaxAmount { get; set; } = Config.maxStack;
 
+
+
+		/********************************/
+		/* Define Behaviours			*/
+		/********************************/
+
 		private int Decrease(int count) {
 			int decrease = Math.Min(count, Amount);
 
 			Amount -= decrease;
-			updateUseableConut?.Invoke();
-			if (UseableCount <= 0) {
-				removeEmptySlot?.Invoke();
-				removeEmptyItem?.Invoke(this);
-			}
-
+			Notify();
 			return decrease;
 		}
 		private int Increase(int count) {
 			int increase = Math.Min(count, Space);
 
 			Amount += increase;
-			updateUseableConut?.Invoke();
-
+			Notify();
 			return increase;
 		}
 		private int Space => MaxAmount - Amount;
@@ -172,10 +160,7 @@ namespace Popup.Items
 
 		public override int UseableCount => Amount;
 		public override bool HaveSpace(int? nameId = null) => (nameId == null || this.NameId.Equals(nameId)) && Amount < MaxAmount;
-		public override bool Use() {
-			Decrease(1);
-			return 0 < Amount;
-		}
+		public override void Use() => Decrease(1);
 		public override float TWeight() => Amount * Weight;
 		public override float TVolume() => Amount * Volume;
 	}

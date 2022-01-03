@@ -41,10 +41,14 @@ public abstract class PItemBase : MonoBehaviour, IITemHandler {
         get => m_item;
         set {
             m_item = value;
-            m_item.updateUseableConut = SetAmount;
-            m_item.updateIcon = SetIconImage;
-            m_item.removeEmptySlot = ReleaseObject;
-            m_item.Reload();
+            m_item.AddDelegate(SetAmount);
+            m_item.AddDelegate(SetIconImage);
+            m_item.AddDelegate(ReleaseObject);
+            m_item.Notify();
+            //m_item.updateUseableConut = SetAmount;
+            //m_item.updateIcon = SetIconImage;
+            //m_item.removeEmptySlot = ReleaseObject;
+            //m_item.Reload();
         }
     }
 

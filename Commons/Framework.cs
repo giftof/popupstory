@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -68,11 +69,15 @@ namespace Popup.Framework
 
     public interface IITemHandler : IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerDownHandler, IPointerUpHandler, IPointerClickHandler {}
 
-    // public interface IObserved {
-    //     void Notify();
-    //     void AddDelegate<T>(T action);
-    //     void RemoveDelegate<T>(T action);
-    // }
+    public interface IPopupObserved {
+        void Notify();
+        void AddDelegate(Action action);
+        void RemoveDelegate(Action action);
+    }
+
+    public interface IPopupObserver {
+        void Dispose();
+    }
 
     //public interface IToolItemHandler : IITemHandler
     //{

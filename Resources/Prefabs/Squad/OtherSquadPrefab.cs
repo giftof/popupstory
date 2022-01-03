@@ -14,10 +14,11 @@ public class OtherSquadPrefab : SquadBase {
             while (true) {
                 PItemBase next = inventoryBase.Next();
                 if (next != null) {
-                    if (TakeAllTarget?.Insert(next.Item) ?? false) {
-                        Debug.Log($"I'll remove {next.Item.Name}");
-                        Remove(next);
-                    }
+                    TakeAllTarget?.Insert(next.Item);
+                    //if (TakeAllTarget?.Insert(next.Item) ?? false) {
+                    //    Debug.Log($"I'll remove {next.Item.Name}");
+                    //    Remove(next);
+                    //}
                 }
                 else
                     return;

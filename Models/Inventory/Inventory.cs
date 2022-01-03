@@ -15,7 +15,7 @@ using Popup.Defines;
 
 namespace Popup.Inventory {
 
-	public abstract class Inventory /*: IInventory*/ {
+	public abstract class Inventory: IPopupObserver /*: IInventory*/ {
 
 		protected Dictionary<int, Item> inventory = new Dictionary<int, Item>();
 		public uint MaxSize { get; protected set; }
@@ -31,16 +31,17 @@ namespace Popup.Inventory {
 		public bool HaveItem(int key) => inventory.ContainsKey(key);
 		public bool HaveItem(Item item) => inventory[item.Uid] != null;
 
-		public bool AddStackable(StackableItem item) {
+		public void AddStackable(StackableItem item) {
 			var list = inventory
 				.Where(e => e.Value.NameId.Equals(item.NameId))
 				.Select(e => (StackableItem)e.Value)
 				.OrderBy(e => e.SlotId);
 
-			foreach (var element in list)
-				if (element.AddStack(item)) return true;
-
-			return false;
+			foreach (var element in list) {
+				element.AddStack(item);
+				if (!item?.IsExist ?? true)
+					return;
+			}
 		}
 
 		public (Item added, Item remain) AddNew(Item item) {
@@ -64,36 +65,19 @@ namespace Popup.Inventory {
 
 		public bool HaveSpace() => inventory.Count < MaxSize;
 
-		public void EraseExhaustedSlot() {
-			var empty = inventory.Where(e => !e.Value.IsExist).Select(e => e.Value).ToArray();
-
-			for (int i = 0; i < empty.Length; ++i) {
-				empty[i].removeEmptySlot?.Invoke();
-				inventory.Remove(empty[i].Uid);
-			}
-		}
-
-		public bool Use(Item item) {
-			if (inventory.ContainsKey(item.Uid) && item.Use()) {
-				if (!item.IsExist) inventory.Remove(item.Uid);
-				return true;
-			}
-			return false;
+		public void Use(Item item) {
+			if (inventory.ContainsKey(item.Uid))
+				item.Use();
 		}
 
 		public void Insert(Item item) {
-			if (item == null)
-				return;
-
-			if (!inventory.ContainsKey(item.Uid)) 
+			if (item != null && !inventory.ContainsKey(item.Uid))
 				AddDictionary(item);
 		}
 
 		public void Remove(Item item) {
-			if (item == null)
-				return;
-
-			inventory.Remove(item.Uid);
+			if (item != null)
+				inventory.Remove(item.Uid);
 		}
 
 		public List<Item> UnslotedList() {
@@ -104,15 +88,26 @@ namespace Popup.Inventory {
 		}
 
 		private void AddDictionary(Item item) {
-			inventory.Add(item.Uid, item);
-			item.removeEmptyItem = RemoveElement;
+			if (!inventory.ContainsKey(item.Uid)) {
+				inventory.Add(item.Uid, item);
+				item.AddDelegate(Dispose);
+			}
 		}
 
-		private void RemoveElement(Item item) => inventory.Remove(item.Uid);
+		/********************************/
+		/* Implement Observer			*/
+		/********************************/
 
-		/********************************/
-		/* Abstract funcs              	*/
-		/********************************/
+		public void Dispose() {
+			RemoveExhaustedElement();
+		}
+
+		private void RemoveExhaustedElement() {
+			var array = inventory.Where(e => !e.Value.IsExist).Select(e => e.Key).ToArray();
+
+			foreach (var key in array)
+				inventory.Remove(key);
+		}
 
 
 
@@ -121,7 +116,7 @@ namespace Popup.Inventory {
 		/********************************/
 
 		public abstract void DEBUG_ShowAllItems();
-	}
+    }
 
 
 

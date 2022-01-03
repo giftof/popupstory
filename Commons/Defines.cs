@@ -1,8 +1,37 @@
+using Popup.Framework;
+using Popup.Items;
+
 
 namespace Popup.Defines
 {
-    public enum GUIPosition
-    {
+    //public static class DetailType {
+    //    public static T Convert<T>(PopupObject targetObject) where T: PopupObject {
+    //        switch (targetObject.Detail) {
+    //            case Detail.Item:
+    //                return targetObject as Item;
+    //            case Detail.SolidItem:
+    //                return targetObject as SolidItem;
+    //            default:
+    //                break;
+    //        }
+
+    //        return null;
+    //    }
+
+    //    public static Item Convert2(PopupObject targetObject) {
+    //        return targetObject as Item;
+    //    }
+    //}
+
+
+
+    public enum Detail {
+        Item,
+        StackableItem,
+        SolidItem,
+    }
+
+    public enum GUIPosition {
         LeftBottom,
         LeftMid,
         LeftTop,
@@ -14,8 +43,7 @@ namespace Popup.Defines
         RightTop,
     }
 
-    public enum Prefab
-    {
+    public enum Prefab {
         CustomButton,
         TextMesh,
         ItemSlot,
@@ -28,8 +56,7 @@ namespace Popup.Defines
         //Squad,
     }
 
-    public enum Elements
-    {
+    public enum Elements {
         none,
         light,  // effective sight (not good)
         dark,   // effective sight (not good)
@@ -39,8 +66,7 @@ namespace Popup.Defines
         earth,  // effective hearing (not good)
     }
 
-    public enum SpellEffective
-    {
+    public enum SpellEffective {
         none,
         hearing,
         sight,
@@ -49,8 +75,7 @@ namespace Popup.Defines
         touch,
     }
 
-    public enum ItemCat
-    {
+    public enum ItemCat {
         solid       = 0x0001,
         stackable   = 0x0002,
     }
@@ -70,8 +95,7 @@ namespace Popup.Defines
     //    rightHand,
     //}
 
-    public enum Grade
-    {
+    public enum Grade {
         none,
         white,
         green,
@@ -81,29 +105,25 @@ namespace Popup.Defines
         red,
     }
 
-    public enum EffectType
-    {
+    public enum EffectType {
         push,
         pull,
     }
 
-    public enum DefenceType
-    {
+    public enum DefenceType {
         evade,
         parry,
         block,
     }
 
-    public enum DamageType
-    {
+    public enum DamageType {
         smite,
         pierce,
         cut,
         scratch,
     }
 
-    public enum DotType
-    {
+    public enum DotType {
         poison,
         bleeding,
         disease,
@@ -111,8 +131,7 @@ namespace Popup.Defines
         sleep,
     }
 
-    public enum MindType
-    {
+    public enum MindType {
         unfocus,
         fear,
         scared,
@@ -122,8 +141,7 @@ namespace Popup.Defines
         focus,
     }
 
-    public enum SceneType
-    {
+    public enum SceneType {
         entrance,
         lobby,
         game,

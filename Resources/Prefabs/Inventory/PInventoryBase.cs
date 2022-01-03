@@ -71,7 +71,7 @@ public abstract class PInventoryBase : MonoBehaviour {
         return null;
     }
 
-    public bool Use(Item item) => inventory.Use(item);
+    public void Use(Item item) => inventory.Use(item);
 
     private int nextIndex = -1;
     public PItemBase Next() {
@@ -99,11 +99,11 @@ Debug.Log($"Requested remove item = {item.Item?.Uid}, slot = {item.Item.SlotId}"
         }
     }
 
-    public bool Insert(Item item) {
+    public void Insert(Item item) {
         if (item.HaveAttribute(ItemCat.stackable)) {
             inventory.AddStackable(item as StackableItem);
             if (!item.IsExist)
-                return true;
+                return;
         }
 
         while (inventory.HaveSpace()) {
@@ -117,11 +117,11 @@ Debug.Log($"Requested remove item = {item.Item?.Uid}, slot = {item.Item.SlotId}"
                 itemBase.lastParentSlot = itemSlot;
             }
             else
-                return false;
+                return;
             if (remain == null)
-                return true;
+                return;
         }
-        return false;
+        return;
     }
 
     public void Insert(params Item[] array) {
