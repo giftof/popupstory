@@ -13,7 +13,8 @@ using Popup.Library;
 using Popup.Items;
 using Popup.Squad;
 using Popup.Charactors;
-
+using Popup.Items;
+using Popup.Inventory;
 
 
 public class Entrance : MonoBehaviour
@@ -37,6 +38,17 @@ public class Entrance : MonoBehaviour
         TEST_BTN();
         TEST_SET();
         //TEST_PROGBAR();
+
+        // Item item1 = new SolidItem();
+        // Item item2 = new SolidItem();
+        // Inventory inventory = new WareHouse(10);
+
+        // Debug.Log("add new");
+        // inventory.AddNew(item1);
+        // Debug.Log("use 1");
+        // inventory.Use(item1.Uid);
+        // Debug.Log("use 2");
+        // inventory.Use(item2.Uid);
     }
 
 

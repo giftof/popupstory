@@ -1,4 +1,3 @@
-using Popup.Library;
 using Popup.Defines;
 using Popup.Framework;
 using Popup.Configs;
@@ -38,7 +37,23 @@ namespace Popup.Items {
 		/********************************/
 
 		public bool HaveAttribute(ItemCat attribute) => 0 < (Category & attribute);
-		public bool IsAttribute(ItemCat attribute) => Category.Equals(attribute);
+		public void Use() => Decrease(1);
+		public override bool IsExist => 0 < UseableCount;
+
+		protected int Decrease(int count) {
+			int decrease = Math.Min(count, UseableCount);
+
+			UseableCount -= decrease;
+			Notify();
+			return decrease;
+		}
+		protected int Increase(int count) {
+			int increase = Math.Min(count, UseableCount);
+
+			UseableCount += increase;
+			Notify();
+			return increase;
+		}
 
 
 
@@ -47,12 +62,14 @@ namespace Popup.Items {
 		/********************************/
 
         [JsonIgnore]
-        public abstract int UseableCount { get; }
+        public abstract int UseableCount { get; protected set; }
+		[JsonIgnore]
+		public abstract int Capacity { get; protected set; }
         public abstract bool HaveSpace(int? _ = null);
-        public abstract void Use();
 		public abstract float TWeight();
 		public abstract float TVolume();
-
+		public abstract int Space { get; }
+        
 
 
 		/********************************/
@@ -74,6 +91,8 @@ namespace Popup.Items {
 		[JsonProperty]
 		public int Durability { get; protected set; }
 		[JsonProperty]
+		public int MaxDurability { get; protected set; }
+		[JsonProperty]
 		public Spell[] SpellArray { get; protected set; }
 
 
@@ -82,8 +101,10 @@ namespace Popup.Items {
 		/* Define Behaviours			*/
 		/********************************/
 
-		public int SpellAmount => SpellArray == null ? 0 : SpellArray.Length;
-        public Spell Spell(int uid) => Guard.MustInclude(uid, SpellArray, "[GetSpell in EquipItem]");
+		public int SpellAmount => SpellArray?.Length ?? 0;
+		public Spell Spell(int uid) => SpellArray.FirstOrDefault(e => e.Uid.Equals(uid));
+		public override int Space => MaxDurability - Durability;
+		public void Repair(int value) => Increase(value);
 
 
 
@@ -91,20 +112,22 @@ namespace Popup.Items {
 		/* Implement Abstract funcs		*/
 		/********************************/
 
-		public override bool IsExist => 0 < Durability;
 		public override object DeepCopy(int? uid) {
 			SolidItem equipItem = (SolidItem)MemberwiseClone();
 			equipItem.Uid = uid ?? 0;
 			equipItem.Durability = 0;
+			// Notify();
 			return equipItem;
 		}
-
-		public override int UseableCount => Durability;
-		public override bool HaveSpace(int? _ = null) => false;
-		public override void Use() {
-			--Durability;
-			Notify();
+		public override int UseableCount {
+			get => Durability;
+			protected set => Durability = value;
 		}
+		public override int Capacity {
+			get => MaxDurability;
+			protected set => MaxDurability = value;
+		}
+		public override bool HaveSpace(int? _ = null) => false;
 		public override float TWeight() => Weight;
 		public override float TVolume() => Volume;
 	}
@@ -123,26 +146,8 @@ namespace Popup.Items {
 		/* Define Behaviours			*/
 		/********************************/
 
-		private int Decrease(int count) {
-			int decrease = Math.Min(count, Amount);
-
-			Amount -= decrease;
-			Notify();
-			return decrease;
-		}
-		private int Increase(int count) {
-			int increase = Math.Min(count, Space);
-
-			Amount += increase;
-			Notify();
-			return increase;
-		}
-		private int Space => MaxAmount - Amount;
-
-		public bool AddStack(StackableItem item) {
-			Increase(item.Decrease(Space));
-			return item.Amount.Equals(0);
-		}
+		public override int Space => MaxAmount - Amount;
+		public void AddStack(StackableItem item) => Increase(item.Decrease(Space));
 
 
 
@@ -150,17 +155,22 @@ namespace Popup.Items {
 		/* Implement Abstract funcs		*/
 		/********************************/
 
-		public override bool IsExist => 0 < Amount;
 		public override object DeepCopy(int? uid) {
 			StackableItem toolItem = (StackableItem)MemberwiseClone();
 			toolItem.Uid = uid ?? 0;
 			toolItem.Amount = 0;
+			// Notify();
 			return toolItem;
 		}
-
-		public override int UseableCount => Amount;
+		public override int UseableCount {
+			get => Amount;
+			protected set => Amount = value;
+		}
+		public override int Capacity {
+			get => MaxAmount;
+			protected set => MaxAmount = value;
+		}
 		public override bool HaveSpace(int? nameId = null) => (nameId == null || this.NameId.Equals(nameId)) && Amount < MaxAmount;
-		public override void Use() => Decrease(1);
 		public override float TWeight() => Amount * Weight;
 		public override float TVolume() => Amount * Volume;
 	}

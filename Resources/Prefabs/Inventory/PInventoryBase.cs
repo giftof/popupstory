@@ -71,7 +71,7 @@ public abstract class PInventoryBase : MonoBehaviour {
         return null;
     }
 
-    public void Use(Item item) => inventory.Use(item);
+    public void Use(Item item) => inventory.Use(item.Uid);
 
     private int nextIndex = -1;
     public PItemBase Next() {
