@@ -4,54 +4,27 @@ using UnityEngine;
 using Newtonsoft.Json;
 using Popup.Items;
 using Popup.Defines;
+using Popup.Converter;
 
 
 
 public class Network : MonoBehaviour
 {
     public int REQ_NEW_ID() => Manager.Instance.server.RequestNewUID;
-    public T[] REQ_NEW_ITEM_BY_ITEMID<T>(params int[] itemId) where T: Item
-    {
-        List<T> list = new List<T>();
-        string[] array = Manager.Instance.server.RequestNewItem(itemId);
 
-        foreach (string element in array)
-        {
-            T item = JsonConvert.DeserializeObject<T>(element);
-            item.SetUID = REQ_NEW_ID();
+    public Item[] REQ_NEW_ITEM_BY_ITEMID(params int[] itemIdArray) {
+        List<Item> list = new List<Item>();
+        string[] array = Manager.Instance.server.RequestNewItem(itemIdArray);
+
+        foreach (string element in array) {
+            Debug.Log($"src = {element}");
+            Item item = FromJson.ToItem(element);
+
+            Debug.Log($"name = {item?.Name}");
+            //item.SetUID = REQ_NEW_ID();
             list.Add(item);
         }
 
         return list.ToArray();
     }
-    //public EquipItem[] REQ_NEW_ITEMS_BY_EQUIPITEMID(params int[] itemId)
-    //{
-    //    List<EquipItem> list = new List<EquipItem>();
-    //    string[] array = Manager.Instance.server.RequestNewItem(itemId);
-
-    //    foreach (string element in array)
-    //    {
-    //        EquipItem item = JsonConvert.DeserializeObject<EquipItem>(element);
-    //        item.DEBUG_TEST_SET_UID(REQ_NEW_ID());
-    //        list.Add(item);
-    //    }
-
-    //    return list.ToArray();
-    //}
-
-    //public ToolItem[] REQ_NEW_ITEMS_BY_TOOLITEMID(params int[] itemId)
-    //{
-    //    List<ToolItem> list = new List<ToolItem>();
-    //    string[] array = Manager.Instance.server.RequestNewItem(itemId);
-
-    //    foreach (string element in array)
-    //    {
-    //        ToolItem item = JsonConvert.DeserializeObject<ToolItem>(element);
-    //        item.DEBUG_TEST_SET_UID(REQ_NEW_ID());
-    //        list.Add(item);
-    //    }
-
-    //    return list.ToArray();
-    //}
-
 }

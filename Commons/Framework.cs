@@ -10,8 +10,8 @@ using Popup.Delegate;
 using UnityEngine.EventSystems;
 using Newtonsoft.Json;
 
-namespace Popup.Framework
-{
+namespace Popup.Framework {
+
     public abstract class PopupObject {
 
         [JsonProperty]
@@ -38,6 +38,9 @@ namespace Popup.Framework
         public GameObject SetOwner { set { Owner = value; } }
     }
 
+
+
+    public interface IItemHandler : IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerDownHandler, IPointerUpHandler, IPointerClickHandler { }
 
 
     //public interface IPopupObject
@@ -67,17 +70,16 @@ namespace Popup.Framework
     //}
 
 
-    public interface IITemHandler : IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerDownHandler, IPointerUpHandler, IPointerClickHandler {}
 
-    public interface IPopupObserved {
-        void Notify();
-        void AddDelegate(Action action);
-        void RemoveDelegate(Action action);
-    }
+    //public interface IPopupObserved {
+    //    void Notify();
+    //    void AddDelegate(Action action);
+    //    void RemoveDelegate(Action action);
+    //}
 
-    public interface IPopupObserver {
-        void Dispose();
-    }
+    //public interface IPopupObserver {
+    //    void Dispose();
+    //}
 
     //public interface IToolItemHandler : IITemHandler
     //{

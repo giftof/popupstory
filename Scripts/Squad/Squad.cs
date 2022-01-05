@@ -49,8 +49,8 @@ namespace Popup.Squad
             return squad;
         }
 
-        public void Use(Item item) => pouch.Use(item);
-        public void Add(Item item) => pouch.Insert(item);
+        //public void Use(Item item) => pouch.Use(item);
+        //public void Add(Item item) => pouch.Insert(item);
 
         public bool AddLast(Charactor charactor)
         {

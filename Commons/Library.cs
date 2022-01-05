@@ -13,8 +13,7 @@ using System.Runtime.CompilerServices;
 
 
 
-namespace Popup.Library
-{
+namespace Popup.Library {
     using Config = Configs.Config;
     public static class Libs
     {

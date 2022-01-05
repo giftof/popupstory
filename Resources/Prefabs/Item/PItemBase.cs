@@ -8,49 +8,67 @@ using Popup.Items;
 using Popup.Framework;
 using Popup.Configs;
 using Popup.Defines;
+using Newtonsoft.Json;
 
 
-// using UniRx;
-// using UniRx.Triggers;
+
+//public class ItemMaker {
+//    public Item item;
+//    public void Stackable(Item item) => this.item = item;
+//    public void Solid(Item item) => this.item = item;
+//    public Item RawData(string json) {
+//        return JsonConvert.DeserializeObject<SolidItem>(json);
+//    }
+//    //Item item8 = JsonConvert.DeserializeObject<SolidItem>(itemDef8);
+//}
 
 
-public abstract class PItemBase : MonoBehaviour, IITemHandler {
+public abstract class PItemBase : MonoBehaviour, IItemHandler {
 
-    void Start() {
-        // var clickStream = this.UpdateAsObservable().Where(_ => Input.GetMouseButtonDown(0));
-        // clickStream.Buffer(clickStream.Throttle(TimeSpan.FromSeconds(Config.doubleClickInterval))).Where(x => x.Count >= 2).Subscribe(x => Debug.Log($"x = {x.ToString()}, this is Double Click"));
+//    void Awake() {
+//        ItemMaker itemMaker = new ItemMaker();
+///* begin test code */
+//        //itemMaker.RawData(json);
+//        itemMaker.RawData("");
+//        //if (Item == null)
+//        //    itemMaker.Stackable(new StackableItem());
+//        //else
+//        //    itemMaker.Solid(new SolidItem());
+//        /* end test code */
+//        Item = itemMaker.item;
+//    }
 
-    }
-
-    [SerializeField] Image image = null;
-    private PItemSlot m_lastParentSlot;
-    public PItemSlot lastParentSlot {
-        get => m_lastParentSlot;
-        set {
-            m_lastParentSlot = value;
-            transform.SetParent(m_lastParentSlot.transform);
-            transform.localPosition = Vector3.zero;
-            m_lastParentSlot.CurrentItem = this;
-        }
-    }
+    [SerializeField]
+    private Image image = null;
+    public PItemSlot LastParentSlot { get; set; }
     private Action useAction = null;
     private Vector2 offset = default;
+    public Item Item { get; set; }
 
-    private Item m_item;
-    public Item Item { 
-        get => m_item;
-        set {
-            m_item = value;
-            m_item.AddDelegate(SetAmount);
-            m_item.AddDelegate(SetIconImage);
-            m_item.AddDelegate(ReleaseObject);
-            m_item.Notify();
-            //m_item.updateUseableConut = SetAmount;
-            //m_item.updateIcon = SetIconImage;
-            //m_item.removeEmptySlot = ReleaseObject;
-            //m_item.Reload();
-        }
+    /********************************/
+    /* Transfer						*/
+    /********************************/
+
+    public void Use() => Decrease(1);
+    protected int Decrease(int count) {
+        int decrease = Math.Min(count, Item.UseableCount);
+
+        Item.UseableCount -= decrease;
+        return decrease;
     }
+    protected int Increase(int count) {
+        int increase = Math.Min(count, Item.UseableCount);
+
+        Item.UseableCount += increase;
+        return increase;
+    }
+    public void ChargeWith(PItemBase itemBase) => Increase(itemBase.Decrease(itemBase.Item.Space));
+    public void Repair(int value) => Increase(value);
+
+
+
+
+
 
     public void SetUseAction(Action action) => useAction = action;
     public void AddUseAction(Action action) => useAction += action;
@@ -64,7 +82,7 @@ public abstract class PItemBase : MonoBehaviour, IITemHandler {
     /********************************/
 
     public abstract void SetAmount();
-    public void SetIconImage() => image.sprite = Resources.Load<Sprite>($"{Path.icon}{m_item.Icon}");
+    public void SetIconImage() => image.sprite = Resources.Load<Sprite>($"{Path.icon}{Item.Icon}");
     public void ReleaseObject() => ObjectPool.Instance.Release(Type, gameObject);
 
 
@@ -76,6 +94,7 @@ public abstract class PItemBase : MonoBehaviour, IITemHandler {
     public void OnDrag(PointerEventData eventData) => transform.position = eventData.position + offset;
 
     public void OnBeginDrag(PointerEventData eventData) {
+        Debug.Log($"[TO DEBUG] eventData.selectedObject is? ({eventData.selectedObject})");
         eventData.selectedObject = gameObject;
         image.raycastTarget = false;
     }
@@ -90,8 +109,8 @@ public abstract class PItemBase : MonoBehaviour, IITemHandler {
     }
 
     public void OnPointerUp(PointerEventData eventData) {
-        if (lastParentSlot != null) {
-            transform.SetParent(lastParentSlot.transform);
+        if (LastParentSlot != null) {
+            transform.SetParent(LastParentSlot.transform);
             transform.localPosition = Vector3.zero;
         }
     }

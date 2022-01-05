@@ -85,38 +85,38 @@ public class Lobby : MonoBehaviour
     //    });
     //}
 
-    IEnumerator REQ_OTHER_ITEM<T>(NET_REQ<T> req, params int[] id) where T: Item
-    {
-        T[] array;
+    //IEnumerator REQ_OTHER_ITEM<T>(NET_REQ<T> req, params int[] id) where T: Item
+    //{
+    //    T[] array;
 
-        yield return array = req(id);
+    //    yield return array = req(id);
 
-        foreach (var obj in array)
-            Debug.Log($"read obj = {Libs.ToJson(obj)}");
+    //    foreach (var obj in array)
+    //        Debug.Log($"read obj = {Libs.ToJson(obj)}");
 
-        otherSquad.Insert(array);
-    }
+    //    otherSquad.Insert(array);
+    //}
 
-    IEnumerator REQ_USER_ITEM<T>(NET_REQ<T> req, params int[] id) where T: Item
-    {
-        T[] array;
+    //IEnumerator REQ_USER_ITEM<T>(NET_REQ<T> req, params int[] id) where T: Item
+    //{
+    //    T[] array;
 
-        yield return array = req(id);
+    //    yield return array = req(id);
 
-        foreach (var obj in array)
-            Debug.Log($"read obj = {Libs.ToJson(obj)}");
+    //    foreach (var obj in array)
+    //        Debug.Log($"read obj = {Libs.ToJson(obj)}");
 
-        userSquad.Insert(array);
-    }
+    //    userSquad.Insert(array);
+    //}
 
 
     void DEBUG_ITEM()
     {
-        StartCoroutine(REQ_OTHER_ITEM(Manager.Instance.network.REQ_NEW_ITEM_BY_ITEMID<SolidItem>, 0, 1));
-        StartCoroutine(REQ_OTHER_ITEM(Manager.Instance.network.REQ_NEW_ITEM_BY_ITEMID<StackableItem>, 1000, 1001, 1000));
+        //StartCoroutine(REQ_OTHER_ITEM(Manager.Instance.network.REQ_NEW_ITEM_BY_ITEMID<SolidItem>, 0, 1));
+        //StartCoroutine(REQ_OTHER_ITEM(Manager.Instance.network.REQ_NEW_ITEM_BY_ITEMID<StackableItem>, 1000, 1001, 1000));
 
-        StartCoroutine(REQ_USER_ITEM(Manager.Instance.network.REQ_NEW_ITEM_BY_ITEMID<SolidItem>, 0, 1));
-        StartCoroutine(REQ_USER_ITEM(Manager.Instance.network.REQ_NEW_ITEM_BY_ITEMID<StackableItem>, 1000, 1001, 1000));
+        //StartCoroutine(REQ_USER_ITEM(Manager.Instance.network.REQ_NEW_ITEM_BY_ITEMID<SolidItem>, 0, 1));
+        //StartCoroutine(REQ_USER_ITEM(Manager.Instance.network.REQ_NEW_ITEM_BY_ITEMID<StackableItem>, 1000, 1001, 1000));
 
         //otherSquad.Insert(Manager.Instance.network.REQ_NEW_ITEMS_BY_EQUIPITEMID(0, 1));
         //otherSquad.Insert(Manager.Instance.network.REQ_NEW_ITEMS_BY_TOOLITEMID(1000, 1001, 1000));

@@ -205,9 +205,9 @@ public class Game : MonoBehaviour
 
         //inventory.DEBUG_ShowAllItems();
 
-        inventory1.Insert(item1);
-        inventory1.Insert(item2);
-        inventory1.Insert(item8);
+        //inventory1.InsertItem(item1);
+        //inventory1.InsertItem(item2);
+        //inventory1.InsertItem(item8);
 
         // Debug.Log("add item1 = " + inventory1.Add(item1));
         // Debug.Log("add item2 = " + inventory1.Add(item2));
@@ -287,8 +287,8 @@ public class Game : MonoBehaviour
         // Debug.Log("use i2 10 = " + inventory2.UseItem(10));
         // Debug.Log("use i2 11 = " + inventory2.UseItem(11));
 
-        inventory1.DEBUG_ShowAllItems();
-        inventory2.DEBUG_ShowAllItems();
+        //inventory1.DEBUG_ShowAllItems();
+        //inventory2.DEBUG_ShowAllItems();
         // string TEST_JSON_ITEM1 = "{\"name\":\"glass sword\",\"uid\":99,\"weight\":1.2,\"volume\":3.4,\"amount\":1,\"grade\":4,\"category\":63,\"magicIdArray\":[1,2,3,4,5]}";
 
         // string json = Libs.ToJson(item8);

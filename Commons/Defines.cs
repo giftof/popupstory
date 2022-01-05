@@ -146,4 +146,16 @@ namespace Popup.Defines
         lobby,
         game,
     }
+
+    public class ParamNames {
+        public const string type = "type";
+        public const string contents = "contents";
+        public const string solid = "solid";
+        public const string stackable = "stackable";
+    }
+
+    public enum TypeName {
+        solid,
+        stackable,
+    }
 }

@@ -157,7 +157,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -259,6 +259,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: CustomButtonPrefab
+      objectReference: {fileID: 0}
+    - target: {fileID: 3462078040106515812, guid: bc1a555545bd34f75924535949839c5c,
+        type: 3}
+      propertyPath: m_Size.x
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 3462078040106515812, guid: bc1a555545bd34f75924535949839c5c,
+        type: 3}
+      propertyPath: m_Size.y
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 3845150275799299631, guid: bc1a555545bd34f75924535949839c5c,
+        type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7308776273783241885, guid: bc1a555545bd34f75924535949839c5c,
         type: 3}

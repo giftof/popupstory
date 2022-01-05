@@ -50,6 +50,11 @@ public partial class ProgressBar : MonoBehaviour
         //animate.DOFillAmount(rate, duration).SetId(GetInstanceID()).SetSpeedBased();
         animate.DOFillAmount(rate, Libs.TimeDuration(duration)).SetId(GetInstanceID()).SetEase(Ease.OutCubic);
     }
+
+    private void OnMouseDown()
+    {
+        Debug.Log("mouse down");
+    }
 }
 
 public partial class ProgressBar    // TEST

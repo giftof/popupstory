@@ -1,65 +1,132 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System;
+
 using Popup.Delegate;
 using Popup.Items;
 
 
 
-public partial class PItemSlot : MonoBehaviour, IDropHandler {
-    public int slotId;
-    public ActionWithItem InsertDelegate = null;
-    public ActionWithItem RemoveDelegate = null;
+
+
+public enum SlotEventArgsEnum
+{
+    drop,
+}
+
+
+
+
+
+public class SlotEventArgs : EventArgs
+{
+    public SlotEventArgsEnum Enum { get; set; } = SlotEventArgsEnum.drop;
     public PItemBase CurrentItem { get; set; } = null;
+    public PItemBase NewItem { get; set; } = null;
+
+}
 
 
 
-    /********************************/
-    /* Behaviours funcs             */
-    /********************************/
 
-    public void SetInsertData(ActionWithItem itemAction) => InsertDelegate = itemAction;
-    public void AddInsertData(ActionWithItem itemAction) => InsertDelegate += itemAction;
-    public void SetRemoveData(ActionWithItem itemAction) => RemoveDelegate = itemAction;
-    public void AddRemoveData(ActionWithItem itemAction) => RemoveDelegate += itemAction;
-    public void PutItem(PItemBase item) {
-        SetData(item, null, this);
-        SetTransform(item, this);
+
+public class SlotEvent
+{
+    public event EventHandler<SlotEventArgs> slotEvent;
+    public SlotEventArgs args = new SlotEventArgs();
+
+    public void OnDrop() => slotEvent?.Invoke(this, args);
+}
+
+
+
+
+
+public partial class PItemSlot : MonoBehaviour, IDropHandler
+{
+    private int instanceId;
+    SlotEvent slotEvent;
+
+
+    private void Start()
+    {
+        slotEvent = new SlotEvent();
+        instanceId = GetInstanceID();
+
+        //c_item_slot.Instance.AddEvent(instanceId, slotEvent);
+        //slotEvent.slotEvent += new EventHandler<SlotEventArgs>(SlotDropEvent);
+        slotEvent.slotEvent += new EventHandler<SlotEventArgs>(c_item_slot.Instance.SlotDropEvent);
     }
-    public void RemoveItem() {
-        ObjectPool.Instance.Release(CurrentItem.Type, CurrentItem.gameObject);
-        CurrentItem = null;
-    }
 
-    /********************************/
-    /* Implement Interface          */
-    /********************************/
+    public Image bgImage;
 
-    public void OnDrop(PointerEventData eventData) {
+    public void OnDrop(PointerEventData eventData)
+    {
         if (eventData.selectedObject == null)
             return;
 
-        if (eventData.selectedObject.TryGetComponent(out PItemBase selectedItem)) {
-            SetData(CurrentItem, this, selectedItem.lastParentSlot);
-            SetTransform(CurrentItem, selectedItem.lastParentSlot);
-            SetData(selectedItem, selectedItem.lastParentSlot, this);
-            SetTransform(selectedItem, this);
+        if (eventData.selectedObject.TryGetComponent(out PItemBase selectedItem))
+        {
+            selectedItem.transform.localPosition = Vector3.zero;
+
+            slotEvent.args.CurrentItem = null;
+            slotEvent.args.NewItem = null;
+            slotEvent.args.Enum = SlotEventArgsEnum.drop;
+            slotEvent.OnDrop();
         }
     }
 
-    public void SetData(PItemBase item, PItemSlot from, PItemSlot to) {
-        if (item == null)
-            return;
-        item.Item.SetSlotId = to.slotId;
-        from?.RemoveDelegate?.Invoke(item.Item);
-        to?.InsertDelegate?.Invoke(item.Item);
+
+    //void SlotDropEvent(object sender, SlotEventArgs e)
+    //{
+    //    Debug.Log("begin button click");
+    //    //Debug.Log(e.OnDrop());
+    //    Debug.Log("click");
+    //    Debug.Log("end button click");
+    //}
+
+    private void Swap(PItemBase currentItem, PItemBase newItem)
+    {
+
     }
 
-    public void SetTransform(PItemBase dest, PItemSlot slot) {
-        if (dest != null)
-            dest.lastParentSlot = slot;
-        slot.CurrentItem = dest;
-    }
+    //private PItemBase Current()
+    //{
+    //    FindObjectOfType(PItemBase);
+    //    return null;
+    //}
 }
+
+
+
+
+//public class CustomEvent : EventArgs {
+//    public int intValue;
+//}
+
+//public class TestEvent {
+//    public event EventHandler<CustomEvent> Click;
+
+//    public void MouseButtonDown() {
+//        CustomEvent customEvent = new CustomEvent { intValue = 42 };
+//        Click?.Invoke(this, customEvent);
+//    }
+//}
+
+
+
+//void ButtonClick(object sender, CustomEvent e)
+//{
+//    Debug.Log("begin button click");
+//    Debug.Log(e.intValue);
+//    Debug.Log("click");
+//    Debug.Log("end button click");
+//}
+
+//TestEvent testEvent = new TestEvent();
+//testEvent.Click += new EventHandler<CustomEvent>(ButtonClick);
+//testEvent.MouseButtonDown();

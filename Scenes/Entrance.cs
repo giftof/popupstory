@@ -8,7 +8,7 @@ using Popup.Defines;
 using Popup.Configs;
 using Popup.Library;
 
-
+using UnityEngine.EventSystems;
 
 using Popup.Items;
 using Popup.Squad;
@@ -16,9 +16,27 @@ using Popup.Charactors;
 using Popup.Items;
 using Popup.Inventory;
 
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
-public class Entrance : MonoBehaviour
-{
+
+using Popup.Framework;
+
+
+//public class CustomEvent : EventArgs {
+//    public int intValue;
+//}
+
+//public class TestEvent {
+//    public event EventHandler<CustomEvent> Click;
+
+//    public void MouseButtonDown() {
+//        CustomEvent customEvent = new CustomEvent { intValue = 42 };
+//        Click?.Invoke(this, customEvent);
+//    }
+//}
+
+public class Entrance : MonoBehaviour {
     public Button toLobby;
     public Button toGame;
     [SerializeField]
@@ -28,8 +46,28 @@ public class Entrance : MonoBehaviour
 
     //public ProgressBar progressBar;
 
-    void Start()
-    {
+
+    //void ButtonClick(object sender, CustomEvent e)
+    //{
+    //    Debug.Log("begin button click");
+    //    Debug.Log(e.intValue);
+    //    Debug.Log("click");
+    //    Debug.Log("end button click");
+    //}
+
+    //TestEvent testEvent = new TestEvent();
+    //testEvent.Click += new EventHandler<CustomEvent>(ButtonClick);
+    //testEvent.MouseButtonDown();
+
+    void Start() {
+
+
+
+
+        //TestEvent testEvent = new TestEvent();
+        //testEvent.Click += new EventHandler<CustomEvent>(ButtonClick);
+        //testEvent.MouseButtonDown();
+
         // var clickStream = this.UpdateAsObservable().Where(_ => Input.GetMouseButtonDown(0));
         // clickStream.Buffer(clickStream.Throttle(TimeSpan.FromSeconds(Config.doubleClickInterval))).Where(x => x.Count >= 2).Subscribe(x => Debug.Log($"x = {x.ToString()}, this is Double Click"));
 
@@ -49,7 +87,48 @@ public class Entrance : MonoBehaviour
         // inventory.Use(item1.Uid);
         // Debug.Log("use 2");
         // inventory.Use(item2.Uid);
+
+        StartCoroutine(TESTITEM());
     }
+
+    IEnumerator TESTITEM() {
+        yield return new WaitForSecondsRealtime(1);
+
+        Item[] itemArray = Manager.Instance.network.REQ_NEW_ITEM_BY_ITEMID(0, 1, 2, 3);
+
+        foreach (Item element in itemArray) {
+            if (element.HaveAttribute(ItemCat.stackable))
+                Debug.Log($"name = {element.Name}, amt = {(element as StackableItem).Amount}");
+            else
+                Debug.Log($"name = {element.Name}, dur = {(element as SolidItem).Durability}");
+        }
+
+        //string[] list = Manager.Instance.server.RequestNewItem(1);
+
+        //JObject hello = JObject.Parse(list[0]);
+        //Debug.Log(hello);
+        //Debug.Log(hello["type"]);
+        //Debug.Log(hello["contents"]);
+
+        //SolidItem item = hello["contents"].ToObject<SolidItem>();
+        //Debug.Log(item.Name);
+
+        //SolidItem solidItem;
+        //object obj3 = JsonConvert.DeserializeObject<object>(list[0]);
+        //Debug.Log(obj3);
+        //TEST_OBJ2 obj4 = (TEST_OBJ2)obj3;
+        //Debug.Log(obj4.nameId);
+        //Debug.Log(obj4.contents.Name);
+        //Debug.Log(obj3.GetType());
+
+        //Debug.Log($"obj.contents = {obj.contents}");
+
+        //Item item8 = JsonConvert.DeserializeObject<SolidItem>(itemDef8);
+
+    }
+    //TestEvent testEvent = new TestEvent();
+
+
 
 
     private void Initialize()
