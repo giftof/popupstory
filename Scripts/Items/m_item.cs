@@ -1,8 +1,8 @@
+using System;
 using Newtonsoft.Json;
 
 using Popup.Defines;
 using Popup.Framework;
-
 
 
 
@@ -28,6 +28,27 @@ namespace Popup.Items {
 		public bool HaveAttribute(ItemCat attribute) => 0 < (Category & attribute);
 		public override bool IsExist => 0 < UseableCount;
 		public int Space => Capacity - UseableCount;
+
+		/********************************/
+		/* Behaviour					*/
+		/********************************/
+
+		public int Increment(int amount)
+		{
+			int increment = Math.Min(Space, amount);
+			UseableCount += increment;
+			return increment;
+		}
+
+		public int Decrement(int amount)
+		{
+			int decrement = Math.Min(UseableCount, amount);
+			UseableCount += decrement;
+			return decrement;
+		}
+
+		public void Repair(int amount) => Increment(amount);
+		public void Charge(int amount) => Increment(amount);
 
 		/********************************/
 		/* Abstract funcs              	*/

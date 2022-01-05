@@ -10,7 +10,8 @@ public partial class ObjectPool : MonoBehaviour {
 
     public static ObjectPool Instance = null;
     private readonly Dictionary<Prefab, Queue<GameObject>> pool = new Dictionary<Prefab, Queue<GameObject>>();
-    [SerializeField] private readonly List<GameObject> prefabList = new List<GameObject>();
+    //[SerializeField] private readonly List<GameObject> prefabList = new List<GameObject>();
+    [SerializeField] private List<GameObject> prefabList = new List<GameObject>();
     //private readonly List<GameObject> prefabList = new List<GameObject>();
 
     void Awake() {

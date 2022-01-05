@@ -8,8 +8,8 @@ public class OtherSquadPrefab : SquadBase {
 
     protected override void SetButtonAction() {
 
-        //    inventoryBtn.AddClickAction( () => ToggleInventory() );
-        //    inventoryBase.close.AddClickAction( () => inventoryBase.DEBUG_TEST_SHOW_CONTENTS() );
+        inventoryBtn.AddClickAction( () => ToggleInventory() );
+        //inventoryBase.close.AddClickAction( () => inventoryBase.DEBUG_TEST_SHOW_CONTENTS() );
         //    inventoryBase.takeAll.AddClickAction(() => {
         //        while (true) {
         //            PItemBase next = inventoryBase.Next();
