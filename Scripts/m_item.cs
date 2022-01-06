@@ -69,6 +69,10 @@ namespace Popup.Items {
 		public abstract float TVolume();
 		public abstract Item MakeItem(string json);
 
+		/********************************/
+		/* Events						*/
+		/********************************/
+
 		event EventHandler<Item> _changeUseableCountHandler;
 	}
 }

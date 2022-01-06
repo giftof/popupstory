@@ -38,16 +38,19 @@ namespace Popup.Items
 			equipItem.Durability = 0;
 			return equipItem;
 		}
+
 		public override int UseableCount
 		{
 			get => Durability;
 			set => Durability = value;
 		}
+
 		public override int Capacity
 		{
 			get => MaxDurability;
 			protected set => MaxDurability = value;
 		}
+
 		public override bool HaveSpace(int? _ = null) => false;
 		public override float TWeight() => Weight;
 		public override float TVolume() => Volume;

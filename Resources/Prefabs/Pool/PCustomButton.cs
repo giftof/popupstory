@@ -30,7 +30,6 @@ public class PCustomButton : MonoBehaviour, IPointerClickHandler
     /********************************/
 
     event EventHandler _clickHandler;
-    //public void AddClickEventListener(ActionEvent<EventArgs> actionEvent) => _clickHandler += new EventHandler(actionEvent);
     public ActionEvent<EventArgs> AddClickEventListener { set { _clickHandler += new EventHandler(value); } }
 
 }

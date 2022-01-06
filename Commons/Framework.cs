@@ -43,6 +43,42 @@ namespace Popup.Framework {
     public interface IItemHandler : IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerDownHandler, IPointerUpHandler, IPointerClickHandler { }
 
 
+    //public interface IPopupEventDetector<T1, T2>
+    //{
+    //    PopupCallBack<T1, T2> AddListener();
+    //    //Dictionary<string, PopupCallBack<T1, T2>> PopupCallbackDictionary { get; }
+    //}
+
+
+
+    //public interface IPopupEventArgs<T> where T : class
+    //{
+    //    Dictionary<string, T> PopupEventArgsDictionary { get; }
+    //    void AddPopupEventArgs(string keyName, T valueData);
+    //    T GetArgs(string keyName);
+    //}
+
+    //public interface IPopupEventDetector<T> where T: class
+    //{
+    //    Dictionary<string, EventHandler<T>> PopupEventDetectorDictionary { get; }
+    //    event EventHandler<T> PopupEventDetector;
+    //}
+
+    //public interface IPopupEventReceiver<T> where T: class
+    //{
+    //    //void AddPopupListener(object sender, T e);
+    //    abstract void PopupEventReceiver(object sender, T e);
+    //}
+
+    //public interface IPopupClickEvent<T1, T2>
+    //{
+    //    Dictionary<string, PopupCallBack<T1, T2>> PopupCallBackDictionary { get; }
+    //    void AddListener(T1 funcName, T2 arg);
+    //    //PopipCallBack<T1, T2> 
+    //}
+
+    //public interface IPopupClick
+
     //public interface IPopupObject
     //{
     //    int Uid { get; }

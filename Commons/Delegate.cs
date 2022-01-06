@@ -19,4 +19,5 @@ namespace Popup.Delegate
     public delegate void ActionWithInt(int value);
 
     public delegate void ActionEvent<T>(object sender, T e) where T : class;
+    public delegate void PopupCallBack<T1, T2>(T1 sender, T2 e);
 }
