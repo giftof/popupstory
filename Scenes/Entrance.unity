@@ -893,12 +893,17 @@ PrefabInstance:
     - target: {fileID: 8874316560165832264, guid: a370215f5954e4f69ac527ec7011d783,
         type: 3}
       propertyPath: m_Offset.x
-      value: 50
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8874316560165832264, guid: a370215f5954e4f69ac527ec7011d783,
         type: 3}
       propertyPath: m_Offset.y
-      value: 50
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9110946472235666691, guid: a370215f5954e4f69ac527ec7011d783,
+        type: 3}
+      propertyPath: m_RaycastTarget
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a370215f5954e4f69ac527ec7011d783, type: 3}

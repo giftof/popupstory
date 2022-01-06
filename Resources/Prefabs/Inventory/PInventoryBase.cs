@@ -43,7 +43,7 @@ public abstract class PInventoryBase : MonoBehaviour {
 
     protected void MakeSlot() {
         for (int i = 0; i < inventorySize; i++) {
-            PItemSlot prefab = ObjectPool.Instance.Get(Prefab.ItemSlot, frame.transform).GetComponent<PItemSlot>();
+            PItemSlot prefab = ObjectPool.Instance.Get<PItemSlot>(Prefab.ItemSlot, frame.transform);
             //prefab.slotId = i;
             //prefab.SetInsertData(item => inventory.Insert(item));
             //prefab.SetRemoveData(item => inventory.Remove(item));

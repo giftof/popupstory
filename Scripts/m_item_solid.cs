@@ -19,6 +19,8 @@ namespace Popup.Items
 		[JsonProperty]
 		public Spell[] SpellArray { get; protected set; }
 
+		protected SolidItem() : base() { }
+
 		/********************************/
 		/* Define Checker				*/
 		/********************************/

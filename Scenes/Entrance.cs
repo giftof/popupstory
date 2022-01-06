@@ -36,12 +36,23 @@ using Popup.Framework;
 //    }
 //}
 
+public static class TE
+{
+    public static UnityEngine.Object FindObjectFromInstanceID(int iid)
+    {
+        return (UnityEngine.Object)typeof(UnityEngine.Object)
+                .GetMethod("FindObjectFromInstanceID", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static)
+                .Invoke(null, new object[] { iid });
+
+    }
+}
+
 public class Entrance : MonoBehaviour {
     public Button toLobby;
     public Button toGame;
     [SerializeField]
     private Canvas canvas;
-    private GameObject gpgs = null;
+    private PCustomButton gpgs = null;
 
 
     //public ProgressBar progressBar;
@@ -61,6 +72,27 @@ public class Entrance : MonoBehaviour {
 
     void Start() {
 
+        //Debug.LogWarning(">> begin key test");
+        //PItemBase itemBase1 = ObjectPool.Instance.Get(Prefab.SolidItem, transform).GetComponent<PSolidItem>();
+        //PItemBase itemBase2 = ObjectPool.Instance.Get(Prefab.SolidItem, transform).GetComponent<PSolidItem>();
+        //Debug.LogWarning($">> key = {c_item_slot.Instance.FindKeyWithItemBase(itemBase1)}");
+        //Debug.LogWarning(TE.FindObjectFromInstanceID(0));
+        ///*seperator*/
+        //PItemSlot itemSlot1 = c_item_slot.Instance.MakeSlot(transform, itemBase1);
+        //PItemSlot itemSlot2 = c_item_slot.Instance.MakeSlot(transform, itemBase2);
+        //Debug.LogWarning($">> key = {c_item_slot.Instance.FindKeyWithItemBase(itemBase1)}");
+        //Debug.LogError($">> KEY = {itemSlot1.GetInstanceID()}");
+        //Debug.LogWarning(TE.FindObjectFromInstanceID(itemSlot1.GetInstanceID()));
+
+
+        //Debug.LogWarning(">>>> before swap");
+        //Debug.Log($"{c_item_slot.Instance.dictionary[itemSlot1.GetInstanceID()].itemSlot.GetInstanceID()}, {c_item_slot.Instance.dictionary[itemSlot1.GetInstanceID()].itemBase.GetInstanceID()}");
+        //Debug.Log($"{c_item_slot.Instance.dictionary[itemSlot2.GetInstanceID()].itemSlot.GetInstanceID()}, {c_item_slot.Instance.dictionary[itemSlot2.GetInstanceID()].itemBase.GetInstanceID()}");
+        //c_item_slot.Instance.Swap(itemSlot1.GetInstanceID(), itemSlot2.GetInstanceID());
+        //Debug.LogWarning(">>>> after swap");
+        //Debug.Log($"{c_item_slot.Instance.dictionary[itemSlot1.GetInstanceID()].itemSlot.GetInstanceID()}, {c_item_slot.Instance.dictionary[itemSlot1.GetInstanceID()].itemBase.GetInstanceID()}");
+        //Debug.Log($"{c_item_slot.Instance.dictionary[itemSlot2.GetInstanceID()].itemSlot.GetInstanceID()}, {c_item_slot.Instance.dictionary[itemSlot2.GetInstanceID()].itemBase.GetInstanceID()}");
+        //Debug.LogWarning(">> end key test");
 
 
 
@@ -88,7 +120,7 @@ public class Entrance : MonoBehaviour {
         // Debug.Log("use 2");
         // inventory.Use(item2.Uid);
 
-        StartCoroutine(TESTITEM());
+        //StartCoroutine(TESTITEM());
     }
 
     IEnumerator TESTITEM() {
@@ -186,13 +218,10 @@ public class Entrance : MonoBehaviour {
 
 
 
-        gpgs = gpgs ?? (GameObject)ObjectPool.Instance.Get(Prefab.CustomButton, transform);
-        //gpgs.name = "GPGS";
-        PCustomButton gpgsButton = gpgs.GetComponent<PCustomButton>();
-        gpgs.PositionOnParent(GUIPosition.RightBottom, Vector2.one * 100);
-        gpgsButton.SetText("GPGS", Color.red);
-
-        gpgsButton.AddClickAction(() => Debug.Log("(0): Hello Click action mmm... !!!"));
+        gpgs = gpgs ?? ObjectPool.Instance.Get<PCustomButton>(Prefab.CustomButton, transform);
+        gpgs.gameObject.PositionOnParent(GUIPosition.RightBottom, Vector2.one * 100);
+        gpgs.SetText("GPGS", Color.red);
+        gpgs.AddClickEventListener = (object sender, EventArgs e) => Debug.Log("(0): Hello Click action mmm... !!!");
 
         List<int> list = new List<int>();
         list.FirstOrDefault(e => 0 < e);

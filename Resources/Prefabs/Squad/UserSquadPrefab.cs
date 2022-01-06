@@ -8,7 +8,8 @@ public class UserSquadPrefab : SquadBase
 
     protected override void SetButtonAction()
     {
-        inventoryBtn.AddClickAction( () => ToggleInventory() );
+        //inventoryBtn.AddClickAction( () => ToggleInventory() );
+        inventoryBtn.AddClickEventListener = ToggleInventory;
         //inventoryBase.close.AddClickAction( () => inventoryBase.DEBUG_TEST_SHOW_CONTENTS() );
 
     }

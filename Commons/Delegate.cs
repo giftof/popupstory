@@ -17,4 +17,6 @@ namespace Popup.Delegate
     public delegate void ActionWithItemBase(PItemBase itemBase);
     public delegate void ActionWithItem(Item item);
     public delegate void ActionWithInt(int value);
+
+    public delegate void ActionEvent<T>(object sender, T e) where T : class;
 }

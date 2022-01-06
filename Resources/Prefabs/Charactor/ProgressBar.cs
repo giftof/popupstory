@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -47,6 +48,7 @@ public partial class ProgressBar : MonoBehaviour
         instant.DOKill();
         
         instant.fillAmount = rate;
+
         //animate.DOFillAmount(rate, duration).SetId(GetInstanceID()).SetSpeedBased();
         animate.DOFillAmount(rate, Libs.TimeDuration(duration)).SetId(GetInstanceID()).SetEase(Ease.OutCubic);
     }
@@ -63,10 +65,11 @@ public partial class ProgressBar    // TEST
 
     private void Start()
     {
-        button.AddClickAction(() => {
-            float random = Random.Range(0f, 1f);
+        button.AddClickEventListener = (object sender, EventArgs e) =>
+        {
+            float random = UnityEngine.Random.Range(0f, 1f);
             Debug.Log($"current bar = {bar.fillAmount}, current cover = {cover.fillAmount}, random = {random}");
             Rate(random);
-        });
+        };
     }
 }

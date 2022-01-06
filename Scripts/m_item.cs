@@ -11,6 +11,8 @@ namespace Popup.Items {
 
 	public abstract class Item : PopupObject {
 		[JsonProperty]
+		public int PositionId { get; protected set; }
+		[JsonProperty]
 		public int ItemId { get; protected set; }
 		[JsonProperty]
 		public float Weight { get; protected set; }
@@ -20,6 +22,8 @@ namespace Popup.Items {
 		public ItemCat Category { get; protected set; }
 		[JsonProperty]
 		public int Icon { get; set; }
+
+		protected Item() => _changeUseableCountHandler += new EventHandler<Item>(c_item.Instance.UpdateCount);
 
 		/********************************/
 		/* Checker						*/
@@ -37,6 +41,7 @@ namespace Popup.Items {
 		{
 			int increment = Math.Min(Space, amount);
 			UseableCount += increment;
+			_changeUseableCountHandler?.Invoke(this, this);
 			return increment;
 		}
 
@@ -44,6 +49,7 @@ namespace Popup.Items {
 		{
 			int decrement = Math.Min(UseableCount, amount);
 			UseableCount += decrement;
+			_changeUseableCountHandler?.Invoke(this, this);
 			return decrement;
 		}
 
@@ -62,5 +68,7 @@ namespace Popup.Items {
 		public abstract float TWeight();
 		public abstract float TVolume();
 		public abstract Item MakeItem(string json);
+
+		event EventHandler<Item> _changeUseableCountHandler;
 	}
 }

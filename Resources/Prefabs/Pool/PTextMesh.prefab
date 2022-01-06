@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2623442241408827947}
   - component: {fileID: 2623442241408827925}
   - component: {fileID: 2623442241408827946}
+  - component: {fileID: 3755494059050933999}
   m_Layer: 5
   m_Name: PTextMesh
   m_TagString: Untagged
@@ -134,3 +135,16 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &3755494059050933999
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2623442241408827944}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e559385fc6344d248c24c8bf094e9ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ugui: {fileID: 2623442241408827946}

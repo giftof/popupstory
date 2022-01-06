@@ -63,7 +63,7 @@ public class Game : MonoBehaviour
     void DEBUG_LINQ()
     {
         string TEST_JSON_ITEM1 = "{\"name\":\"glass sword\",\"uid\":88,\"weight\":1.2,\"volume\":3.4,\"amount\":1,\"grade\":4,\"category\":63,\"magicIdArray\":[1,2,3,4,5]}";
-        SolidItem test = Libs.FromJson<SolidItem>(TEST_JSON_ITEM1);
+        SolidItem test = JsonConvert.DeserializeObject<SolidItem>(TEST_JSON_ITEM1);
 
         Debug.Log(test.Name);
         Debug.Log(test.Uid);
@@ -85,7 +85,7 @@ public class Game : MonoBehaviour
     void DEBUG_Convert()
     {
         string TEST_JSON_ITEM1 = "{\"name\":\"glass sword\",\"uid\":88,\"weight\":1.2,\"volume\":3.4,\"amount\":1,\"grade\":4,\"category\":63,\"magicIdArray\":[1,2,3,4,5]}";
-        SolidItem test = Libs.FromJson<SolidItem>(TEST_JSON_ITEM1);
+        SolidItem test = JsonConvert.DeserializeObject<SolidItem>(TEST_JSON_ITEM1);
         string json;
 
         Debug.Log(test.Name);
@@ -100,7 +100,7 @@ public class Game : MonoBehaviour
         // Debug.Log(json);
 
 
-        json = Libs.ToJson(test);
+        json = JsonConvert.SerializeObject(test);
         Debug.Log(json);
 
 

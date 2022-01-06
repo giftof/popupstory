@@ -17,7 +17,7 @@ namespace Popup.Library {
     using Config = Configs.Config;
     public static class Libs
     {
-        public static void Quit()
+        public static void QuitPopup()
         {
 #if UNITY_EDITOR
              Debug.Log("call quit on UNITY_EDITOR");
@@ -27,14 +27,15 @@ namespace Popup.Library {
             Application.Quit();
 #endif
         }
+        public static int InstanceId(object obj) => ((MonoBehaviour)obj).GetInstanceID();
 
         public static bool IsInclude<T>(int index, T[] array) => 0 <= index && index < array.Length;
         public static bool IsInclude(int index, int maxSize) => index < maxSize;
         public static void IncreaseValue(int dest, int amount) => dest += amount;
         public static bool IsUnder(int dest, int cap) => dest < cap;
-        public static T ConvertTo<T>(object item) => (T)item;
-        public static T FromJson<T>(string source) => JsonConvert.DeserializeObject<T>(source);
-        public static string ToJson<T>(T source) => JsonConvert.SerializeObject(source);
+        //public static T ConvertTo<T>(object item) => (T)item;
+        //public static T FromJson<T>(string source) => JsonConvert.DeserializeObject<T>(source);
+        //public static string ToJson<T>(T source) => JsonConvert.SerializeObject(source);
         // public static T      	FromJson<T>     (string  source                )    => JsonUtility.FromJson<T>(source);
         // public static string	ToJson<T>       (T       source                )    => JsonUtility.ToJson(source);
         public static int Round(float value) => (int)Math.Round(value);
@@ -99,7 +100,7 @@ namespace Popup.Library {
             public Error(string message)
             {
                 Debug.LogError(message);
-                Libs.Quit();
+                Libs.QuitPopup();
             }
         }
 

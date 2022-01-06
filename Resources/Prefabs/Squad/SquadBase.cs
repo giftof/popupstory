@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
@@ -24,8 +25,8 @@ public abstract partial class SquadBase : MonoBehaviour {
 
 
 
-    protected void ToggleInventory() => inventoryBase.gameObject.SetActive(!inventoryBase.gameObject.activeSelf);
-
+    //protected void ToggleInventory() => inventoryBase.gameObject.SetActive(!inventoryBase.gameObject.activeSelf);
+    protected void ToggleInventory(object _, EventArgs __) => inventoryBase.gameObject.SetActive(!inventoryBase.gameObject.activeSelf);
 
 
 

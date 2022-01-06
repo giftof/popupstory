@@ -15,6 +15,8 @@ namespace Popup.Items
         [JsonIgnore]
         private int MaxAmount { get; set; } = Config.maxStack;
 
+        protected StackableItem() : base() { }
+
         /********************************/
         /* Implement Abstract funcs		*/
         /********************************/
