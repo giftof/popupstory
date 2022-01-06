@@ -16,8 +16,8 @@ public abstract class PItemBase : MonoBehaviour, IItemHandler
 
     void Start()
     {
-        _useHandler += new EventHandler<PItemBase>(c_item.Instance.Use);
-        _releaseHandler += new EventHandler<PItemBase>(c_item.Instance.Release);
+        UseHandler += new EventHandler<PItemBase>(c_item.Instance.Use);
+        ReleaseHandler += new EventHandler<PItemBase>(c_item.Instance.Release);
     }
 
     /********************************/
@@ -25,28 +25,37 @@ public abstract class PItemBase : MonoBehaviour, IItemHandler
     /********************************/
 
     public abstract void SetAmount(Item item);
-    public void UpdateIconImage(Item item) => image.sprite = Resources.Load<Sprite>($"{Path.icon}{item.Icon}");
+
+    public void UpdateIconImage(Item item)
+    {
+        image.sprite = Resources.Load<Sprite>($"{Path.icon}{item.Icon}");
+    }
 
     /********************************/
     /* Events                       */
     /********************************/
 
-    event EventHandler<PItemBase> _releaseHandler;
-    event EventHandler<PItemBase> _useHandler;
+    event EventHandler<PItemBase> ReleaseHandler;
+
+    event EventHandler<PItemBase> UseHandler;
 
     public void UpdateCount(Item item)
     {
         if (HaveDisplayPannel(item))
             SetAmount(item);
+
         if (!item.IsExist)
-            _releaseHandler?.Invoke(this, this);
+            ReleaseHandler?.Invoke(this, this);
     }
 
     /********************************/
     /* Implement interface          */
     /********************************/
 
-    public void OnDrag(PointerEventData eventData) => transform.position = eventData.position + offset;
+    public void OnDrag(PointerEventData eventData)
+    {
+        transform.position = eventData.position + offset;
+    }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
@@ -61,11 +70,6 @@ public abstract class PItemBase : MonoBehaviour, IItemHandler
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        //if (LastParentSlot != null) {
-        //    transform.SetParent(LastParentSlot.transform);
-        //    transform.localPosition = Vector3.zero;
-        //}
-
         transform.localPosition = Vector3.zero;
     }
 
@@ -83,7 +87,7 @@ public abstract class PItemBase : MonoBehaviour, IItemHandler
         if (0 < clickCount && eventData.clickTime - clickTime < Config.doubleClickInterval)
         {
             clickCount = 0;
-            _useHandler?.Invoke(this, this);
+            UseHandler?.Invoke(this, this);
         }
         else
         {
@@ -96,5 +100,8 @@ public abstract class PItemBase : MonoBehaviour, IItemHandler
     /* Sub                          */
     /********************************/
 
-    private bool HaveDisplayPannel(Item item) => item is StackableItem;
+    private bool HaveDisplayPannel(Item item)
+    {
+        return item is StackableItem;
+    }
 }

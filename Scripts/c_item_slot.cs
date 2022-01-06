@@ -11,16 +11,19 @@ using Popup.Library;
 
 namespace Popup.Items
 {
-    public class c_item_slot
+    sealed public class c_item_slot
     {
         private static readonly Lazy<c_item_slot> instance = new Lazy<c_item_slot>(() => new c_item_slot());
-        public static c_item_slot Instance => instance.Value;
+        public static c_item_slot Instance
+        {
+            get { return instance.Value; }
+        }
 
         private readonly Dictionary<int, (PItemSlot itemSlot, PItemBase itemBase)> dictionary;
         private c_item_slot()
         {
             dictionary = new Dictionary<int, (PItemSlot, PItemBase)>();
-            _releaseHandler += new EventHandler<PItemBase>(c_item.Instance.Release);
+            ReleaseHandler += new EventHandler<PItemBase>(c_item.Instance.Release);
         }
 
         public PItemSlot MakeSlot(Transform parent, string itemJson = null)
@@ -36,7 +39,7 @@ namespace Popup.Items
         /* Events                       */
         /********************************/
 
-        event EventHandler<PItemBase> _releaseHandler;
+        event EventHandler<PItemBase> ReleaseHandler;
 
         public void ItemDrop(object sender, PItemBase e)
         {
@@ -59,14 +62,17 @@ namespace Popup.Items
             if (itemBase == null)
                 return;
 
-            _releaseHandler.Invoke(this, itemBase);
+            ReleaseHandler.Invoke(this, itemBase);
         }
 
         /********************************/
         /* Sub func                     */
         /********************************/
 
-        private int FindKeyFromItemBase(PItemBase itemBase) => dictionary.FirstOrDefault(e => e.Value.itemBase?.Equals(itemBase) ?? false).Key;
+        private int FindKeyFromItemBase(PItemBase itemBase)
+        {
+            return dictionary.FirstOrDefault(e => e.Value.itemBase?.Equals(itemBase) ?? false).Key;
+        }
 
         private void Swap(int key1, int key2)
         {

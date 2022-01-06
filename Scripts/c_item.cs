@@ -14,15 +14,21 @@ using Popup.Framework;
 
 namespace Popup.Items
 {
-    public class c_item
+    sealed public class c_item
     {
         private static readonly Lazy<c_item> instance = new Lazy<c_item>(() => new c_item());
 
-        public static c_item Instance => instance.Value;
+        public static c_item Instance
+        {
+            get { return instance.Value; }
+        }
 
         private readonly Dictionary<int, (Item item, PItemBase itemBase)> dictionary;
 
-        private c_item() => dictionary = new Dictionary<int, (Item item, PItemBase itemBase)>();
+        private c_item()
+        {
+            dictionary = new Dictionary<int, (Item item, PItemBase itemBase)>();
+        }
 
         public (Item item, PItemBase itemBase) MakeItem(string json, Transform parent)
         {
@@ -46,15 +52,28 @@ namespace Popup.Items
             dictionary.Remove(e.GetInstanceID());
         }
 
-        public void UpdateCount(object _, Item e) => dictionary[FindKeyFromItem(e)].itemBase.UpdateCount(e);
+        public void UpdateCount(object _, Item e)
+        {
+            int key = FindKeyFromItem(e);
+            
+            dictionary[key].itemBase.UpdateCount(e);
+        }
 
-        public void Use(object _, PItemBase e) => dictionary[e.GetInstanceID()].item.Decrement(1);
+        public void Use(object _, PItemBase e)
+        {
+            int key = e.GetInstanceID();
+            
+            dictionary[key].item.Decrement(1);
+        }
 
         /********************************/
         /* Sub func                     */
         /********************************/
 
-        private int FindKeyFromItem(Item item) => dictionary.FirstOrDefault(e => e.Value.item.Equals(item)).Key;
+        private int FindKeyFromItem(Item item)
+        {
+            return dictionary.FirstOrDefault(e => e.Value.item.Equals(item)).Key;
+        }
 
         private Prefab ExplictPrefabEnum(PItemBase itemBase)
         {

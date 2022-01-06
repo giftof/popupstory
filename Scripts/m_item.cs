@@ -23,41 +23,13 @@ namespace Popup.Items {
 		[JsonProperty]
 		public int Icon { get; set; }
 
-		protected Item() => _changeUseableCountHandler += new EventHandler<Item>(c_item.Instance.UpdateCount);
-
-		/********************************/
-		/* Checker						*/
-		/********************************/
-
-		public bool HaveAttribute(ItemCat attribute) => 0 < (Category & attribute);
-		public override bool IsExist => 0 < UseableCount;
-		public int Space => Capacity - UseableCount;
-
-		/********************************/
-		/* Behaviour					*/
-		/********************************/
-
-		public int Increment(int amount)
+		protected Item()
 		{
-			int increment = Math.Min(Space, amount);
-			UseableCount += increment;
-			_changeUseableCountHandler?.Invoke(this, this);
-			return increment;
+			ChangeUseableCountHandler += new EventHandler<Item>(c_item.Instance.UpdateCount);
 		}
 
-		public int Decrement(int amount)
-		{
-			int decrement = Math.Min(UseableCount, amount);
-			UseableCount += decrement;
-			_changeUseableCountHandler?.Invoke(this, this);
-			return decrement;
-		}
-
-		public void Repair(int amount) => Increment(amount);
-		public void Charge(int amount) => Increment(amount);
-
 		/********************************/
-		/* Abstract funcs              	*/
+		/* Abstract		              	*/
 		/********************************/
 
 		[JsonIgnore]
@@ -70,9 +42,58 @@ namespace Popup.Items {
 		public abstract Item MakeItem(string json);
 
 		/********************************/
+		/* Checker						*/
+		/********************************/
+
+		public bool HaveAttribute(ItemCat attribute)
+		{
+			return 0 < (Category & attribute);
+		}
+
+		public override bool IsExist
+		{
+			get { return 0 < UseableCount; }
+		}
+
+		public int Space
+		{
+			get { return Capacity - UseableCount; }
+		}
+
+		/********************************/
+		/* Behaviour					*/
+		/********************************/
+
+		public int Increment(int amount)
+		{
+			int increment = Math.Min(Space, amount);
+			UseableCount += increment;
+			ChangeUseableCountHandler?.Invoke(this, this);
+			return increment;
+		}
+
+		public int Decrement(int amount)
+		{
+			int decrement = Math.Min(UseableCount, amount);
+			UseableCount += decrement;
+			ChangeUseableCountHandler?.Invoke(this, this);
+			return decrement;
+		}
+
+		public void Repair(int amount)
+		{
+			Increment(amount);
+		}
+
+		public void Charge(int amount)
+		{
+			Increment(amount);
+		}
+
+		/********************************/
 		/* Events						*/
 		/********************************/
 
-		event EventHandler<Item> _changeUseableCountHandler;
+		event EventHandler<Item> ChangeUseableCountHandler;
 	}
 }

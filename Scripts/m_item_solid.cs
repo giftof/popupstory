@@ -22,13 +22,16 @@ namespace Popup.Items
 		protected SolidItem() : base() { }
 
 		/********************************/
-		/* Define Checker				*/
+		/* Checker						*/
 		/********************************/
 
-		public int SpellAmount => SpellArray?.Length ?? 0;
+		public int SpellAmount
+		{
+			get { return SpellArray?.Length ?? 0; }
+		}
 
 		/********************************/
-		/* Implement Abstract funcs		*/
+		/* Abstract						*/
 		/********************************/
 
 		public override object DeepCopy(int? uid)
@@ -41,19 +44,34 @@ namespace Popup.Items
 
 		public override int UseableCount
 		{
-			get => Durability;
-			set => Durability = value;
+			get { return Durability; }
+			set { Durability = value; }
 		}
 
 		public override int Capacity
 		{
-			get => MaxDurability;
-			protected set => MaxDurability = value;
+			get { return MaxDurability; }
+			protected set { MaxDurability = value; }
 		}
 
-		public override bool HaveSpace(int? _ = null) => false;
-		public override float TWeight() => Weight;
-		public override float TVolume() => Volume;
-		public override Item MakeItem(string json) => FromJson.ToItem(json);
+		public override bool HaveSpace(int? _ = null)
+		{
+			return false;
+		}
+
+		public override float TWeight()
+		{
+			return Weight;
+		}
+
+		public override float TVolume() 
+		{
+            return Volume;
+        } 
+		
+		public override Item MakeItem(string json)
+		{
+			return FromJson.ToItem(json);
+		}
 	}
 }

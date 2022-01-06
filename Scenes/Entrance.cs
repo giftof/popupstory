@@ -72,6 +72,8 @@ public class Entrance : MonoBehaviour {
 
     void Start() {
 
+        toLobby.onClick.AddListener(() => {Debug.Log("click");});
+
         //Debug.LogWarning(">> begin key test");
         //PItemBase itemBase1 = ObjectPool.Instance.Get(Prefab.SolidItem, transform).GetComponent<PSolidItem>();
         //PItemBase itemBase2 = ObjectPool.Instance.Get(Prefab.SolidItem, transform).GetComponent<PSolidItem>();

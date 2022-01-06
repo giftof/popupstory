@@ -12,13 +12,13 @@ using Popup.Items;
 public partial class PItemSlot : MonoBehaviour, IDropHandler
 {
     public Image bgImage;
-    event EventHandler<PItemBase> _dropHandler;
-    event EventHandler<PItemSlot> _releaseHandler;
+    event EventHandler<PItemBase> DropHandler;
+    event EventHandler<PItemSlot> ReleaseHandler;
 
     private void Start()
     {
-        _dropHandler += new EventHandler<PItemBase>(c_item_slot.Instance.ItemDrop);
-        _releaseHandler += new EventHandler<PItemSlot>(c_item_slot.Instance.Release);
+        DropHandler += new EventHandler<PItemBase>(c_item_slot.Instance.ItemDrop);
+        ReleaseHandler += new EventHandler<PItemSlot>(c_item_slot.Instance.Release);
     }
 
     /********************************/
@@ -31,12 +31,15 @@ public partial class PItemSlot : MonoBehaviour, IDropHandler
             return;
 
         if (eventData.selectedObject.TryGetComponent(out PItemBase selectedItem))
-            _dropHandler?.Invoke(this, selectedItem);
+            DropHandler?.Invoke(this, selectedItem);
     }
 
     /********************************/
     /* Events                       */
     /********************************/
 
-    public void Release() => _releaseHandler?.Invoke(this, this);
+    public void Release()
+    {
+        ReleaseHandler?.Invoke(this, this);
+    }
 }

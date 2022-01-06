@@ -28,19 +28,37 @@ namespace Popup.Items
             toolItem.Amount = 0;
             return toolItem;
         }
+
         public override int UseableCount
         {
-            get => Amount;
-            set => Amount = value;
+            get { return Amount; }
+            set { Amount = value; }
         }
+
         public override int Capacity
         {
-            get => MaxAmount;
-            protected set => MaxAmount = value;
+            get { return MaxAmount; }
+            protected set { MaxAmount = value; }
         }
-        public override bool HaveSpace(int? nameId = null) => (nameId == null || NameId.Equals(nameId)) && Amount < MaxAmount;
-        public override float TWeight() => Amount * Weight;
-        public override float TVolume() => Amount * Volume;
-        public override Item MakeItem(string json) => FromJson.ToItem(json);
+
+        public override bool HaveSpace(int? nameId = null)
+        {
+            return (nameId == null || NameId.Equals(nameId)) && Amount < MaxAmount;
+        }
+
+        public override float TWeight()
+        {
+            return Amount * Weight;
+        }
+
+        public override float TVolume() 
+        {
+            return Amount * Volume;
+        }
+
+        public override Item MakeItem(string json)
+        {
+            return FromJson.ToItem(json);
+        }
     }
 }
