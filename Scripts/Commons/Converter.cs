@@ -17,14 +17,14 @@ namespace Popup.Converter {
         //    return name;
         //}
 
-        public static Item ToItem (string json) {
+        public static m_item ToItem (string json) {
             JObject obj = JObject.Parse(json);
             string type = obj[ParamNames.type].ToString();
 
             if (type.Equals(ParamNames.solid))
-                return obj[ParamNames.contents].ToObject<SolidItem>();
+                return obj[ParamNames.contents].ToObject<m_solid_item>();
             if (type.Equals(ParamNames.stackable))
-                return obj[ParamNames.contents].ToObject<StackableItem>();
+                return obj[ParamNames.contents].ToObject<m_stackable_item>();
 
             return null;
         }

@@ -34,7 +34,7 @@ public class PCustomButton : MonoBehaviour, IPointerClickHandler
 
     event EventHandler ClickEventDelegate;
 
-    public PopupEvent<EventArgs> AddClickEventListener 
+    public EventHandler<EventArgs> AddClickEventListener
     { 
         set { ClickEventDelegate += new EventHandler(value); }
     }

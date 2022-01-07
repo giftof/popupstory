@@ -42,7 +42,7 @@ namespace Popup.Charactors
         [JsonProperty]
         public Spell[] SpellArray { get; protected set; }
         [JsonProperty]
-        public Item[] EquipArray { get; protected set; }
+        public m_item[] EquipArray { get; protected set; }
 
 
         public bool IsAlive => 0 < CurHp;
@@ -51,7 +51,7 @@ namespace Popup.Charactors
 
 
     	public override bool IsExist => IsOccupied; // impl.
-        public override object DeepCopy(int? uid = null) => MemberwiseClone(); // impl.
+        public override object DeepCopy(int uid) => MemberwiseClone(); // impl.
 
         public void TakeAffect(params Spell[] spell)
         {

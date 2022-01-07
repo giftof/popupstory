@@ -8,7 +8,7 @@ using Popup.Converter;
 
 namespace Popup.Items
 {
-	public class SolidItem : Item
+	public class m_solid_item : m_item
 	{
 		[JsonProperty]
 		public int Durability { get; protected set; }
@@ -19,7 +19,7 @@ namespace Popup.Items
 		[JsonProperty]
 		public Spell[] SpellArray { get; protected set; }
 
-		protected SolidItem() : base() { }
+		protected m_solid_item() : base() { }
 
 		/********************************/
 		/* Checker						*/
@@ -34,10 +34,10 @@ namespace Popup.Items
 		/* Abstract						*/
 		/********************************/
 
-		public override object DeepCopy(int? uid)
+		public override object DeepCopy(int uid)
 		{
-			SolidItem equipItem = (SolidItem)MemberwiseClone();
-			equipItem.Uid = uid ?? 0;
+			m_solid_item equipItem = (m_solid_item)MemberwiseClone();
+			equipItem.Uid = uid;
 			equipItem.Durability = 0;
 			return equipItem;
 		}
@@ -69,7 +69,7 @@ namespace Popup.Items
             return Volume;
         } 
 		
-		public override Item MakeItem(string json)
+		public override m_item MakeItem(string json)
 		{
 			return FromJson.ToItem(json);
 		}

@@ -8,23 +8,23 @@ using Popup.Configs;
 
 namespace Popup.Items
 {
-    public class StackableItem : Item
+    public class m_stackable_item : m_item
     {
         [JsonProperty]
         public int Amount { get; protected set; }
         [JsonIgnore]
         private int MaxAmount { get; set; } = Config.maxStack;
 
-        protected StackableItem() : base() { }
+        protected m_stackable_item() : base() { }
 
         /********************************/
         /* Implement Abstract funcs		*/
         /********************************/
 
-        public override object DeepCopy(int? uid)
+        public override object DeepCopy(int uid)
         {
-            StackableItem toolItem = (StackableItem)MemberwiseClone();
-            toolItem.Uid = uid ?? 0;
+            m_stackable_item toolItem = (m_stackable_item)MemberwiseClone();
+            toolItem.Uid = uid;
             toolItem.Amount = 0;
             return toolItem;
         }
@@ -56,7 +56,7 @@ namespace Popup.Items
             return Amount * Volume;
         }
 
-        public override Item MakeItem(string json)
+        public override m_item MakeItem(string json)
         {
             return FromJson.ToItem(json);
         }

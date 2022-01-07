@@ -9,6 +9,7 @@ using Popup.Library;
 
 
 
+
 namespace Popup.Items
 {
     sealed public class c_item_slot
@@ -29,10 +30,22 @@ namespace Popup.Items
         public PItemSlot MakeSlot(Transform parent, string itemJson = null)
         {
             PItemSlot itemSlot = ObjectPool.Instance.Get<PItemSlot>(Prefab.ItemSlot, parent);
-            PItemBase itemBase = c_item.Instance.MakeItem(itemJson, itemSlot.transform).itemBase;
+            itemSlot.AddItemDropListener = ItemDrop;
+            itemSlot.AddReleaseHandler = Release;
+
+            PItemBase itemBase = c_item.Instance.MakeItem(itemSlot.transform, itemJson).itemBase;
             dictionary.Add(itemSlot.GetInstanceID(), (itemSlot, itemBase));
 
             return itemSlot;
+        }
+
+        /********************************/
+        /* Behaviour                    */
+        /********************************/
+
+        public PItemSlot FindItemSlot(PItemBase itemBase)
+        {
+            return dictionary.FirstOrDefault(e => e.Value.itemBase?.Equals(itemBase) ?? false).Value.itemSlot;
         }
 
         /********************************/
@@ -46,7 +59,20 @@ namespace Popup.Items
             int currentSlotKey = Libs.InstanceId(sender);
             int newSlotKey = FindKeyFromItemBase(e);
 
-            Swap(currentSlotKey, newSlotKey);
+            m_item currentItem = FindItemFromItemBaseKey(FindPItemBaseFromItemSlotKey(currentSlotKey).GetInstanceID());
+            m_item newItem = FindItemFromItemBaseKey(e.GetInstanceID());
+
+            if (newItem.NameId.Equals(currentItem?.NameId) && currentItem is m_stackable_item)
+            {
+                Debug.LogWarning($"{currentItem.UseableCount}");
+                Debug.LogWarning($"{newItem.UseableCount}");
+                Debug.LogWarning("------------ CHARGE CALL -----------------");
+                currentItem.Charge(newItem);
+                Debug.LogWarning($"{currentItem.UseableCount}");
+                Debug.LogWarning($"{newItem.UseableCount}");
+            }
+            else
+                Swap(currentSlotKey, newSlotKey);
         }
 
         public void Release(object _, PItemSlot e)
@@ -69,9 +95,24 @@ namespace Popup.Items
         /* Sub func                     */
         /********************************/
 
-        private int FindKeyFromItemBase(PItemBase itemBase)
+        public int FindKeyFromItemBase(PItemBase itemBase)
         {
             return dictionary.FirstOrDefault(e => e.Value.itemBase?.Equals(itemBase) ?? false).Key;
+        }
+
+        public PItemBase FindPItemBaseFromItemSlotKey(int key)
+        {
+            return dictionary[key].itemBase;
+        }
+
+        public m_item FindItemFromItemBaseKey(int key)
+        {
+            return c_item.Instance.FindItemFromKey(key);
+        }
+
+        public m_item FindItemFromItemSlotKey(int key)
+        {
+            return FindItemFromItemBaseKey(FindPItemBaseFromItemSlotKey(key).GetInstanceID());
         }
 
         private void Swap(int key1, int key2)

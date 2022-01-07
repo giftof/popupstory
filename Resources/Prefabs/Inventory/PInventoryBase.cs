@@ -11,7 +11,7 @@ using Popup.Delegate;
 
 public abstract class PInventoryBase : MonoBehaviour {
 
-    protected Inventory inventory = null;
+    protected m_inventory inventory = null;
     protected PItemSlot[] slotArray = null;
     protected uint inventorySize;
     [SerializeField]
@@ -31,7 +31,7 @@ public abstract class PInventoryBase : MonoBehaviour {
     /* Property funcs              	*/
     /********************************/
 
-    private Prefab Type(Item item) => item.HaveAttribute(ItemCat.stackable) ? Prefab.StackableItem : Prefab.SolidItem;
+    //private Prefab Type(m_item item) => item.HaveAttribute(ItemCat.stackable) ? Prefab.StackableItem : Prefab.SolidItem;
 
 
 

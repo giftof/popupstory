@@ -12,14 +12,6 @@ using Popup.Items;
 public partial class PItemSlot : MonoBehaviour, IDropHandler
 {
     public Image bgImage;
-    event EventHandler<PItemBase> DropHandler;
-    event EventHandler<PItemSlot> ReleaseHandler;
-
-    private void Start()
-    {
-        DropHandler += new EventHandler<PItemBase>(c_item_slot.Instance.ItemDrop);
-        ReleaseHandler += new EventHandler<PItemSlot>(c_item_slot.Instance.Release);
-    }
 
     /********************************/
     /* Implement interface          */
@@ -37,6 +29,20 @@ public partial class PItemSlot : MonoBehaviour, IDropHandler
     /********************************/
     /* Events                       */
     /********************************/
+
+    event EventHandler<PItemBase> DropHandler;
+
+    event EventHandler<PItemSlot> ReleaseHandler;
+
+    public EventHandler<PItemBase> AddItemDropListener
+    {
+        set { DropHandler += new EventHandler<PItemBase>(value); }
+    }
+
+    public EventHandler<PItemSlot> AddReleaseHandler
+    {
+        set { ReleaseHandler += new EventHandler<PItemSlot>(value); }
+    }
 
     public void Release()
     {

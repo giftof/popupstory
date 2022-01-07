@@ -9,7 +9,7 @@ using Popup.Items;
 
 public class ItemPrefab : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
 {
-    Item item;
+    m_item item;
     Vector2 offset;
     [SerializeField] Image image;
 

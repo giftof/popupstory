@@ -13,9 +13,9 @@ using Newtonsoft.Json;
 namespace Popup.Squad
 {
     using Charactor = Charactors.Charactor;
-    using Inventory = Inventory.Inventory;
+    using Inventory = Inventory.m_inventory;
     using Config    = Configs.Config;
-    using Item      = Items.Item;
+    using Item      = Items.m_item;
     // using ServerJob = ServerJob.ServerJob;
 
     public partial class Squad : PopupObject /*, IInventory*/
@@ -41,10 +41,10 @@ namespace Popup.Squad
 
         public override bool IsExist => 0 < Charactors.Count;
         public bool IsAlive => !Charactors.FirstOrDefault(p => p.Value.IsAlive).Equals(null);
-        public override object DeepCopy(int? uid = null)
+        public override object DeepCopy(int uid)
         {
             Squad squad = (Squad)MemberwiseClone();
-            squad.Uid = uid ?? squad.Uid;
+            squad.Uid = uid;
 
             return squad;
         }

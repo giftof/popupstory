@@ -70,21 +70,30 @@ public class Entrance : MonoBehaviour {
     //testEvent.Click += new EventHandler<CustomEvent>(ButtonClick);
     //testEvent.MouseButtonDown();
 
-    void Start() {
+    IEnumerator Start() {
+        Debug.LogError("Start Entrance");
+        yield return null;
 
-        toLobby.onClick.AddListener(() => {Debug.Log("click");});
+        toLobby.onClick.AddListener(() => { Debug.Log("click"); });
 
         //Debug.LogWarning(">> begin key test");
-        //PItemBase itemBase1 = ObjectPool.Instance.Get(Prefab.SolidItem, transform).GetComponent<PSolidItem>();
-        //PItemBase itemBase2 = ObjectPool.Instance.Get(Prefab.SolidItem, transform).GetComponent<PSolidItem>();
-        //Debug.LogWarning($">> key = {c_item_slot.Instance.FindKeyWithItemBase(itemBase1)}");
         //Debug.LogWarning(TE.FindObjectFromInstanceID(0));
         ///*seperator*/
-        //PItemSlot itemSlot1 = c_item_slot.Instance.MakeSlot(transform, itemBase1);
-        //PItemSlot itemSlot2 = c_item_slot.Instance.MakeSlot(transform, itemBase2);
-        //Debug.LogWarning($">> key = {c_item_slot.Instance.FindKeyWithItemBase(itemBase1)}");
+
+        //yield return new WaitForSecondsRealtime(2);
+        //Debug.Log(Manager.Instance);
+        //Debug.Log(Manager.Instance.network);
+        //PItemSlot itemSlot1 = c_item_slot.Instance.MakeSlot(transform, Manager.Instance.network.REQ_NEW_ITEMDATA_BY_ITEMID(3)[0]);
+        //PItemSlot itemSlot2 = c_item_slot.Instance.MakeSlot(transform, Manager.Instance.network.REQ_NEW_ITEMDATA_BY_ITEMID(3)[0]);
+
+        //Debug.LogWarning("Begin ItemDropTEST!");
+        //c_item_slot.Instance.ItemDrop(itemSlot1, c_item_slot.Instance.FindPItemBaseFromItemSlotKey(itemSlot2.GetInstanceID()));
+        //Debug.LogWarning("End ItemDropTEST!");
+
+        ////Debug.LogWarning($">> key = {c_item_slot.Instance.FindKeyFromItemBase(itemBase1)}");
         //Debug.LogError($">> KEY = {itemSlot1.GetInstanceID()}");
         //Debug.LogWarning(TE.FindObjectFromInstanceID(itemSlot1.GetInstanceID()));
+
 
 
         //Debug.LogWarning(">>>> before swap");
@@ -122,20 +131,64 @@ public class Entrance : MonoBehaviour {
         // Debug.Log("use 2");
         // inventory.Use(item2.Uid);
 
-        //StartCoroutine(TESTITEM());
+        StartCoroutine(TESTITEM());
     }
 
     IEnumerator TESTITEM() {
         yield return new WaitForSecondsRealtime(1);
 
-        Item[] itemArray = Manager.Instance.network.REQ_NEW_ITEM_BY_ITEMID(0, 1, 2, 3);
+        //m_item[] itemArray = Manager.Instance.network.REQ_NEW_ITEM_BY_ITEMID(0, 1, 2, 3);
 
-        foreach (Item element in itemArray) {
-            if (element.HaveAttribute(ItemCat.stackable))
-                Debug.Log($"name = {element.Name}, amt = {(element as StackableItem).Amount}");
-            else
-                Debug.Log($"name = {element.Name}, dur = {(element as SolidItem).Durability}");
-        }
+        //foreach (m_item element in itemArray) {
+        //    if (element.HaveAttribute(ItemCat.stackable))
+        //        Debug.Log($"name = {element.Name}, amt = {(element as m_stackable_item).Amount}");
+        //    else
+        //        Debug.Log($"name = {element.Name}, dur = {(element as m_solid_item).Durability}");
+
+
+
+        Debug.Log(Manager.Instance);
+        Debug.Log(Manager.Instance.network);
+        PItemSlot itemSlot1 = c_item_slot.Instance.MakeSlot(transform, Manager.Instance.network.REQ_NEW_ITEMDATA_BY_ITEMID(3)[0]);
+        PItemSlot itemSlot2 = c_item_slot.Instance.MakeSlot(transform, Manager.Instance.network.REQ_NEW_ITEMDATA_BY_ITEMID(3)[0]);
+
+        PItemBase itemBase1 = c_item_slot.Instance.FindPItemBaseFromItemSlotKey(itemSlot1.GetInstanceID());
+        PItemBase itemBase2 = c_item_slot.Instance.FindPItemBaseFromItemSlotKey(itemSlot2.GetInstanceID());
+
+        m_item item1 = c_item_slot.Instance.FindItemFromItemBaseKey(itemBase1.GetInstanceID());
+        m_item item2 = c_item_slot.Instance.FindItemFromItemBaseKey(itemBase2.GetInstanceID());
+
+        item1.SetUID = 1;
+        item2.SetUID = 2;
+
+        Debug.LogError($"IID = {itemBase1.GetInstanceID()}");
+        Debug.LogError($"IID = {itemBase2.GetInstanceID()}");
+        Debug.LogError($"UID = {item1.Uid}");
+        Debug.LogError($"UID = {item2.Uid}");
+
+        Debug.LogWarning("Begin ItemDropTEST!");
+        //Debug.LogError($"amt = {c_item_slot.Instance.FindItemFromItemBaseKey(c_item_slot.Instance.FindPItemBaseFromItemSlotKey(itemSlot1.GetInstanceID()).GetInstanceID()).UseableCount}");
+        //Debug.LogError($"amt = {c_item_slot.Instance.FindItemFromItemBaseKey(c_item_slot.Instance.FindPItemBaseFromItemSlotKey(itemSlot2.GetInstanceID()).GetInstanceID()).UseableCount}");
+        Debug.LogError($"amt = {item1.UseableCount}");
+        Debug.LogError($"amt = {item2.UseableCount}");
+        c_item_slot.Instance.ItemDrop(itemSlot1, c_item_slot.Instance.FindPItemBaseFromItemSlotKey(itemSlot2.GetInstanceID()));
+        Debug.LogWarning("------");
+        //Debug.LogError($"amt = {c_item_slot.Instance.FindItemFromItemBaseKey(c_item_slot.Instance.FindPItemBaseFromItemSlotKey(itemSlot1.GetInstanceID()).GetInstanceID()).UseableCount}");
+        //Debug.LogError($"amt = {c_item_slot.Instance.FindItemFromItemBaseKey(c_item_slot.Instance.FindPItemBaseFromItemSlotKey(itemSlot2.GetInstanceID()).GetInstanceID()).UseableCount}");
+
+        Debug.LogError($"IID = {itemBase1.GetInstanceID()}");
+        Debug.LogError($"IID = {itemBase2.GetInstanceID()}");
+        Debug.LogError($"UID = {item1.Uid}");
+        Debug.LogError($"UID = {item2.Uid}");
+
+        Debug.LogError($"amt = {item1.UseableCount}");
+        Debug.LogError($"amt = {item2.UseableCount}");
+        Debug.LogWarning("End ItemDropTEST!");
+
+        //Debug.LogWarning($">> key = {c_item_slot.Instance.FindKeyFromItemBase(itemBase1)}");
+        Debug.LogError($">> KEY = {itemSlot1.GetInstanceID()}");
+        Debug.LogWarning(TE.FindObjectFromInstanceID(itemSlot1.GetInstanceID()));
+
 
         //string[] list = Manager.Instance.server.RequestNewItem(1);
 

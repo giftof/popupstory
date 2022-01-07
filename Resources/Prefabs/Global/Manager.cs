@@ -22,6 +22,7 @@ public class Manager : MonoBehaviour
 
     private void Awake()
     {
+        Debug.LogError("Awake Manager");
         if (Instance != null)
             Destroy(this);
         Instance = this;

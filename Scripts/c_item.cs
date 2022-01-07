@@ -5,8 +5,6 @@ using UnityEngine;
 
 using Popup.Converter;
 using Popup.Defines;
-using Popup.Library;
-using Popup.Framework;
 
 
 
@@ -23,23 +21,44 @@ namespace Popup.Items
             get { return instance.Value; }
         }
 
-        private readonly Dictionary<int, (Item item, PItemBase itemBase)> dictionary;
+        private readonly Dictionary<int, (m_item item, PItemBase itemBase)> dictionary;
 
         private c_item()
         {
-            dictionary = new Dictionary<int, (Item item, PItemBase itemBase)>();
+            dictionary = new Dictionary<int, (m_item item, PItemBase itemBase)>();
         }
 
-        public (Item item, PItemBase itemBase) MakeItem(string json, Transform parent)
+        public (m_item item, PItemBase itemBase) MakeItem(Transform parent, string json)
         {
             if (json == null) return (null, null);
 
-            Item item = FromJson.ToItem(json);
+            m_item item = FromJson.ToItem(json);
+            item.AddChangeUseableCountListener = UpdateCount;
+
             PItemBase itemBase = ExplictPrefabType(item, parent);
+            itemBase.UpdateIconImage(item);
 
             dictionary.Add(itemBase.GetInstanceID(), (item, itemBase));
-            itemBase.UpdateIconImage(item);
             return (item, itemBase);
+        }
+
+        /********************************/
+        /* Checker                      */
+        /********************************/
+
+        public bool HaveItem(m_item item)
+        {
+            return dictionary.FirstOrDefault(e => e.Value.item.Equals(item)).Value.item != null;
+        }
+
+        public PItemBase FindItemBase(m_item item)
+        {
+            return dictionary.FirstOrDefault(e => e.Value.item.Equals(item)).Value.itemBase;
+        }
+
+        public m_item FindItemFromKey(int key)
+        {
+            return dictionary[key].item;
         }
 
         /********************************/
@@ -52,7 +71,7 @@ namespace Popup.Items
             dictionary.Remove(e.GetInstanceID());
         }
 
-        public void UpdateCount(object _, Item e)
+        public void UpdateCount(object _, m_item e)
         {
             int key = FindKeyFromItem(e);
             
@@ -70,7 +89,7 @@ namespace Popup.Items
         /* Sub func                     */
         /********************************/
 
-        private int FindKeyFromItem(Item item)
+        private int FindKeyFromItem(m_item item)
         {
             return dictionary.FirstOrDefault(e => e.Value.item.Equals(item)).Key;
         }
@@ -84,13 +103,32 @@ namespace Popup.Items
             return Prefab.TextMesh;
         }
 
-        private PItemBase ExplictPrefabType(Item item, Transform parent)
+        private PItemBase ExplictPrefabType(m_item item, Transform parent)
         {
-            if (item is SolidItem)
+            if (item is m_solid_item)
                 return ObjectPool.Instance.Get<PSolidItem>(Prefab.SolidItem, parent);
-            if (item is StackableItem)
+            if (item is m_stackable_item)
                 return ObjectPool.Instance.Get<PStackableItem>(Prefab.StackableItem, parent);
             return null;
+        }
+    }
+
+    public static class m_item_extension
+    {
+        public static int Increment(this m_item item, int amount)
+        {
+            int increment = Math.Min(item.Space, amount);
+            item.UseableCount += increment;
+            item.DoChangeUseableCountHandler();
+            return increment;
+        }
+
+        public static int Decrement(this m_item item, int amount)
+        {
+            int decrement = Math.Min(item.UseableCount, amount);
+            item.UseableCount -= decrement;
+            item.DoChangeUseableCountHandler();
+            return decrement;
         }
     }
 }

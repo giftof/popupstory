@@ -63,7 +63,7 @@ public class Game : MonoBehaviour
     void DEBUG_LINQ()
     {
         string TEST_JSON_ITEM1 = "{\"name\":\"glass sword\",\"uid\":88,\"weight\":1.2,\"volume\":3.4,\"amount\":1,\"grade\":4,\"category\":63,\"magicIdArray\":[1,2,3,4,5]}";
-        SolidItem test = JsonConvert.DeserializeObject<SolidItem>(TEST_JSON_ITEM1);
+        m_solid_item test = JsonConvert.DeserializeObject<m_solid_item>(TEST_JSON_ITEM1);
 
         Debug.Log(test.Name);
         Debug.Log(test.Uid);
@@ -85,7 +85,7 @@ public class Game : MonoBehaviour
     void DEBUG_Convert()
     {
         string TEST_JSON_ITEM1 = "{\"name\":\"glass sword\",\"uid\":88,\"weight\":1.2,\"volume\":3.4,\"amount\":1,\"grade\":4,\"category\":63,\"magicIdArray\":[1,2,3,4,5]}";
-        SolidItem test = JsonConvert.DeserializeObject<SolidItem>(TEST_JSON_ITEM1);
+        m_solid_item test = JsonConvert.DeserializeObject<m_solid_item>(TEST_JSON_ITEM1);
         string json;
 
         Debug.Log(test.Name);
@@ -139,17 +139,17 @@ public class Game : MonoBehaviour
     void DEBUG_ShowInventory()
     {
         // Inventory inventory1 = new Inventory(null, Configs.squadInventorySize);
-        Inventory inventory1 = new WareHouse(Config.squadInventorySize);
+        m_inventory inventory1 = new WareHouse(Config.squadInventorySize);
 
         string itemDef1 = $"{{\"uid\":{Manager.Instance.network.REQ_NEW_ID()},\"name\":\"stack1\",\"category\":{(int)ItemCat.stackable},\"amount\":12,\"weight\":0.1,\"volume\":0.2}}";
-        Item item1 = JsonConvert.DeserializeObject<StackableItem>(itemDef1);
+        m_item item1 = JsonConvert.DeserializeObject<m_stackable_item>(itemDef1);
         Debug.Log(item1);
         Debug.Log(item1.Uid);
         Debug.Log(item1.Name);
 
 
         string itemDef2 = $"{{\"uid\":{Manager.Instance.network.REQ_NEW_ID()},\"name\":\"stack2\",\"category\":{(int)ItemCat.stackable},\"amount\":5,\"weight\":0.5,\"volume\":0.1}}";
-        Item item2 = JsonConvert.DeserializeObject<StackableItem>(itemDef2);
+        m_item item2 = JsonConvert.DeserializeObject<m_stackable_item>(itemDef2);
 
         // Item item3 = new ToolItem(ServerJob.RequestNewUID);
         // item3.SetName("stack1");
@@ -187,7 +187,7 @@ public class Game : MonoBehaviour
         // item7.SetVolume(5f);
 
         string itemDef8 = $"{{\"uid\":{Manager.Instance.network.REQ_NEW_ID()},\"name\":\"boots1\",\"category\":{(int)ItemCat.solid},\"durability\":50,\"weight\":0.2,\"volume\":1}}";
-        Item item8 = JsonConvert.DeserializeObject<SolidItem>(itemDef8);
+        m_item item8 = JsonConvert.DeserializeObject<m_solid_item>(itemDef8);
 
         // Item item9 = new EquipItem(ServerJob.RequestNewUID);
         // item9.SetName("gloves1");
@@ -232,7 +232,7 @@ public class Game : MonoBehaviour
         //inventory.ShowAllItems();
         //Debug.Log(item10.GetAmount);
 
-        Inventory inventory2 = inventory1;
+        m_inventory inventory2 = inventory1;
 
         // Debug.Log("use i1 10 = " + inventory.UseItem(10));
         // Debug.Log("use i2 10 = " + inventory2.UseItem(10));

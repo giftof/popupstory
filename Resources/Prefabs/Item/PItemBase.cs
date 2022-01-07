@@ -24,9 +24,9 @@ public abstract class PItemBase : MonoBehaviour, IItemHandler
     /* Delegate Action              */
     /********************************/
 
-    public abstract void SetAmount(Item item);
+    public abstract void SetAmount(m_item item);
 
-    public void UpdateIconImage(Item item)
+    public void UpdateIconImage(m_item item)
     {
         image.sprite = Resources.Load<Sprite>($"{Path.icon}{item.Icon}");
     }
@@ -39,7 +39,7 @@ public abstract class PItemBase : MonoBehaviour, IItemHandler
 
     event EventHandler<PItemBase> UseHandler;
 
-    public void UpdateCount(Item item)
+    public void UpdateCount(m_item item)
     {
         if (HaveDisplayPannel(item))
             SetAmount(item);
@@ -100,8 +100,8 @@ public abstract class PItemBase : MonoBehaviour, IItemHandler
     /* Sub                          */
     /********************************/
 
-    private bool HaveDisplayPannel(Item item)
+    private bool HaveDisplayPannel(m_item item)
     {
-        return item is StackableItem;
+        return item is m_stackable_item;
     }
 }

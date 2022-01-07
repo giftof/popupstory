@@ -49,6 +49,9 @@ namespace Popup.Defines
         ItemSlot,
         StackableItem,
         SolidItem,
+        Pouch,
+        //Equip,
+
         //Spell,
         //Buff,
         //Charactor,

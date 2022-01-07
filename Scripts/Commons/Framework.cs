@@ -29,7 +29,7 @@ namespace Popup.Framework {
 
         [JsonIgnore]
         public abstract bool IsExist { get; }
-        public abstract object DeepCopy(int? _ = null);
+        public abstract object DeepCopy(int uid);
 
         public int SetSlotId { set { SlotId = value; } }
         public int SetUID { set { Uid = value; } }
@@ -37,8 +37,6 @@ namespace Popup.Framework {
         public string SetName { set { Name = value; } }
         public GameObject SetOwner { set { Owner = value; } }
     }
-
-
 
     public interface IItemHandler : IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerDownHandler, IPointerUpHandler, IPointerClickHandler { }
 

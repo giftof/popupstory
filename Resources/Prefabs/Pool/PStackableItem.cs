@@ -7,7 +7,7 @@ using TMPro;
 public class PStackableItem : PItemBase {
     [SerializeField] TextMeshProUGUI amount;
 
-    public override void SetAmount(Item item)
+    public override void SetAmount(m_item item)
     {
         amount.text = item.UseableCount.ToString();
     }

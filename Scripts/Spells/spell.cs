@@ -58,7 +58,7 @@ public class Spell : PopupObject
 
 	public override bool IsExist => false; // impl.
 
-	public override object DeepCopy(int? uid = null) => MemberwiseClone(); // impl.
+	public override object DeepCopy(int uid) => MemberwiseClone(); // impl.
 	// public object DuplicateNew() => ((Spell)Duplicate()).uid = ServerJob.RequestNewUID;
 }
 
